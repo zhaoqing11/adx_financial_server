@@ -3,17 +3,21 @@
 <mapper namespace="com.project.mapper.master.UserMapper">
     <resultMap id="BaseResultMap" type="com.project.entity.User">
         <id column="id_user" property="idUser" jdbcType="INTEGER"/>
-        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="id_role" property="idRole" jdbcType="INTEGER"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="username" property="userName" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="enable" property="enable" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_user, `user_name`, `password`, enable
+       id_user, id_role, real_name, `username`, `password`, `phone`, `email`, enable
 	</sql>
     <select id="selectUserByUserName" resultMap="BaseResultMap"
             parameterType="java.lang.String">
 		select *
 		from `user`
-		where user_name = #{userName}
+		where username = #{userName}
 	</select>
 </mapper>

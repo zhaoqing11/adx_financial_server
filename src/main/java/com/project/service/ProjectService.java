@@ -26,7 +26,7 @@ public interface ProjectService {
 
     ReturnEntity selectProjectFieldAll();
 
-    ReturnEntity insertSelective(List<ProjectFieldValues> projectFieldValuesList, Project project);
+//    ReturnEntity insertSelective(List<ProjectFieldValues> projectFieldValuesList, Project project);
 
     ReturnEntity selectByIdProject(Integer idProject);
 }

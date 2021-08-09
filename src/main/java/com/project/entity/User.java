@@ -21,7 +21,7 @@ public class User {
 
     private boolean enable;
 
-    public boolean isEnable() {
+    public boolean getEnable() {
         return enable;
     }
 

@@ -33,7 +33,7 @@ spring:
       strict: false #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
       master:
         driverClassName: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/gzs_security_check_curtain?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+        url: jdbc:mysql://127.0.0.1:3306/adx_financial_db?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
         username: root
         password: TYFC@mysql789
         dbcp2:
@@ -41,10 +41,5 @@ spring:
           max-wait-millis: 10000
           min-idle: 5
           initial-size: 5
-      market:
-        driverClassName: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/curtain_inspection?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
-        username: root
-        password: TYFC@mysql789
 
 

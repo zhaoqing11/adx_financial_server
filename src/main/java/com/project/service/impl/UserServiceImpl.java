@@ -46,19 +46,16 @@ public class UserServiceImpl implements UserService {
             if (user == null || null == user.getPassword()) {
                 // 抛出用户不存在异常
                 return ReturnUtil.validError(HttpCode.CODE_500, "用户不存在！");
-//                throw new UserException(UserEnum.USER_NOT_EXIST.getStatus(), UserEnum.USER_NOT_EXIST.getMessage());
             }
             if (user.getEnable() == false) {
                 // 抛出用户已被禁用异常
                 return ReturnUtil.validError(HttpCode.CODE_500, "用户已被禁用，请联系管理员");
-//                throw new UserException(UserEnum.USER_NOT_EXIST.getStatus(), UserEnum.USER_IS_DISABLED.getMessage());
             }
 
             // 若密码不匹配
             if (!EncryptionUtil.match(usr.getPassword(), user.getPassword())) {
                 // 抛出密码错误异常
                 return ReturnUtil.validError(HttpCode.CODE_500, "请输入正确的账号或密码");
-//                throw new UserException(UserEnum.USER_PASSWORD_ERROR.getStatus(), "请输入正确的账号或密码！");
             }
             returnEntity = assembleResponseBody(user);
         } catch (Exception e) {

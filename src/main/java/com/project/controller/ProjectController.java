@@ -1,13 +1,11 @@
 package com.project.controller;
 
-import com.project.entity.Project;
 import com.project.service.ProjectService;
 import com.project.utils.common.base.ReturnEntity;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @description: 项目相关API
@@ -96,14 +94,14 @@ public class ProjectController {
     }
 
 
-    @ApiOperation(value = "新增项目")
-    @PostMapping(value = "/addProject")
-    public ReturnEntity addProject(@RequestBody  List<ProjectFieldValues> projectFieldValuesList, Project project) {
-
-        returnEntity = projectService.insertSelective(projectFieldValuesList, project);
-        return returnEntity;
-
-    }
+//    @ApiOperation(value = "新增项目")
+//    @PostMapping(value = "/addProject")
+//    public ReturnEntity addProject(@RequestBody  List<ProjectFieldValues> projectFieldValuesList, Project project) {
+//
+//        returnEntity = projectService.insertSelective(projectFieldValuesList, project);
+//        return returnEntity;
+//
+//    }
 
     @ApiOperation(value = "根据id获取项目详情")
     @PostMapping(value = "/selectByIdProject")
