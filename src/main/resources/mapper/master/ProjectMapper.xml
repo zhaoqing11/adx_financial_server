@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ProjectMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.Project">
+        <id column="id_project" property="idProject" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="id_project_state" property="idProjectState" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="old_code" property="oldCode" jdbcType="VARCHAR"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="id_inspection_plan" property="idInspectPlan" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_project, `code`, id_project_state, create_time, `old_code`, sort, id_inspect_plan
+	</sql>
+    <select id="selectProjectByIdInspectPlan" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM project WHERE id_inspect_plan = #{idInspectPlan,jdbcType=INTEGER}
+    </select>
+    <select id="selectMaxSort" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM project ORDER BY `sort` DESC LIMIT 0,1
+    </select>
+    <select id="selectSortIsExits" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM `project`
+		WHERE id_project_state = 2
+		and sort = #{sort,jdbcType=INTEGER}
+	</select>
+    <update id="updateSelective" parameterType="com.project.entity.Project">
+        update project
+        <set>
+            <if test="idProjectState != null">
+                id_project_state = #{idProjectState,jdbcType=INTEGER},
+            </if>
+            <if test="oldCode != null and oldCode != ''">
+                old_code = #{oldCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="idInspectPlan != null">
+                id_inspect_plan = #{idInspectPlan,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id_project = #{idProject,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteProject">
+		DELETE FROM `project` WHERE id_project = #{idProject,jdbcType=INTEGER}
+	</delete>
+    <update id="updateOldCodeByIdProject">
+		UPDATE project SET old_code = #{oldCode,jdbcType=VARCHAR}
+		WHERE id_project = #{idProject,jdbcType=INTEGER}
+	</update>
+    <select id="selectByIdProject" resultType="com.project.entity.Project">
+		SELECT v1.value AS 'projectName',
+		v2.value AS 'checkDate',
+		p.`id_project` AS 'idProject',
+		p.`id_project_state` AS 'idProjectState',
+		p.`old_code` AS 'oldCode',
+		p.`code`,
+		p.sort,
+		p.`create_time` AS 'createTime'
+		FROM project p
+		LEFT JOIN (SELECT id_project,`value` FROM project_field_values WHERE id_project_field = 1) v1
+		ON p.`id_project` = v1.id_project
+		LEFT JOIN (SELECT id_project,`value` FROM project_field_values WHERE id_project_field = 2) v2
+		ON p.`id_project` = v2.id_project
+		WHERE p.id_project = #{idProject,jdbcType=INTEGER}
+	</select>
+    <select id="selectAll" resultType="com.project.entity.Project">
+		SELECT
+		  p.`code`,
+		  p.sort,
+		  p.`create_time` AS 'createTime',
+		  p.`id_project` AS 'idProject',
+		  pfv.id_project_field_value AS 'idProjectFieldValue',
+		  pfv.value AS 'projectName'
+		FROM project p
+		LEFT JOIN
+		(SELECT id_project_field_value, id_project, `value`
+		FROM project_field_values
+		WHERE id_project_field = 1)pfv
+		ON pfv.`id_project` = p.`id_project`
+		WHERE id_project_state = 2
+		ORDER BY p.`create_time` DESC
+	</select>
+    <insert id="addProject" parameterType="com.project.entity.Project"
+            useGeneratedKeys="true" keyProperty="idProject">
+        insert into project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idProject != null">
+                id_project,
+            </if>
+            <if test="code != null and code != ''">
+                `code`,
+            </if>
+            <if test="idProjectState != null">
+                id_project_state,
+            </if>
+            <if test="oldCode != null and oldCode != ''">
+                old_code,
+            </if>
+            <if test="sort != null">
+                `sort`,
+            </if>
+            <if test="createTime != null">
+                `create_time`,
+            </if>
+            <if test="idInspectPlan != null">
+                id_inspect_plan
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="idProject != null">
+                #{idProject,jdbcType=INTEGER},
+            </if>
+            <if test="code != null and code != ''">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="idProjectState != null">
+                #{idProjectState,jdbcType=INTEGER},
+            </if>
+            <if test="oldCode != null and oldCode != ''">
+                #{oldCode,jdbcType=CHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="idInspectPlan != null">
+                #{idInspectPlan,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+</mapper>

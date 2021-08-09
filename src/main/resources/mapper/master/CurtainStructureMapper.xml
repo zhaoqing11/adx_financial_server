@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.CurtainStructureMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.CurtainStructure">
+        <id column="id_curtain_structure" property="idCurtainStructure" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+	</resultMap>
+    <sql id="Base_Column_List">
+       id_curtain_structure, `name`
+	</sql>
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM curtain_structure
+        WHERE id_curtain_structure in
+        <foreach collection="array" item="item" open="(" close=")" separator=",">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </select>
+    <select id="getCurtainStructureList" resultMap="BaseResultMap">
+		SELECT
+			 <include refid="Base_Column_List"/>
+		FROM curtain_structure
+	</select>
+</mapper>
