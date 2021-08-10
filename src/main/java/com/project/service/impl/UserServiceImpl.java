@@ -68,7 +68,6 @@ public class UserServiceImpl implements UserService {
     private ReturnEntity assembleResponseBody(User user) {
         if (user.getEnable() != true) {
             return ReturnUtil.validError(HttpCode.CODE_403, "对不起您的账号已被禁用，请联系平台管理员！");
-//            throw new UserException(403, "对不起您的账号已被禁用，请联系平台管理员！");
         }
         Map<String, Object> cacheUserInfo = new HashMap<String, Object>();
 
@@ -89,8 +88,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ReturnEntity logout(String userId, String token) {
-//        String cacheUserId = HttpServletRquestUtil.getCacheUserInfo(UserEnum.CACHE_USERID);
-//        String cacheTokenId = HttpServletRquestUtil.getCacheUserInfo(UserEnum.CACHE_USER_TOKEN);
         redisUtil.del(token);
         redisUtil.del(userId);
         return ReturnUtil.success();

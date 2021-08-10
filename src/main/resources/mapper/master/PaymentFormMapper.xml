@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.PaymentFormMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.PaymentForm">
+        <id column="id_payment_form" property="idPaymentForm" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="reason_application" property="reasonApplication" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="payment_name" property="paymentName" jdbcType="VARCHAR"/>
+        <result column="payment_account" property="paymentAccount" jdbcType="VARCHAR"/>
+        <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_payment_form, `code`, reason_application, amount, payment_name, payment_account, id_user, create_time
+	</sql>
+    <select id="queryMaxCode" resultType="java.lang.String">
+        SELECT MAX(`code`) FROM payment_form
+        WHERE DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(#{date}, '%y-%m-%d')
+    </select>
+    <insert id="addSelective" parameterType="com.project.entity.PaymentForm"
+            useGeneratedKeys="true" keyProperty="idPaymentForm">
+        insert into payment_form
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+          <if test="idPaymentForm != null">
+              id_payment_form,
+          </if>
+          <if test="code != null and code != ''">
+              `code`,
+          </if>
+          <if test="reasonApplication != null and reasonApplication != ''">
+              reason_application,
+          </if>
+          <if test="amount != null">
+              amount,
+          </if>
+          <if test="paymentName != null and paymentName != ''">
+              payment_name,
+          </if>
+          <if test="paymentAccount != null and paymentAccount != ''">
+              payment_account,
+          </if>
+          <if test="idUser != null">
+              id_user,
+          </if>
+          <if test="createTime != null and createTime != ''">
+              create_time
+          </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="idPaymentForm != null">
+                #{idPaymentForm,jdbcType=INTEGER},
+            </if>
+            <if test="code != null and code != ''">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="reasonApplication != null and reasonApplication != ''">
+                #{reasonApplication,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="paymentName != null and paymentName != ''">
+                #{paymentName,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentAccount != null and paymentAccount != ''">
+                #{paymentAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="idUser != null">
+                #{idUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateSelective" parameterType="com.project.entity.PaymentForm">
+        update payment_form
+        <set>
+            <if test="reasonApplication != null and reasonApplication != ''">
+                `reason_application` = #{reasonApplication,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="paymentName != null and paymentName != ''">
+                payment_name = #{paymentName,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentAccount != null and paymentAccount != ''">
+                payment_account = #{paymentAccount,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteSelective" parameterType="java.lang.Integer">
+        delete from payment_form where id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
+    </delete>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from payment_form where id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
+    </select>
+    <select id="selectByPageTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM payment_form pf
+        LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+        WHERE pf.id_user = #{idUser,jdbcType=INTEGER}
+        <if test="paymentForm != null">
+            <if test="paymentForm.code != null and paymentForm.code != ''">
+                AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+        </if>
+    </select>
+    <select id="selectByPage" resultType="com.project.entity.PaymentForm">
+         SELECT
+         pf.`id_payment_form` AS 'idPaymentForm',
+         pf.`code`,
+         pf.`reason_application` AS 'reasonApplication',
+         pf.`amount`,
+         pf.`payment_name` AS 'paymentName',
+         pf.`payment_account` AS 'paymentAccount',
+         pf.`create_time` AS 'createTime',
+         pf.`id_user` AS 'idUser',
+
+         u.`real_name` AS 'userName'
+        FROM payment_form pf
+        LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+        WHERE pf.id_user = #{idUser,jdbcType=INTEGER}
+        <if test="paymentForm != null">
+            <if test="paymentForm.code != null and paymentForm.code != ''">
+                AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+        </if>
+        ORDER BY pf.`create_time` DESC
+        <if test="pageSize > 0">
+            LIMIT #{startIndex},#{pageSize}
+        </if>
+    </select>
+</mapper>
