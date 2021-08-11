@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface PaymentFormMapper {
 
+    int queryPaymentRemittanceCount();
+
     int queryApprovalPaymentCount();
 
     int queryPaymentFormTotal(@Param("paymentForm") PaymentForm paymentForm);

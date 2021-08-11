@@ -15,6 +15,11 @@
     <sql id="Base_Column_List">
        id_payment_form, `code`, reason_application, amount, payment_name, payment_account, id_user, id_payment_form_state, create_time
 	</sql>
+    <select id="queryPaymentRemittanceCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN (
+            SELECT id_payment_form FROM payment_remittance
+        )
+    </select>
     <select id="queryApprovalPaymentCount" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1
     </select>
@@ -41,14 +46,19 @@
          pf.`payment_account` AS 'paymentAccount',
          pa.`amount` AS 'approvalAmount',
          ua.`real_name` AS 'approvalUser',
+         pr.`amount` AS 'remittanceAmount',
+         pr.`service_charge` AS 'serviceCharge',
+         ur.`real_name` AS 'remittanceUser',
          pf.`id_payment_form_state` AS 'idPaymentFormState',
          pf.`create_time` AS 'createTime',
          pf.`id_user` AS 'idUser',
          u.`real_name` AS 'userName'
          FROM payment_form pf
          LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
+         LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form`
          LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
          LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user`
+         LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user`
          WHERE 1=1
         <if test="paymentForm != null">
             <if test="paymentForm.code != null and paymentForm.code != ''">

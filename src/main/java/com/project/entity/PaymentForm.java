@@ -28,4 +28,10 @@ public class PaymentForm {
     private String approvalAmount;
 
     private String approvalUser;
+
+    private String remittanceAmount;
+
+    private String serviceCharge;
+
+    private String remittanceUser;
 }

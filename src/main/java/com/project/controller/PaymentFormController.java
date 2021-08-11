@@ -25,10 +25,10 @@ public class PaymentFormController {
     PaymentFormService paymentFormService;
 
     @ApiOperation(value = "获取待审批请款数")
-    @PostMapping(value = "/queryApprovalPaymentCount")
-    public ReturnEntity queryApprovalPaymentCount() {
+    @PostMapping(value = "/getDataInfo")
+    public ReturnEntity getDataInfo() {
 
-        returnEntity = paymentFormService.queryApprovalPaymentCount();
+        returnEntity = paymentFormService.getDataInfo();
         return returnEntity;
 
     }

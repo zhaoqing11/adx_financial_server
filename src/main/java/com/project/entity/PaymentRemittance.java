@@ -2,8 +2,6 @@ package com.project.entity;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class PaymentRemittance {
 
@@ -11,9 +9,9 @@ public class PaymentRemittance {
 
     private Integer idPaymentForm;
 
-    private BigDecimal amount;
+    private String amount;
 
-    private BigDecimal serviceCharge;
+    private String serviceCharge;
 
     private Integer idUser;
 

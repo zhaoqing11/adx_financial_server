@@ -5,7 +5,7 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface PaymentFormService {
 
-    ReturnEntity queryApprovalPaymentCount();
+    ReturnEntity getDataInfo();
 
     ReturnEntity queryAllPaymentForm(Integer startIndex, Integer pageSize,
                                           PaymentForm paymentForm);

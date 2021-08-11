@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.PaymentRemittanceMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.PaymentRemittance">
+        <id column="id_payment_remittance" property="idPaymentRemittance" jdbcType="INTEGER"/>
+        <result column="id_payment_form" property="idPaymentForm" jdbcType="INTEGER"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
+        <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_payment_remittance, id_payment_form, amount, service_charge, id_user, create_time
+	</sql>
+    <insert id="addSelective" parameterType="com.project.entity.PaymentRemittance"
+            useGeneratedKeys="true" keyProperty="idPaymentRemittance">
+        insert into payment_remittance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idPaymentRemittance != null">
+                id_payment_remittance,
+            </if>
+            <if test="idPaymentForm != null">
+                id_payment_form,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="serviceCharge != null">
+                service_charge,
+            </if>
+            <if test="idUser != null">
+                id_user,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="idPaymentRemittance != null">
+                #{idPaymentRemittance,jdbcType=INTEGER},
+            </if>
+            <if test="idPaymentForm != null">
+                #{idPaymentForm,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="serviceCharge != null">
+                #{serviceCharge,jdbcType=DECIMAL},
+            </if>
+            <if test="idUser != null">
+                #{idUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+</mapper>

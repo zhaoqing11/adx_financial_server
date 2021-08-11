@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @SuppressWarnings("all")
@@ -30,10 +32,15 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     private ReturnEntity returnEntity;
 
     @Override
-    public ReturnEntity queryApprovalPaymentCount() {
+    public ReturnEntity getDataInfo() {
         try {
-            int count = paymentFormMapper.queryApprovalPaymentCount();
-            returnEntity = ReturnUtil.success(count);
+            int approvalCount = paymentFormMapper.queryApprovalPaymentCount();
+            int remittanceCount = paymentFormMapper.queryPaymentRemittanceCount();
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("approvalCount", approvalCount);
+            map.put("remittanceCount", remittanceCount);
+            returnEntity = ReturnUtil.success(map);
         } catch (Exception e) {
             logger.error("获取待审批请款数失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
