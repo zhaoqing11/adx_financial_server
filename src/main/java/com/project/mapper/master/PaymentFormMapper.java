@@ -8,6 +8,18 @@ import java.util.List;
 
 public interface PaymentFormMapper {
 
+    int queryApprovalPaymentCount();
+
+    int queryPaymentFormTotal(@Param("paymentForm") PaymentForm paymentForm);
+
+    List<PaymentForm> queryAllPaymentForm(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,
+                                          @Param("paymentForm") PaymentForm paymentForm);
+
+    int selectApprovalPaymentFormTotal(@Param("paymentForm") PaymentForm paymentForm);
+
+    List<PaymentForm> selectApprovalPaymentFormByPage(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,
+                                                      @Param("paymentForm") PaymentForm paymentForm);
+
     String queryMaxCode(@Param("date") Date date);
 
     int addSelective(PaymentForm paymentForm);

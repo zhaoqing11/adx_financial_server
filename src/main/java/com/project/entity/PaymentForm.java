@@ -19,7 +19,13 @@ public class PaymentForm {
 
     private Integer idUser;
 
+    private Integer idPaymentFormState;
+
     private String createTime;
 
     private String userName;
+
+    private String approvalAmount;
+
+    private String approvalUser;
 }

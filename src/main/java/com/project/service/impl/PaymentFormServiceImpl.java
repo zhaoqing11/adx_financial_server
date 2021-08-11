@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +30,58 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     private ReturnEntity returnEntity;
 
     @Override
+    public ReturnEntity queryApprovalPaymentCount() {
+        try {
+            int count = paymentFormMapper.queryApprovalPaymentCount();
+            returnEntity = ReturnUtil.success(count);
+        } catch (Exception e) {
+            logger.error("获取待审批请款数失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity queryAllPaymentForm(Integer startIndex, Integer pageSize, PaymentForm paymentForm) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = paymentFormMapper.queryPaymentFormTotal(paymentForm);
+            PageBean<PaymentForm> pageBean = new PageBean<PaymentForm>(startIndex, pageSize, total);
+            List<PaymentForm> paymentFormList = paymentFormMapper.queryAllPaymentForm(pageBean.getStartIndex(),
+                    pageBean.getPageSize(), paymentForm);
+
+            pageBean.setList(paymentFormList);
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("分页（条件）查询待全部请款列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity selectApprovalPaymentFormByPage(Integer startIndex, Integer pageSize, PaymentForm paymentForm) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = paymentFormMapper.selectApprovalPaymentFormTotal(paymentForm);
+            PageBean<PaymentForm> pageBean = new PageBean<PaymentForm>(startIndex, pageSize, total);
+            List<PaymentForm> paymentFormList = paymentFormMapper.selectApprovalPaymentFormByPage(pageBean.getStartIndex(),
+                    pageBean.getPageSize(), paymentForm);
+
+            pageBean.setList(paymentFormList);
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("分页（条件）查询待审批请款列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity addSelective(PaymentForm paymentForm) {
         try {
             if (paymentForm != null) {
@@ -39,7 +90,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 String code = paymentFormMapper.queryMaxCode(new Date());
                 if (Tools.notEmpty(code)) { // 编号不为空接上一个产生编号数+1
                     int num = Integer.parseInt(code.substring(10, 13));
-                    newCode = code.substring(0,10) + formatNum(String.valueOf(num  +  1));
+                    newCode = code.substring(0, 10) + formatNum(String.valueOf(num + 1));
 
                 } else { // 为空创建当日首个编号
                     String date = Tools.date2Str(new Date(), "yy-MM-dd");

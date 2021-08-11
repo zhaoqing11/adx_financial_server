@@ -2,14 +2,12 @@ package com.project.entity;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class CollectionRecord {
 
     private Integer idCollectionRecord;
 
-    private BigDecimal amount;
+    private String amount;
 
     private String collectionDate;
 
@@ -18,4 +16,6 @@ public class CollectionRecord {
     private Integer idUser;
 
     private String createTime;
+
+    private String userName;
 }

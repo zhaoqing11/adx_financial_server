@@ -5,6 +5,14 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface PaymentFormService {
 
+    ReturnEntity queryApprovalPaymentCount();
+
+    ReturnEntity queryAllPaymentForm(Integer startIndex, Integer pageSize,
+                                          PaymentForm paymentForm);
+
+    ReturnEntity selectApprovalPaymentFormByPage(Integer startIndex, Integer pageSize,
+                                                      PaymentForm paymentForm);
+
     ReturnEntity addSelective(PaymentForm paymentForm);
 
     ReturnEntity updateSelective(PaymentForm paymentForm);

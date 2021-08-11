@@ -9,11 +9,100 @@
         <result column="payment_name" property="paymentName" jdbcType="VARCHAR"/>
         <result column="payment_account" property="paymentAccount" jdbcType="VARCHAR"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+        <result column="id_payment_form_state" property="idPaymentFormState" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_form, `code`, reason_application, amount, payment_name, payment_account, id_user, create_time
+       id_payment_form, `code`, reason_application, amount, payment_name, payment_account, id_user, id_payment_form_state, create_time
 	</sql>
+    <select id="queryApprovalPaymentCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1
+    </select>
+    <select id="queryPaymentFormTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM payment_form pf
+        LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
+        LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+        LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user`
+        WHERE 1=1
+        <if test="paymentForm != null">
+            <if test="paymentForm.code != null and paymentForm.code != ''">
+                AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+        </if>
+    </select>
+    <select id="queryAllPaymentForm" resultType="com.project.entity.PaymentForm">
+         SELECT
+         pf.`id_payment_form` AS 'idPaymentForm',
+         pf.`code`,
+         pf.`reason_application` AS 'reasonApplication',
+         pf.`amount`,
+         pf.`payment_name` AS 'paymentName',
+         pf.`payment_account` AS 'paymentAccount',
+         pa.`amount` AS 'approvalAmount',
+         ua.`real_name` AS 'approvalUser',
+         pf.`id_payment_form_state` AS 'idPaymentFormState',
+         pf.`create_time` AS 'createTime',
+         pf.`id_user` AS 'idUser',
+         u.`real_name` AS 'userName'
+         FROM payment_form pf
+         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
+         LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+         LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user`
+         WHERE 1=1
+        <if test="paymentForm != null">
+            <if test="paymentForm.code != null and paymentForm.code != ''">
+                AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+        </if>
+        ORDER BY pf.`create_time` DESC
+        <if test="pageSize > 0">
+            LIMIT #{startIndex},#{pageSize}
+        </if>
+    </select>
+    <select id="selectApprovalPaymentFormTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM payment_form pf
+        LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+        WHERE 1=1
+        <if test="paymentForm != null">
+            <if test="paymentForm.code != null and paymentForm.code != ''">
+                AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="paymentForm.idPaymentFormState != null">
+                and pf.`id_payment_form_state` = #{paymentForm.idPaymentFormState,jdbcType=INTEGER}
+            </if>
+        </if>
+    </select>
+    <select id="selectApprovalPaymentFormByPage" resultType="com.project.entity.PaymentForm">
+        SELECT
+        pf.`id_payment_form` AS 'idPaymentForm',
+        pf.`code`,
+        pf.`reason_application` AS 'reasonApplication',
+        pf.`amount`,
+        pf.`payment_name` AS 'paymentName',
+        pf.`payment_account` AS 'paymentAccount',
+        pf.`id_payment_form_state` as 'idPaymentFormState',
+        pf.`create_time` AS 'createTime',
+        pf.`id_user` AS 'idUser',
+
+        u.`real_name` AS 'userName'
+        FROM payment_form pf
+        LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+        WHERE 1=1
+        <if test="paymentForm != null">
+            <if test="paymentForm.code != null and paymentForm.code != ''">
+                AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="paymentForm.idPaymentFormState != null">
+                and pf.`id_payment_form_state` = #{paymentForm.idPaymentFormState,jdbcType=INTEGER}
+            </if>
+        </if>
+        ORDER BY pf.`create_time` DESC
+        <if test="pageSize > 0">
+            LIMIT #{startIndex},#{pageSize}
+        </if>
+    </select>
     <select id="queryMaxCode" resultType="java.lang.String">
         SELECT MAX(`code`) FROM payment_form
         WHERE DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(#{date}, '%y-%m-%d')
@@ -89,6 +178,9 @@
             <if test="paymentAccount != null and paymentAccount != ''">
                 payment_account = #{paymentAccount,jdbcType=VARCHAR},
             </if>
+            <if test="idPaymentFormState != null">
+                id_payment_form_state = #{idPaymentFormState, jdbcType=INTEGER}
+            </if>
         </set>
         where id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
     </update>
@@ -117,6 +209,7 @@
          pf.`amount`,
          pf.`payment_name` AS 'paymentName',
          pf.`payment_account` AS 'paymentAccount',
+         pf.`id_payment_form_state` as 'idPaymentFormState',
          pf.`create_time` AS 'createTime',
          pf.`id_user` AS 'idUser',
 
@@ -127,6 +220,9 @@
         <if test="paymentForm != null">
             <if test="paymentForm.code != null and paymentForm.code != ''">
                 AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="paymentForm.idPaymentFormState != null">
+                and pf.`id_payment_form_state` = #{paymentForm.idPaymentFormState,jdbcType=INTEGER}
             </if>
         </if>
         ORDER BY pf.`create_time` DESC

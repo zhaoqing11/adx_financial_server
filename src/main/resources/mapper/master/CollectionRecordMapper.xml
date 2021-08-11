@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.CollectionRecordMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.CollectionRecord">
+        <id column="id_collection_record" property="idCollectionRecord" jdbcType="INTEGER"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="collection_date" property="collectionDate" jdbcType="TIMESTAMP"/>
+        <result column="collection_account" property="collectionAccount" jdbcType="VARCHAR"/>
+        <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_collection_record, amount, collection_date, collection_account, id_user, create_time
+	</sql>
+    <insert id="addSelective" parameterType="com.project.entity.CollectionRecord"
+            useGeneratedKeys="true" keyProperty="idCollectionRecord">
+        insert into collection_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idCollectionRecord != null">
+                id_collection_record,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="collectionDate != null and collectionDate != ''">
+                collection_date,
+            </if>
+            <if test="collectionAccount != null and collectionAccount != ''">
+                collection_account,
+            </if>
+            <if test="idUser != null">
+                id_user,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="idCollectionRecord != null">
+                #{idCollectionRecord,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="collectionDate != null and collectionDate != ''">
+                #{collectionDate,jdbcType=VARCHAR},
+            </if>
+            <if test="collectionAccount != null and collectionAccount != ''">
+                #{collectionAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="idUser != null">
+                #{idUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateSelective" parameterType="com.project.entity.CollectionRecord">
+        update collection_record
+        <set>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="collectionDate != null and collectionDate != ''">
+                collection_date = #{collectionDate,jdbcType=VARCHAR},
+            </if>
+            <if test="collectionAccount != null and collectionAccount != ''">
+                collection_account = #{collectionAccount,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id_collection_record = #{idCollectionRecord,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteSelective" parameterType="java.lang.Integer">
+        delete from collection_record where id_collection_record = #{idCollectionRecord,jdbcType=INTEGER}
+    </delete>
+    <select id="selectByPageTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM collection_record cr
+        LEFT JOIN `user` u ON u.`id_user` = cr.`id_user`
+        where 1=1
+        <if test="startTime != null and startTime != ''">
+            AND cr.`collection_date` BETWEEN #{startTime} AND #{endTime}
+        </if>
+    </select>
+    <select id="selectByPage" resultType="com.project.entity.CollectionRecord">
+        SELECT
+        cr.`id_collection_record` AS 'idCollectionRecord',
+        cr.`amount`,
+        cr.`collection_date` AS 'collectionDate',
+        cr.`collection_account` AS 'collectionAccount',
+        cr.`create_time` AS 'createTime',
+
+        cr.`id_user` AS 'idUser',
+        u.`real_name` AS 'userName'
+        FROM collection_record cr
+        LEFT JOIN `user` u ON u.`id_user` = cr.`id_user`
+        where 1=1
+        <if test="startTime != null and startTime != ''">
+            AND cr.`collection_date` BETWEEN #{startTime} AND #{endTime}
+        </if>
+        ORDER BY cr.`collection_date` DESC
+        <if test="pageSize > 0">
+            LIMIT #{startIndex},#{pageSize}
+        </if>
+    </select>
+</mapper>

@@ -24,6 +24,35 @@ public class PaymentFormController {
     @Autowired
     PaymentFormService paymentFormService;
 
+    @ApiOperation(value = "获取待审批请款数")
+    @PostMapping(value = "/queryApprovalPaymentCount")
+    public ReturnEntity queryApprovalPaymentCount() {
+
+        returnEntity = paymentFormService.queryApprovalPaymentCount();
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "分页条件查询全部请款列表")
+    @PostMapping(value = "/queryAllPaymentForm")
+    public ReturnEntity queryAllPaymentForm(Integer pageNum, Integer pageSize, PaymentForm paymentForm) {
+
+        returnEntity = paymentFormService.queryAllPaymentForm(pageNum, pageSize, paymentForm);
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "分页条件查询审批列表")
+    @PostMapping(value = "/selectApprovalPaymentFormByPage")
+    public ReturnEntity selectApprovalPaymentFormByPage(Integer pageNum, Integer pageSize,
+                                                        PaymentForm paymentForm) {
+
+        returnEntity = paymentFormService.selectApprovalPaymentFormByPage(pageNum, pageSize,
+                paymentForm);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "创建请款单")
     @PostMapping(value = "/addSelective")
     public ReturnEntity addSelective(PaymentForm paymentForm) {
