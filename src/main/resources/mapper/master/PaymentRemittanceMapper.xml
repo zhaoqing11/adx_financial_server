@@ -6,11 +6,12 @@
         <result column="id_payment_form" property="idPaymentForm" jdbcType="INTEGER"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
+        <result column="remittance_date" property="remittanceDate" jdbcType="TIMESTAMP"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_remittance, id_payment_form, amount, service_charge, id_user, create_time
+       id_payment_remittance, id_payment_form, amount, service_charge, remittance_date, id_user, create_time
 	</sql>
     <insert id="addSelective" parameterType="com.project.entity.PaymentRemittance"
             useGeneratedKeys="true" keyProperty="idPaymentRemittance">
@@ -27,6 +28,9 @@
             </if>
             <if test="serviceCharge != null">
                 service_charge,
+            </if>
+            <if test="remittanceDate != null and remittanceDate != ''">
+                remittance_date,
             </if>
             <if test="idUser != null">
                 id_user,
@@ -47,6 +51,9 @@
             </if>
             <if test="serviceCharge != null">
                 #{serviceCharge,jdbcType=DECIMAL},
+            </if>
+            <if test="remittanceDate != null and remittanceDate != ''">
+                #{remittanceDate,jdbcType=VARCHAR},
             </if>
             <if test="idUser != null">
                 #{idUser,jdbcType=INTEGER},

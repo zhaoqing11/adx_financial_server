@@ -3,19 +3,17 @@ package com.project.entity;
 import lombok.Data;
 
 @Data
-public class PaymentRemittance {
+public class PayFlowRecord {
+
+    private Integer idPayFlowRecord;
 
     private Integer idPaymentRemittance;
 
-    private Integer idPaymentForm;
+    private Integer idFlowType;
 
     private String amount;
 
-    private String serviceCharge;
-
-    private String remittanceDate;
-
-    private Integer idUser;
+    private String remainingSum;
 
     private String createTime;
 

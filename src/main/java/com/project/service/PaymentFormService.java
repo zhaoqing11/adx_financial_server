@@ -5,6 +5,8 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface PaymentFormService {
 
+    ReturnEntity queryFlowRecordDetail();
+
     ReturnEntity getDataInfo();
 
     ReturnEntity queryAllPaymentForm(Integer startIndex, Integer pageSize,

@@ -34,4 +34,15 @@ public class PaymentForm {
     private String serviceCharge;
 
     private String remittanceUser;
+
+    private String remainingSum;
+
+    private Integer idFlowType;
+
+    private Integer idPayFlowRecord;
+
+    private Integer idIncomeFlowRecord;
+
+    private String collectionAmount;
+
 }

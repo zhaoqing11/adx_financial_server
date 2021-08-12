@@ -5,6 +5,7 @@ import com.project.service.PaymentFormService;
 import com.project.utils.common.base.ReturnEntity;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,15 @@ public class PaymentFormController {
 
     @Autowired
     PaymentFormService paymentFormService;
+
+    @ApiOperation(value = "获取收支流水列表")
+    @PostMapping(value = "/queryFlowRecordDetail")
+    public ReturnEntity queryFlowRecordDetail() {
+
+        returnEntity = paymentFormService.queryFlowRecordDetail();
+        return returnEntity;
+
+    }
 
     @ApiOperation(value = "获取待审批请款数")
     @PostMapping(value = "/getDataInfo")

@@ -15,6 +15,39 @@
     <sql id="Base_Column_List">
        id_payment_form, `code`, reason_application, amount, payment_name, payment_account, id_user, id_payment_form_state, create_time
 	</sql>
+    <select id="queryIncomeFlowRecordDetails" resultType="com.project.entity.PaymentForm">
+        SELECT
+         cr.`amount` as 'collectionAmount',
+         ifr.`remaining_sum` AS 'remainingSum',
+         ifr.`id_flow_type` AS 'idFlowType',
+         ifr.`id_income_flow_record` AS 'idIncomeFlowRecord',
+         cr.`create_time` AS 'createTime'
+         FROM income_flow_record ifr
+        LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
+        WHERE 1=1
+        AND DATE_FORMAT(cr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
+    </select>
+    <select id="queryPayFlowRecordDetails" resultType="com.project.entity.PaymentForm">
+        SELECT
+         pf.`reason_application` AS 'reasonApplication',
+         pf.`amount`,
+         pf.`payment_name` AS 'paymentName',
+         pf.`payment_account` AS 'paymentAccount',
+         pf.`code`,
+         pa.`amount` AS 'approvalAmount',
+         pr.`amount` AS 'remittanceAmount',
+         pr.`service_charge` AS 'serviceCharge',
+         pfr.`remaining_sum` AS 'remainingSum',
+         pfr.`id_flow_type` AS 'idFlowType',
+         pfr.`id_pay_flow_record` AS 'idPayFlowRecord',
+         pr.`create_time` AS 'createTime'
+         FROM pay_flow_record pfr
+        LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance`
+        LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form`
+        LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
+        WHERE 1=1
+        AND DATE_FORMAT(pr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
+    </select>
     <select id="queryPaymentRemittanceCount" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN (
             SELECT id_payment_form FROM payment_remittance

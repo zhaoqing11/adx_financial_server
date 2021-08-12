@@ -1,7 +1,10 @@
 package com.project.service.impl;
 
 import com.project.entity.PaymentForm;
+import com.project.entity.RemainingSumRecord;
+import com.project.entity.RemainingSumVO;
 import com.project.mapper.master.PaymentFormMapper;
+import com.project.mapper.master.RemainingSumRecordMapper;
 import com.project.service.PaymentFormService;
 import com.project.utils.ReturnUtil;
 import com.project.utils.Tools;
@@ -14,10 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @SuppressWarnings("all")
@@ -26,20 +26,70 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     private static Logger logger = LogManager.getLogger(PaymentFormServiceImpl.class);
 
     @Autowired
+    private RemainingSumRecordMapper remainingSumRecordMapper;
+
+    @Autowired
     private PaymentFormMapper paymentFormMapper;
 
     @Autowired
     private ReturnEntity returnEntity;
 
     @Override
+    public ReturnEntity queryFlowRecordDetail() {
+        try {
+            List<RemainingSumVO> arrayList = new ArrayList<RemainingSumVO>();
+
+            // 获取支出流水列表
+            List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetails();
+            payFlowRecord.forEach(item -> {
+                RemainingSumVO remainingSumVO = new RemainingSumVO();
+                remainingSumVO.setReasonApplication(item.getReasonApplication());
+                remainingSumVO.setAmount(item.getAmount());
+                remainingSumVO.setPaymentName(item.getPaymentName());
+                remainingSumVO.setPaymentAccount(item.getPaymentAccount());
+                remainingSumVO.setCode(item.getCode());
+                remainingSumVO.setApprovalAmount(item.getApprovalAmount());
+                remainingSumVO.setRemittanceAmount(item.getRemittanceAmount());
+                remainingSumVO.setServiceCharge(item.getServiceCharge());
+                remainingSumVO.setRemainingSum(item.getRemainingSum());
+                remainingSumVO.setIdFlowType(item.getIdFlowType());
+                remainingSumVO.setIdPayFlowRecord(item.getIdPayFlowRecord());
+                remainingSumVO.setCreateTime(item.getCreateTime());
+                arrayList.add(remainingSumVO);
+            });
+
+            // 获取收入流水列表
+            List<PaymentForm> incomeFlowRecord = paymentFormMapper.queryIncomeFlowRecordDetails();
+            incomeFlowRecord.forEach(item -> {
+                RemainingSumVO remainingSumVO = new RemainingSumVO();
+                remainingSumVO.setCollectionAmount(item.getCollectionAmount());
+                remainingSumVO.setRemainingSum(item.getRemainingSum());
+                remainingSumVO.setIdFlowType(item.getIdFlowType());
+                remainingSumVO.setIdIncomeFlowRecord(item.getIdIncomeFlowRecord());
+                remainingSumVO.setCreateTime(item.getCreateTime());
+                arrayList.add(remainingSumVO);
+            });
+            returnEntity = ReturnUtil.success(arrayList);
+        } catch (Exception e) {
+            logger.error("获取收支流水列表失败，错误消息：---:" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity getDataInfo() {
         try {
             int approvalCount = paymentFormMapper.queryApprovalPaymentCount();
             int remittanceCount = paymentFormMapper.queryPaymentRemittanceCount();
+            RemainingSumRecord sumRecord = remainingSumRecordMapper.queryTodayRemainingSum();
+            String remainingSum = sumRecord != null ? sumRecord.getLastRemainingSum() : null;
 
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("approvalCount", approvalCount);
             map.put("remittanceCount", remittanceCount);
+            map.put("remainingSum", remainingSum);
+
             returnEntity = ReturnUtil.success(map);
         } catch (Exception e) {
             logger.error("获取待审批请款数失败，错误消息：--->" + e.getMessage());

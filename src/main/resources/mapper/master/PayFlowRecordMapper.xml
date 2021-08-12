@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.PayFlowRecordMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.PayFlowRecord">
+        <id column="id_pay_flow_record" property="idPayFlowRecord" jdbcType="INTEGER"/>
+        <result column="id_payment_remittance" property="idPaymentRemittance" jdbcType="INTEGER"/>
+        <result column="id_flow_type" property="idFlowType" jdbcType="INTEGER"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="remaining_sum" property="remainingSum" jdbcType="DECIMAL"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_pay_flow_record, id_payment_remittance, id_flow_type, amount, remaining_sum, create_time
+	</sql>
+    <select id="selectAllFlowRecord" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from pay_flow_record
+        where DATE_FORMAT(`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
+    </select>
+    <insert id="addSelective" parameterType="com.project.entity.PayFlowRecord"
+            useGeneratedKeys="true" keyProperty="idPayFlowRecord">
+        insert into `pay_flow_record`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idPayFlowRecord != null">
+                id_pay_flow_record,
+            </if>
+            <if test="idPaymentRemittance != null">
+                id_payment_remittance,
+            </if>
+            <if test="idFlowType != null">
+                id_flow_type,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="remainingSum != null">
+                remaining_sum,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="idPayFlowRecord != null">
+                #{idPayFlowRecord,jdbcType=INTEGER},
+            </if>
+            <if test="idPaymentRemittance != null">
+                #{idPaymentRemittance,jdbcType=INTEGER},
+            </if>
+            <if test="idFlowType != null">
+                #{idFlowType,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="remainingSum != null">
+                #{remainingSum,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+</mapper>
