@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface PaymentFormMapper {
 
-    List<PaymentForm> queryIncomeFlowRecordDetails();
+    List<PaymentForm> queryIncomeFlowRecordDetails(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
-    List<PaymentForm> queryPayFlowRecordDetails();
+    List<PaymentForm> queryPayFlowRecordDetails(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
     int queryPaymentRemittanceCount();
 

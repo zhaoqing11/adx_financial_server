@@ -25,7 +25,14 @@
          FROM income_flow_record ifr
         LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
         WHERE 1=1
-        AND DATE_FORMAT(cr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
+        <choose>
+            <when test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                AND DATE_FORMAT(cr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
+            </when>
+            <otherwise>
+                AND DATE_FORMAT(cr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
+            </otherwise>
+        </choose>
     </select>
     <select id="queryPayFlowRecordDetails" resultType="com.project.entity.PaymentForm">
         SELECT
@@ -46,7 +53,15 @@
         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form`
         LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
         WHERE 1=1
-        AND DATE_FORMAT(pr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
+        <choose>
+            <when test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                AND DATE_FORMAT(pr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
+            </when>
+            <otherwise>
+                AND DATE_FORMAT(pr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
+            </otherwise>
+        </choose>
+
     </select>
     <select id="queryPaymentRemittanceCount" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN (

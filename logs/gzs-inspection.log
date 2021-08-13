@@ -1,6 +1,0 @@
-2021-07-29 11:37:55,793 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select * from `user` where user_name = ? 
-2021-07-29 11:37:55,834 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: root1(String)
-2021-07-29 11:37:55,887 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
-2021-07-29 11:37:59,862 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT g.`id_inspection_group` AS 'idInspectionGroup', g.`name`, g.`join_user` AS 'joinUser', g.`create_time` AS 'createTime', g.`plan_time` AS 'planTime', g.`id_accessory_group` AS 'idAccessoryGroup', i.`id_inspection` AS 'idInspection', i.`id_project` AS 'idProject', pfv.value AS 'projectName' FROM inspection_group g LEFT JOIN inspection i ON i.`id_inspection_group` = g.`id_inspection_group` LEFT JOIN (SELECT id_project,`value` FROM project_field_values WHERE id_project_field = 1)pfv ON pfv.id_project = i.`id_project` LEFT JOIN (SELECT id_project,`value` FROM project_field_values WHERE id_project_field = 3)pfv3 ON pfv3.id_project = i.`id_project` WHERE g.`status` = 1 AND g.`name` LIKE CONCAT('%',?,'%') OR pfv3.value = ( SELECT id_district FROM district WHERE `name` = ? ) ORDER BY g.`create_time` DESC 
-2021-07-29 11:37:59,863 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: (String), (String)
-2021-07-29 11:37:59,968 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 220

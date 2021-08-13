@@ -5,7 +5,7 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface PaymentFormService {
 
-    ReturnEntity queryFlowRecordDetail();
+    ReturnEntity queryFlowRecordDetail(String startTime, String endTime);
 
     ReturnEntity getDataInfo();
 

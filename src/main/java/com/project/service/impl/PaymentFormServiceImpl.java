@@ -35,12 +35,16 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     private ReturnEntity returnEntity;
 
     @Override
-    public ReturnEntity queryFlowRecordDetail() {
+    public ReturnEntity queryFlowRecordDetail(String startTime, String endTime) {
         try {
             List<RemainingSumVO> arrayList = new ArrayList<RemainingSumVO>();
 
+
+            startTime = !Tools.isEmpty(startTime) ? Tools.date2Str(Tools.str2Date(startTime), "yyyy-MM-dd") : startTime;
+            endTime = !Tools.isEmpty(endTime) ? Tools.date2Str(Tools.str2Date(endTime), "yyyy-MM-dd") : endTime;
+
             // 获取支出流水列表
-            List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetails();
+            List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetails(startTime,endTime);
             payFlowRecord.forEach(item -> {
                 RemainingSumVO remainingSumVO = new RemainingSumVO();
                 remainingSumVO.setReasonApplication(item.getReasonApplication());
@@ -59,7 +63,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
             });
 
             // 获取收入流水列表
-            List<PaymentForm> incomeFlowRecord = paymentFormMapper.queryIncomeFlowRecordDetails();
+            List<PaymentForm> incomeFlowRecord = paymentFormMapper.queryIncomeFlowRecordDetails(startTime,endTime);
             incomeFlowRecord.forEach(item -> {
                 RemainingSumVO remainingSumVO = new RemainingSumVO();
                 remainingSumVO.setCollectionAmount(item.getCollectionAmount());

@@ -9,6 +9,11 @@
     <sql id="Base_Column_List">
        id_remaining_sum_record, last_remaining_sum, create_time
 	</sql>
+    <select id="queryRemainingSumByMonth" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `remaining_sum_record`
+        WHERE DATE_FORMAT(create_time, '%Y%m') = #{currentDate}
+    </select>
     <select id="queryTodayRemainingSum" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM `remaining_sum_record`

@@ -27,9 +27,9 @@ public class PaymentFormController {
 
     @ApiOperation(value = "获取收支流水列表")
     @PostMapping(value = "/queryFlowRecordDetail")
-    public ReturnEntity queryFlowRecordDetail() {
+    public ReturnEntity queryFlowRecordDetail(String startTime, String endTime) {
 
-        returnEntity = paymentFormService.queryFlowRecordDetail();
+        returnEntity = paymentFormService.queryFlowRecordDetail(startTime, endTime);
         return returnEntity;
 
     }

@@ -80,7 +80,7 @@
         LEFT JOIN `user` u ON u.`id_user` = cr.`id_user`
         where 1=1
         <if test="startTime != null and startTime != ''">
-            AND cr.`collection_date` BETWEEN #{startTime} AND #{endTime}
+            AND DATE_FORMAT(cr.`collection_date`,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
         </if>
     </select>
     <select id="selectByPage" resultType="com.project.entity.CollectionRecord">
@@ -97,7 +97,7 @@
         LEFT JOIN `user` u ON u.`id_user` = cr.`id_user`
         where 1=1
         <if test="startTime != null and startTime != ''">
-            AND cr.`collection_date` BETWEEN #{startTime} AND #{endTime}
+            AND DATE_FORMAT(cr.`collection_date`,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
         </if>
         ORDER BY cr.`collection_date` DESC
         <if test="pageSize > 0">

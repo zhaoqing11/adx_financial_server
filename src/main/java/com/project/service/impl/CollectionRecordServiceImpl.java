@@ -126,6 +126,9 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
             startIndex = startIndex == null ? 0 : startIndex;
             pageSize = pageSize == null ? 0 : pageSize;
 
+            startTime = Tools.notEmpty(startTime) ? Tools.date2Str(Tools.str2Date(startTime), "yyyy-MM-dd") : startTime;
+            endTime = Tools.notEmpty(endTime) ? Tools.date2Str(Tools.str2Date(endTime), "yyyy-MM-dd") : endTime;
+
             int total = collectionRecordMapper.selectByPageTotal(startTime, endTime);
             PageBean<CollectionRecord> pageBean = new PageBean<CollectionRecord>(startIndex, pageSize, total);
             List<CollectionRecord> collectionRecordList = collectionRecordMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
