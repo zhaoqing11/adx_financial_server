@@ -15,11 +15,14 @@ import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
 import com.project.utils.common.exception.ServiceException;
+import com.project.utils.excel.ExcelUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,75 +46,25 @@ public class ReportServiceImpl implements ReportService {
     private RemainingSumRecordMapper remainingSumRecordMapper;
 
     @Override
-    public ReturnEntity selectReportDetailByDay(int year, int month) {
+    public void exportToExcel(HttpServletResponse response, int year, int month) {
         try {
-            String ctDate = year + "-" + month + "-" + 1;
-            int day = DateUtil.getMaxDayOfMonth(Tools.str2DateFormat(ctDate, "yyyy-MM-dd")); // 获取当月天数
-            String startTime = DateUtil.getFirstDayOfMonth(month); // 获取当月第一天
-            String endTime = DateUtil.getLastDayOfMonth(month); // 获取当月最后一天
-            String currentDate = Tools.date2Str(Tools.str2Date(startTime), "yyyyMM");
+            Date date = Tools.str2DateFormat(year + "-" + month, "yyyy-MM");
+            String fileName = Tools.date2Str(date, "yyyyMM");
 
-            List<PaymentForm> payFlowList = paymentFormMapper.queryPayFlowRecordDetails(startTime, endTime); // 支出
-            List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetails(startTime, endTime); // 收入
-            List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(currentDate); // 余额记录列表
+            List<Map<String, Object>> mapList = getReportDetailByMonth(year, month);
 
-            // 循环创建日期
-            List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
-            for (int i = 0; i < day; i ++) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("day", i + 1);
+            HSSFWorkbook wb = ExcelUtil.exportAnalysisData(mapList, fileName);
+            ExcelUtil.downExcel(response, wb, fileName + "收支明细表");
+        } catch (Exception e) {
+            logger.error("导出" + month + "月流水明细失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+    }
 
-                Report report = new Report();
-                Date dateNum = Tools.str2DateFormat(year + "-" + month + "-" + (i + 1), "yyyy-MM-dd");
-                String date = Tools.date2Str(dateNum, "yyyy-MM-dd");
-
-                // 筛选当月每日余额列表
-                List<RemainingSumRecord> remainingSumList = remainingSumRecordList.stream().filter(s ->
-                        Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
-                        .collect(Collectors.toList());
-                String remainingSum = remainingSumList.size() > 0 ? remainingSumList.get(0).getLastRemainingSum() : "0.00";
-                report.setLastRemainingSum(remainingSum);
-
-                BigDecimal payTotal = new BigDecimal("0.00");
-                BigDecimal serviceChargeTotal = new BigDecimal("0.00");
-                BigDecimal collectionTotal = new BigDecimal("0.00");
-
-                // 筛选当月每日支出流水
-                List<PaymentForm> newPayFlowList = payFlowList.stream().filter(s ->
-                        Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
-                        .collect(Collectors.toList());
-                for (PaymentForm paymentForm : newPayFlowList) {
-                    String payAmount = paymentForm.getRemittanceAmount();
-                    String serviceCharge = paymentForm.getServiceCharge();
-
-                    BigDecimal newPayAmount = Tools.isEmpty(payAmount) ? new BigDecimal("0.00") : new BigDecimal(payAmount);
-                    BigDecimal newServiceCharge = Tools.isEmpty(serviceCharge) ? new BigDecimal("0.00") : new BigDecimal(serviceCharge);
-
-                    payTotal = payTotal.add(newPayAmount);
-                    serviceChargeTotal = serviceChargeTotal.add(newServiceCharge);
-                }
-
-                // 筛选当月每日收入流水
-                List<PaymentForm> newIncomeFlowList = incomeFlowList.stream().filter(s ->
-                        Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
-                        .collect(Collectors.toList());
-                for (PaymentForm paymentForm : newIncomeFlowList) {
-                    String collectionAmount = paymentForm.getCollectionAmount();
-
-                    BigDecimal newCollectionAmount = Tools.isEmpty(collectionAmount) ? new BigDecimal("0.00") : new BigDecimal(collectionAmount);
-
-                    collectionTotal = collectionTotal.add(newCollectionAmount);
-                }
-
-                report.setPayAmount(String.valueOf(payTotal));
-                report.setCollectionAmount(String.valueOf(collectionTotal));
-                report.setServiceCharge(String.valueOf(serviceChargeTotal));
-                map.put("report", report);
-                mapList.add(map);
-            }
-
-            Map<String, Object> map = totalCalculation(mapList);
-            mapList.add(map);
+    @Override
+    public ReturnEntity selectReportDetailByMonth(int year, int month) {
+        try {
+            List<Map<String, Object>> mapList = getReportDetailByMonth(year, month);
             returnEntity = ReturnUtil.success(mapList);
         } catch (Exception e) {
             logger.error("获取月报详情失败，错误消息：--->" + e.getMessage());
@@ -121,7 +74,87 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     *  计算合计
+     * 获取指定月份流水明细
+     *
+     * @param year
+     * @param month
+     * @return
+     */
+    private List<Map<String, Object>> getReportDetailByMonth(int year, int month) {
+        String ctDate = year + "-" + month + "-" + 1;
+        int day = DateUtil.getMaxDayOfMonth(Tools.str2DateFormat(ctDate, "yyyy-MM-dd")); // 获取当月天数
+        String startTime = DateUtil.getFirstDayOfMonth(month); // 获取当月第一天
+        String endTime = DateUtil.getLastDayOfMonth(month); // 获取当月最后一天
+        String currentDate = Tools.date2Str(Tools.str2Date(startTime), "yyyyMM");
+
+        List<PaymentForm> payFlowList = paymentFormMapper.queryPayFlowRecordDetails(startTime, endTime); // 支出
+        List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetails(startTime, endTime); // 收入
+        List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(currentDate); // 余额记录列表
+
+        // 循环创建日期
+        List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+        for (int i = 0; i < day; i++) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("day", i + 1);
+
+            Report report = new Report();
+            Date dateNum = Tools.str2DateFormat(year + "-" + month + "-" + (i + 1), "yyyy-MM-dd");
+            String date = Tools.date2Str(dateNum, "yyyy-MM-dd");
+
+            // 筛选当月每日余额列表
+            List<RemainingSumRecord> remainingSumList = remainingSumRecordList.stream().filter(s ->
+                    Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
+                    .collect(Collectors.toList());
+            String remainingSum = remainingSumList.size() > 0 ? remainingSumList.get(0).getLastRemainingSum() : "0.00";
+            report.setLastRemainingSum(remainingSum);
+
+            BigDecimal payTotal = new BigDecimal("0.00");
+            BigDecimal serviceChargeTotal = new BigDecimal("0.00");
+            BigDecimal collectionTotal = new BigDecimal("0.00");
+
+            // 筛选当月每日支出流水
+            List<PaymentForm> newPayFlowList = payFlowList.stream().filter(s ->
+                    Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
+                    .collect(Collectors.toList());
+            for (PaymentForm paymentForm : newPayFlowList) {
+                String payAmount = paymentForm.getRemittanceAmount();
+                String serviceCharge = paymentForm.getServiceCharge();
+
+                BigDecimal newPayAmount = Tools.isEmpty(payAmount) ? new BigDecimal("0.00") : new BigDecimal(payAmount);
+                BigDecimal newServiceCharge = Tools.isEmpty(serviceCharge) ? new BigDecimal("0.00") : new BigDecimal(serviceCharge);
+
+                payTotal = payTotal.add(newPayAmount);
+                serviceChargeTotal = serviceChargeTotal.add(newServiceCharge);
+            }
+
+            // 筛选当月每日收入流水
+            List<PaymentForm> newIncomeFlowList = incomeFlowList.stream().filter(s ->
+                    Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
+                    .collect(Collectors.toList());
+            for (PaymentForm paymentForm : newIncomeFlowList) {
+                String collectionAmount = paymentForm.getCollectionAmount();
+
+                BigDecimal newCollectionAmount = Tools.isEmpty(collectionAmount) ? new BigDecimal("0.00") : new BigDecimal(collectionAmount);
+
+                collectionTotal = collectionTotal.add(newCollectionAmount);
+            }
+
+            report.setPayAmount(String.valueOf(payTotal));
+            report.setCollectionAmount(String.valueOf(collectionTotal));
+            report.setServiceCharge(String.valueOf(serviceChargeTotal));
+            map.put("report", report);
+            mapList.add(map);
+        }
+
+        Map<String, Object> map = totalCalculation(mapList);
+        mapList.add(map);
+
+        return mapList;
+    }
+
+    /**
+     * 计算合计
+     *
      * @param dataList
      * @return
      */

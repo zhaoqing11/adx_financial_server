@@ -4,9 +4,12 @@ import com.project.service.ReportService;
 import com.project.utils.common.base.ReturnEntity;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @description: 月报相关API
@@ -23,11 +26,19 @@ public class ReportController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "导出收支明细")
+    @GetMapping(value = "/exportToExcel")
+    public void exportToExcel(HttpServletResponse response, int year, int month) {
+
+        reportService.exportToExcel(response, year, month);
+
+    }
+
     @ApiOperation(value = "获取指定月份流水明细")
     @PostMapping(value = "/selectReportDetailByDay")
     public ReturnEntity selectReportDetailByDay(int year, int month) {
 
-        returnEntity = reportService.selectReportDetailByDay(year, month);
+        returnEntity = reportService.selectReportDetailByMonth(year, month);
         return returnEntity;
 
     }

@@ -19,6 +19,7 @@ project:
   rootFolder: /SCResource #文件存放根路径
   imagesPath: /Projects/images/
   tokenExpire: 86400
+  downloadUrl: D:\
 
 spring:
   servlet:
