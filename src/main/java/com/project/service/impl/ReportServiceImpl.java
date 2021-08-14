@@ -8,6 +8,7 @@ import com.project.mapper.master.RemainingSumRecordMapper;
 import com.project.mapper.master.ReportMapper;
 import com.project.service.ReportService;
 import com.project.utils.DateUtil;
+import com.project.utils.DecimalFormatUtil;
 import com.project.utils.ReturnUtil;
 import com.project.utils.Tools;
 import com.project.utils.common.PageBean;
@@ -108,12 +109,58 @@ public class ReportServiceImpl implements ReportService {
                 map.put("report", report);
                 mapList.add(map);
             }
+
+            Map<String, Object> map = totalCalculation(mapList);
+            mapList.add(map);
             returnEntity = ReturnUtil.success(mapList);
         } catch (Exception e) {
             logger.error("获取月报详情失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return returnEntity;
+    }
+
+    /**
+     *  计算合计
+     * @param dataList
+     * @return
+     */
+    public Map<String, Object> totalCalculation(List<Map<String, Object>> dataList) {
+        BigDecimal collectionAmount = new BigDecimal("0.00");
+        BigDecimal payAmount = new BigDecimal("0.00");
+        BigDecimal serviceCharge = new BigDecimal("0.00");
+
+        Map<String, Object> mp = new HashMap<String, Object>();
+        for (Map<String, Object> map : dataList) {
+            Report report = (Report) map.get("report");
+
+            BigDecimal newCollectionAmount = Tools.isEmpty(report.getCollectionAmount()) ? new BigDecimal("0.00") : new BigDecimal(report.getCollectionAmount());
+            BigDecimal newPayAmount = Tools.isEmpty(report.getPayAmount()) ? new BigDecimal("0.00") : new BigDecimal(report.getPayAmount());
+            BigDecimal newServiceCharge = Tools.isEmpty(report.getServiceCharge()) ? new BigDecimal("0.00") : new BigDecimal(report.getServiceCharge());
+
+            collectionAmount = collectionAmount.add(newCollectionAmount);
+            payAmount = payAmount.add(newPayAmount);
+            serviceCharge = serviceCharge.add(newServiceCharge);
+
+            // 匹配以0开头的小数不进行数字格式化
+            String formatLastRemainingSum = report.getLastRemainingSum().matches("^0.*$") ? report.getLastRemainingSum() : DecimalFormatUtil.formatString(new BigDecimal(report.getLastRemainingSum()), null);
+            String formatPayAmount = report.getPayAmount().matches("^0.*$") ? report.getPayAmount() : DecimalFormatUtil.formatString(new BigDecimal(report.getPayAmount()), null);
+            String formatCAmount = report.getCollectionAmount().matches("^0.*$") ? report.getCollectionAmount() : DecimalFormatUtil.formatString(new BigDecimal(report.getCollectionAmount()), null);
+            String formatSCharge = report.getServiceCharge().matches("^0.*$") ? report.getServiceCharge() : DecimalFormatUtil.formatString(new BigDecimal(report.getServiceCharge()), null);
+
+            report.setLastRemainingSum(formatLastRemainingSum);
+            report.setPayAmount(formatPayAmount);
+            report.setCollectionAmount(formatCAmount);
+            report.setServiceCharge(formatSCharge);
+        }
+
+        Report report = new Report();
+        report.setCollectionAmount(DecimalFormatUtil.formatString(collectionAmount, null));
+        report.setPayAmount(DecimalFormatUtil.formatString(payAmount, null));
+        report.setServiceCharge(DecimalFormatUtil.formatString(serviceCharge, null));
+
+        mp.put("report", report);
+        return mp;
     }
 
     @Override
@@ -142,6 +189,20 @@ public class ReportServiceImpl implements ReportService {
             PageBean<Report> pageBean = new PageBean<Report>(startIndex, pageSize, total);
             List<Report> reportList = reportMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
                     currentDate);
+
+            for (Report report : reportList) {
+                String collectionAmount = report.getCollectionAmount();
+                String payAmount = report.getPayAmount();
+                String serviceCharge = report.getServiceCharge();
+
+                collectionAmount = collectionAmount.matches("^0.*$") ? collectionAmount : DecimalFormatUtil.formatString(new BigDecimal(collectionAmount), null);
+                payAmount = payAmount.matches("^0.*$") ? payAmount : DecimalFormatUtil.formatString(new BigDecimal(payAmount), null);
+                serviceCharge = serviceCharge.matches("^0.*$") ? serviceCharge : DecimalFormatUtil.formatString(new BigDecimal(serviceCharge), null);
+
+                report.setCollectionAmount(collectionAmount);
+                report.setPayAmount(payAmount);
+                report.setServiceCharge(serviceCharge);
+            }
 
             pageBean.setList(reportList);
             returnEntity = ReturnUtil.success(pageBean);
