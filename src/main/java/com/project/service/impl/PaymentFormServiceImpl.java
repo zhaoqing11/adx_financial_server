@@ -35,16 +35,22 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     private ReturnEntity returnEntity;
 
     @Override
-    public ReturnEntity queryFlowRecordDetail(String startTime, String endTime) {
+    public ReturnEntity queryFlowRecordDetail(Integer pageNum, Integer pageSize, String startTime, String endTime) {
         try {
             List<RemainingSumVO> arrayList = new ArrayList<RemainingSumVO>();
 
+            pageNum = pageNum == null ? 0 : pageNum;
+            pageSize = pageSize == null ? 0 : pageSize;
 
             startTime = !Tools.isEmpty(startTime) ? Tools.date2Str(Tools.str2Date(startTime), "yyyy-MM-dd") : startTime;
             endTime = !Tools.isEmpty(endTime) ? Tools.date2Str(Tools.str2Date(endTime), "yyyy-MM-dd") : endTime;
 
+            int payTotal = paymentFormMapper.queryPayFlowRecordDetailTotal(startTime, endTime);
+            PageBean<PaymentForm> pageBean = new PageBean<PaymentForm>(pageNum, pageSize, payTotal);
+
             // 获取支出流水列表
-            List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetails(startTime,endTime);
+            List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetail(pageBean.getStartIndex(),
+                    pageBean.getPageSize(), startTime,endTime);
             payFlowRecord.forEach(item -> {
                 RemainingSumVO remainingSumVO = new RemainingSumVO();
                 remainingSumVO.setReasonApplication(item.getReasonApplication());
@@ -62,8 +68,12 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 arrayList.add(remainingSumVO);
             });
 
+            int incomeTotal = paymentFormMapper.queryIncomeFlowRecordDetailTotal(startTime, endTime);
+            PageBean<PaymentForm> pageBean2 = new PageBean<PaymentForm>(pageNum, pageSize, incomeTotal);
+
             // 获取收入流水列表
-            List<PaymentForm> incomeFlowRecord = paymentFormMapper.queryIncomeFlowRecordDetails(startTime,endTime);
+            List<PaymentForm> incomeFlowRecord = paymentFormMapper.queryIncomeFlowRecordDetail(pageBean2.getStartIndex(),
+                    pageBean2.getPageSize(), startTime, endTime);
             incomeFlowRecord.forEach(item -> {
                 RemainingSumVO remainingSumVO = new RemainingSumVO();
                 remainingSumVO.setCollectionAmount(item.getCollectionAmount());
@@ -73,7 +83,12 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 remainingSumVO.setCreateTime(item.getCreateTime());
                 arrayList.add(remainingSumVO);
             });
-            returnEntity = ReturnUtil.success(arrayList);
+
+            pageBean.setList(arrayList);
+            pageBean.setTotalPage(payTotal + incomeTotal);
+            pageBean.setTotalRecord(arrayList.size());
+
+            returnEntity = ReturnUtil.success(pageBean);
         } catch (Exception e) {
             logger.error("获取收支流水列表失败，错误消息：---:" + e.getMessage());
             throw new ServiceException(e.getMessage());

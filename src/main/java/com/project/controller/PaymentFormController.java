@@ -5,7 +5,6 @@ import com.project.service.PaymentFormService;
 import com.project.utils.common.base.ReturnEntity;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,9 +26,9 @@ public class PaymentFormController {
 
     @ApiOperation(value = "获取收支流水列表")
     @PostMapping(value = "/queryFlowRecordDetail")
-    public ReturnEntity queryFlowRecordDetail(String startTime, String endTime) {
+    public ReturnEntity queryFlowRecordDetail(Integer pageNum, Integer pageSize, String startTime, String endTime) {
 
-        returnEntity = paymentFormService.queryFlowRecordDetail(startTime, endTime);
+        returnEntity = paymentFormService.queryFlowRecordDetail(pageNum, pageSize, startTime, endTime);
         return returnEntity;
 
     }

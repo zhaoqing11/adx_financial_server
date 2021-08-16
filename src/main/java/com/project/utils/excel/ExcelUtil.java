@@ -34,7 +34,7 @@ public class ExcelUtil {
     static final String[] ANALYSIS_DATA_COLUMN_FIELD = new String[]{"日期", "上日余额", "本月收入", "本月支出", "手续费"};
 
     /**
-     * 导出幕墙（幕墙综合统计）数据分析
+     * 导出月报统计
      * @param dataList
      * @return
      */
@@ -42,23 +42,14 @@ public class ExcelUtil {
     public static HSSFWorkbook exportAnalysisData(List<Map<String, Object>> dataList, String fileName) {
         HSSFWorkbook wb = createWorkBook();
         HSSFSheet sheet = createSheet(wb, fileName);
-        HSSFRow row = createRow(sheet,0,30);
-
         HSSFCellStyle style = setCellStyle(wb, String.valueOf(FontEnum.FONT_TYPE6), Integer.valueOf(FontEnum.FONT_SIZE1),
                 false,true, false);
-        setFillForegroundColor(style, IndexedColors.GREY_25_PERCENT.getIndex());
-
-        HSSFCell cell = row.createCell((short) 0);
-        cell.setCellStyle(style);
-        cell.setCellValue(new HSSFRichTextString("日期:" + fileName));
         CellRangeAddress range = new CellRangeAddress(0, 0, 0, 4);
-        setRegionStyle(range, sheet, wb, style);
-        sheet.addMergedRegion(range);
         for (int i = 0; i < 5; i++) {
             sheet.setColumnWidth(i, 256 * 15);
         }
 
-        HSSFRow row1 = createRow(sheet,1,30);
+        HSSFRow row1 = createRow(sheet,0,30); // rowIndex 1
         setFieldColumnName(row1, ANALYSIS_DATA_COLUMN_FIELD, style); // 设置标题列值
 
         HSSFCellStyle contentStyle = setCellStyle(wb, String.valueOf(FontEnum.FONT_TYPE1), Integer.valueOf(FontEnum.FONT_SIZE1),
@@ -72,7 +63,7 @@ public class ExcelUtil {
         HSSFCell cell2 = null;
         for (int i = 0; i < newData.size(); i++) {
             String[] array = newData.get(i);
-            row2 = createRow(sheet, (int)i + 2,25);
+            row2 = createRow(sheet, (int)i + 1,25);
             for (int j = 0; j < array.length; j++) {
                 cell2 = row2.createCell((short) j);
                 cell2.setCellStyle(contentStyle);

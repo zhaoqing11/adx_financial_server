@@ -37,8 +37,8 @@ public class Scheduler {
             Date date = new Date();
             String startTime = DateUtil.getFirstDayOfMonth(date.getMonth() + 1);
             String endTime = DateUtil.getLastDayOfMonth(date.getMonth() + 1);
-            List<PaymentForm> payFlowRecordList = paymentFormMapper.queryPayFlowRecordDetails(startTime, endTime); // 获取月支出
-            List<PaymentForm> incomeFlowRecordList = paymentFormMapper.queryIncomeFlowRecordDetails(startTime, endTime); // 获取月收入
+            List<PaymentForm> payFlowRecordList = paymentFormMapper.queryPayFlowRecordDetail(0, 0, startTime, endTime); // 获取月支出
+            List<PaymentForm> incomeFlowRecordList = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime); // 获取月收入
 
             BigDecimal collectionTotal = new BigDecimal("0.00");
             BigDecimal payTotal = new BigDecimal("0.00");

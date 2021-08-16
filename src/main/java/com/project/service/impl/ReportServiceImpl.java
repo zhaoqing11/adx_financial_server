@@ -87,8 +87,8 @@ public class ReportServiceImpl implements ReportService {
         String endTime = DateUtil.getLastDayOfMonth(month); // 获取当月最后一天
         String currentDate = Tools.date2Str(Tools.str2Date(startTime), "yyyyMM");
 
-        List<PaymentForm> payFlowList = paymentFormMapper.queryPayFlowRecordDetails(startTime, endTime); // 支出
-        List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetails(startTime, endTime); // 收入
+        List<PaymentForm> payFlowList = paymentFormMapper.queryPayFlowRecordDetail(0, 0, startTime, endTime); // 支出
+        List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime); // 收入
         List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(currentDate); // 余额记录列表
 
         // 循环创建日期

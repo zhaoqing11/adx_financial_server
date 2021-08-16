@@ -15,7 +15,16 @@
     <sql id="Base_Column_List">
        id_payment_form, `code`, reason_application, amount, payment_name, payment_account, id_user, id_payment_form_state, create_time
 	</sql>
-    <select id="queryIncomeFlowRecordDetails" resultType="com.project.entity.PaymentForm">
+    <select id="queryIncomeFlowRecordDetailTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM income_flow_record ifr
+        LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
+        WHERE 1=1
+        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+            AND DATE_FORMAT(cr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
+        </if>
+    </select>
+    <select id="queryIncomeFlowRecordDetail" resultType="com.project.entity.PaymentForm">
         SELECT
          cr.`amount` as 'collectionAmount',
          ifr.`remaining_sum` AS 'remainingSum',
@@ -25,16 +34,25 @@
          FROM income_flow_record ifr
         LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
         WHERE 1=1
-        <choose>
-            <when test="startTime != null and endTime != null and startTime != '' and endTime != ''">
-                AND DATE_FORMAT(cr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
-            </when>
-            <otherwise>
-                AND DATE_FORMAT(cr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
-            </otherwise>
-        </choose>
+        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+            AND DATE_FORMAT(cr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
+        </if>
+        <if test="pageSize > 0">
+            LIMIT #{startIndex},#{pageSize}
+        </if>
     </select>
-    <select id="queryPayFlowRecordDetails" resultType="com.project.entity.PaymentForm">
+    <select id="queryPayFlowRecordDetailTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM pay_flow_record pfr
+        LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance`
+        LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form`
+        LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
+        WHERE 1=1
+        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+            AND DATE_FORMAT(pr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
+        </if>
+    </select>
+    <select id="queryPayFlowRecordDetail" resultType="com.project.entity.PaymentForm">
         SELECT
          pf.`reason_application` AS 'reasonApplication',
          pf.`amount`,
@@ -53,15 +71,12 @@
         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form`
         LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
         WHERE 1=1
-        <choose>
-            <when test="startTime != null and endTime != null and startTime != '' and endTime != ''">
-                AND DATE_FORMAT(pr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
-            </when>
-            <otherwise>
-                AND DATE_FORMAT(pr.`create_time`, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d')
-            </otherwise>
-        </choose>
-
+        <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+            AND DATE_FORMAT(pr.`create_time`, '%Y-%m-%d') between #{startTime} and #{endTime}
+        </if>
+        <if test="pageSize > 0">
+            LIMIT #{startIndex},#{pageSize}
+        </if>
     </select>
     <select id="queryPaymentRemittanceCount" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN (
