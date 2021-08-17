@@ -2,6 +2,7 @@ package com.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.project.entity.Config;
+import com.project.entity.ConfigVO;
 import com.project.entity.PayFlowRecord;
 import com.project.entity.PaymentRemittance;
 import com.project.mapper.master.ConfigMapper;
@@ -48,13 +49,9 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
                 // 创建支出流水记录
                 Integer idPaymentRemittance = paymentRemittance.getIdPaymentRemittance();
                 Config config = configMapper.selectConfigInfo();
+                ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
-                JSONObject jsonObject = JSONObject.parseObject(config.getConfig());
-                String value = jsonObject.getString("remainingSum");
-                String timeUnit = jsonObject.getString("timeUnit");
-                boolean isCyclical = jsonObject.getBooleanValue("isCyclical");
-
-                BigDecimal remainingSum = new BigDecimal(value); // 余额
+                BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum()); // 余额
                 BigDecimal amount = new BigDecimal(paymentRemittance.getAmount()); // 汇款金额
                 BigDecimal serviceCharge = new BigDecimal(paymentRemittance.getServiceCharge()); // 手续费
 
@@ -68,11 +65,9 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
                 payFlowRecordMapper.addSelective(payFlowRecord);
 
                 // 修改config文件余额变量
-                JSONObject json = new JSONObject();
-                json.put("remainingSum", String.valueOf(money));
-                json.put("timeUnit", timeUnit);
-                json.put("isCyclical", isCyclical);
-                config.setConfig(json.toJSONString());
+                configVO.setRemainingSum(String.valueOf(money));
+                config.setConfig(JSONObject.toJSONString(configVO));
+
                 configMapper.updateConfig(config);
                 returnEntity = ReturnUtil.success("汇款成功");
             } else {

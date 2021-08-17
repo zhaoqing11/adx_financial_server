@@ -1,10 +1,7 @@
 package com.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.project.entity.CollectionRecord;
-import com.project.entity.Config;
-import com.project.entity.IncomeFlowRecord;
-import com.project.entity.PayFlowRecord;
+import com.project.entity.*;
 import com.project.mapper.master.CollectionRecordMapper;
 import com.project.mapper.master.ConfigMapper;
 import com.project.mapper.master.IncomeFlowRecordMapper;
@@ -51,13 +48,9 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
                 // 创建支出流水记录
                 Integer idCollectionRecord = collectionRecord.getIdCollectionRecord();
                 Config config = configMapper.selectConfigInfo();
+                ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
-                JSONObject jsonObject = JSONObject.parseObject(config.getConfig());
-                String value = jsonObject.getString("remainingSum");
-                String timeUnit = jsonObject.getString("timeUnit");
-                boolean isCyclical = jsonObject.getBooleanValue("isCyclical");
-
-                BigDecimal remainingSum = new BigDecimal(value); // 余额
+                BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum()); // 余额
                 BigDecimal amount = new BigDecimal(collectionRecord.getAmount()); // 收款金额
 
                 BigDecimal money = remainingSum.add(amount); // 剩余余额
@@ -70,11 +63,9 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
                 incomeFlowRecordMapper.addSelective(flowRecord);
 
                 // 修改config文件余额变量
-                JSONObject json = new JSONObject();
-                json.put("remainingSum", String.valueOf(money));
-                json.put("timeUnit", timeUnit);
-                json.put("isCyclical", isCyclical);
-                config.setConfig(json.toJSONString());
+                configVO.setRemainingSum(String.valueOf(money));
+                config.setConfig(JSONObject.toJSONString(configVO));
+
                 configMapper.updateConfig(config);
 
                 returnEntity = ReturnUtil.success("新增成功");

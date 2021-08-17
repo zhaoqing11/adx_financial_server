@@ -2,6 +2,7 @@ package com.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.project.entity.Config;
+import com.project.entity.ConfigVO;
 import com.project.entity.RemainingSumRecord;
 import com.project.mapper.master.ConfigMapper;
 import com.project.mapper.master.RemainingSumRecordMapper;
@@ -40,16 +41,9 @@ public class RemainingSumRecordServiceImpl implements RemainingSumRecordService 
             int count = remainingSumRecordMapper.addSelective(remainingSumRecord);
             if (count > 0) {
                 Config config = configMapper.selectConfigInfo();
-                JSONObject jsonObject = JSONObject.parseObject(config.getConfig());
-                String value = jsonObject.getString("remainingSum");
-                String timeUnit = jsonObject.getString("timeUnit");
-                boolean isCyclical = jsonObject.getBooleanValue("isCyclical");
-
-                JSONObject json = new JSONObject();
-                json.put("remainingSum", remainingSumRecord.getLastRemainingSum());
-                json.put("timeUnit", timeUnit);
-                json.put("isCyclical", isCyclical);
-                config.setConfig(json.toJSONString());
+                ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+                configVO.setRemainingSum(remainingSumRecord.getLastRemainingSum());
+                config.setConfig(JSONObject.toJSONString(configVO));
                 configMapper.updateConfig(config);
 
                 returnEntity = ReturnUtil.success("新增成功");
