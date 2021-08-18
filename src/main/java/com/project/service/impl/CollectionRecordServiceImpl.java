@@ -47,7 +47,7 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
             if (count > 0) {
                 // 创建支出流水记录
                 Integer idCollectionRecord = collectionRecord.getIdCollectionRecord();
-                Config config = configMapper.selectConfigInfo();
+                Config config = configMapper.selectConfigInfo(collectionRecord.getIdCardType());
                 ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
                 BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum()); // 余额
@@ -112,7 +112,7 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     }
 
     @Override
-    public ReturnEntity selectByPage(Integer startIndex, Integer pageSize, String startTime, String endTime) {
+    public ReturnEntity selectByPage(Integer startIndex, Integer pageSize, String startTime, String endTime, Integer idCardType) {
         try {
             startIndex = startIndex == null ? 0 : startIndex;
             pageSize = pageSize == null ? 0 : pageSize;
@@ -120,10 +120,10 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
             startTime = Tools.notEmpty(startTime) ? Tools.date2Str(Tools.str2Date(startTime), "yyyy-MM-dd") : startTime;
             endTime = Tools.notEmpty(endTime) ? Tools.date2Str(Tools.str2Date(endTime), "yyyy-MM-dd") : endTime;
 
-            int total = collectionRecordMapper.selectByPageTotal(startTime, endTime);
+            int total = collectionRecordMapper.selectByPageTotal(startTime, endTime, idCardType);
             PageBean<CollectionRecord> pageBean = new PageBean<CollectionRecord>(startIndex, pageSize, total);
             List<CollectionRecord> collectionRecordList = collectionRecordMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
-                    startTime, endTime);
+                    startTime, endTime, idCardType);
 
             pageBean.setList(collectionRecordList);
             returnEntity = ReturnUtil.success(pageBean);

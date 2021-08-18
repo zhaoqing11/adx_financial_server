@@ -12,6 +12,7 @@ public interface CollectionRecordService {
     ReturnEntity deleteSelective(Integer idCollectionRecord);
 
     ReturnEntity selectByPage(Integer startIndex, Integer pageSize,
-                              String startTime, String endTime);
+                              String startTime, String endTime,
+                              Integer idCardType);
 
 }

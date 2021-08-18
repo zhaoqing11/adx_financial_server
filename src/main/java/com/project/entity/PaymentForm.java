@@ -45,4 +45,8 @@ public class PaymentForm {
 
     private String collectionAmount;
 
+    private Integer idCardType;
+
+    private boolean state;
+
 }

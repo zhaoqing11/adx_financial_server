@@ -21,6 +21,8 @@ public class User {
 
     private boolean enable;
 
+    private Integer idDepartment;
+
     public boolean getEnable() {
         return enable;
     }

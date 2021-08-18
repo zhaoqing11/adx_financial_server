@@ -10,9 +10,10 @@
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="enable" property="enable" jdbcType="INTEGER"/>
+        <result column="id_department" property="idDepartment" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_user, id_role, real_name, `username`, `password`, `phone`, `email`, enable
+       id_user, id_role, real_name, `username`, `password`, `phone`, `email`, enable, id_department
 	</sql>
     <select id="selectUserByUserName" resultMap="BaseResultMap"
             parameterType="java.lang.String">

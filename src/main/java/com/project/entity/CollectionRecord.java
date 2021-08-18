@@ -11,11 +11,14 @@ public class CollectionRecord {
 
     private String collectionDate;
 
-    private String collectionAccount;
+//    private String collectionAccount;
 
     private Integer idUser;
 
     private String createTime;
 
     private String userName;
+
+    private Integer idCardType;
+
 }

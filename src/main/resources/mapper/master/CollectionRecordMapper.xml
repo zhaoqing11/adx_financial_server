@@ -3,14 +3,14 @@
 <mapper namespace="com.project.mapper.master.CollectionRecordMapper">
     <resultMap id="BaseResultMap" type="com.project.entity.CollectionRecord">
         <id column="id_collection_record" property="idCollectionRecord" jdbcType="INTEGER"/>
+        <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="collection_date" property="collectionDate" jdbcType="TIMESTAMP"/>
-        <result column="collection_account" property="collectionAccount" jdbcType="VARCHAR"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_collection_record, amount, collection_date, collection_account, id_user, create_time
+       id_collection_record, id_card_type, amount, collection_date, id_user, create_time
 	</sql>
     <insert id="addSelective" parameterType="com.project.entity.CollectionRecord"
             useGeneratedKeys="true" keyProperty="idCollectionRecord">
@@ -19,14 +19,14 @@
             <if test="idCollectionRecord != null">
                 id_collection_record,
             </if>
+            <if test="idCardType != null">
+                id_card_type,
+            </if>
             <if test="amount != null">
                 amount,
             </if>
             <if test="collectionDate != null and collectionDate != ''">
                 collection_date,
-            </if>
-            <if test="collectionAccount != null and collectionAccount != ''">
-                collection_account,
             </if>
             <if test="idUser != null">
                 id_user,
@@ -39,14 +39,14 @@
             <if test="idCollectionRecord != null">
                 #{idCollectionRecord,jdbcType=INTEGER},
             </if>
+            <if test="idCardType != null">
+                #{idCardType,jdbcType=INTEGER},
+            </if>
             <if test="amount != null">
                 #{amount,jdbcType=DECIMAL},
             </if>
             <if test="collectionDate != null and collectionDate != ''">
                 #{collectionDate,jdbcType=VARCHAR},
-            </if>
-            <if test="collectionAccount != null and collectionAccount != ''">
-                #{collectionAccount,jdbcType=VARCHAR},
             </if>
             <if test="idUser != null">
                 #{idUser,jdbcType=INTEGER},
@@ -59,6 +59,9 @@
     <update id="updateSelective" parameterType="com.project.entity.CollectionRecord">
         update collection_record
         <set>
+            <if test="idCardType != null">
+                #{idCardType,jdbcType=INTEGER},
+            </if>
             <if test="amount != null">
                 amount = #{amount,jdbcType=DECIMAL},
             </if>
@@ -82,6 +85,9 @@
         <if test="startTime != null and startTime != ''">
             AND DATE_FORMAT(cr.`collection_date`,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
         </if>
+        <if test="idCardType != null">
+            and cr.id_card_type = #{idCardType,jdbcType=INTEGER}
+        </if>
     </select>
     <select id="selectByPage" resultType="com.project.entity.CollectionRecord">
         SELECT
@@ -90,6 +96,7 @@
         cr.`collection_date` AS 'collectionDate',
         cr.`collection_account` AS 'collectionAccount',
         cr.`create_time` AS 'createTime',
+        cr.id_card_type as 'idCardType',
 
         cr.`id_user` AS 'idUser',
         u.`real_name` AS 'userName'
@@ -98,6 +105,9 @@
         where 1=1
         <if test="startTime != null and startTime != ''">
             AND DATE_FORMAT(cr.`collection_date`,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="idCardType != null">
+            and cr.id_card_type = #{idCardType,jdbcType=INTEGER}
         </if>
         ORDER BY cr.`collection_date` DESC
         <if test="pageSize > 0">

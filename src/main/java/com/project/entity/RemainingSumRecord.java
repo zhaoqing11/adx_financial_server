@@ -10,4 +10,7 @@ public class RemainingSumRecord {
     private String lastRemainingSum;
 
     private String createTime;
+
+    private Integer idCardType;
+
 }

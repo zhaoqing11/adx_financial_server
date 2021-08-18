@@ -2,11 +2,9 @@ package com.project.entity;
 
 public class ConfigVO {
 
-    private String remainingSum;
-
     private String cardNum;
 
-    private String timeUnit;
+    private String remainingSum;
 
     private boolean isCyclical;
 
@@ -24,14 +22,6 @@ public class ConfigVO {
 
     public void setCardNum(String cardNum) {
         this.cardNum = cardNum;
-    }
-
-    public String getTimeUnit() {
-        return timeUnit;
-    }
-
-    public void setTimeUnit(String timeUnit) {
-        this.timeUnit = timeUnit;
     }
 
     public boolean isCyclical() {

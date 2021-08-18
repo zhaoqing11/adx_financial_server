@@ -13,8 +13,10 @@ public interface CollectionRecordMapper {
 
     int deleteSelective(@Param("idCollectionRecord") Integer idCollectionRecord);
 
-    int selectByPageTotal(@Param("startTime") String startTime, @Param("endTime") String endTime);
+    int selectByPageTotal(@Param("startTime") String startTime, @Param("endTime") String endTime,
+                          @Param("idCardType") Integer idCardType);
 
     List<CollectionRecord> selectByPage(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,
-                                        @Param("startTime") String startTime, @Param("endTime") String endTime);
+                                        @Param("startTime") String startTime, @Param("endTime") String endTime,
+                                        @Param("idCardType") Integer idCardType);
 }

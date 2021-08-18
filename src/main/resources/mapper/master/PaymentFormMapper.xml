@@ -11,9 +11,12 @@
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
         <result column="id_payment_form_state" property="idPaymentFormState" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="BOOLEAN"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_form, `code`, reason_application, amount, payment_name, payment_account, id_user, id_payment_form_state, create_time
+       id_payment_form, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
+       id_payment_form_state, state, create_time
 	</sql>
     <select id="queryIncomeFlowRecordDetailTotal" resultType="java.lang.Integer">
         SELECT count(1)
@@ -107,14 +110,16 @@
          pf.`amount`,
          pf.`payment_name` AS 'paymentName',
          pf.`payment_account` AS 'paymentAccount',
+         pf.`id_payment_form_state` AS 'idPaymentFormState',
+         pf.`create_time` AS 'createTime',
+         pf.`id_user` AS 'idUser',
+         pf.`id_card_type` as 'idCardType',
+         pf.`state`,
          pa.`amount` AS 'approvalAmount',
          ua.`real_name` AS 'approvalUser',
          pr.`amount` AS 'remittanceAmount',
          pr.`service_charge` AS 'serviceCharge',
          ur.`real_name` AS 'remittanceUser',
-         pf.`id_payment_form_state` AS 'idPaymentFormState',
-         pf.`create_time` AS 'createTime',
-         pf.`id_user` AS 'idUser',
          u.`real_name` AS 'userName'
          FROM payment_form pf
          LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
@@ -190,6 +195,9 @@
           <if test="code != null and code != ''">
               `code`,
           </if>
+          <if test="idCardType != null">
+              id_card_type,
+          </if>
           <if test="reasonApplication != null and reasonApplication != ''">
               reason_application,
           </if>
@@ -216,6 +224,9 @@
             <if test="code != null and code != ''">
                 #{code,jdbcType=VARCHAR},
             </if>
+            <if test="idCardType != null">
+                #{idCardType,jdbcType=INTEGER},
+            </if>
             <if test="reasonApplication != null and reasonApplication != ''">
                 #{reasonApplication,jdbcType=VARCHAR},
             </if>
@@ -239,6 +250,9 @@
     <update id="updateSelective" parameterType="com.project.entity.PaymentForm">
         update payment_form
         <set>
+            <if test="idCardType != null">
+                id_card_type = #{idCardType,jdbcType=INTEGER},
+            </if>
             <if test="reasonApplication != null and reasonApplication != ''">
                 `reason_application` = #{reasonApplication,jdbcType=VARCHAR},
             </if>
@@ -252,7 +266,10 @@
                 payment_account = #{paymentAccount,jdbcType=VARCHAR},
             </if>
             <if test="idPaymentFormState != null">
-                id_payment_form_state = #{idPaymentFormState, jdbcType=INTEGER}
+                id_payment_form_state = #{idPaymentFormState, jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                `state` = #{state}
             </if>
         </set>
         where id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
@@ -278,6 +295,7 @@
          SELECT
          pf.`id_payment_form` AS 'idPaymentForm',
          pf.`code`,
+         pf.`id_card_type` as 'idCardType',
          pf.`reason_application` AS 'reasonApplication',
          pf.`amount`,
          pf.`payment_name` AS 'paymentName',
@@ -285,6 +303,7 @@
          pf.`id_payment_form_state` as 'idPaymentFormState',
          pf.`create_time` AS 'createTime',
          pf.`id_user` AS 'idUser',
+         pf.`state`,
 
          u.`real_name` AS 'userName'
         FROM payment_form pf

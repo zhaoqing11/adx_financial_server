@@ -40,7 +40,7 @@ public class RemainingSumRecordServiceImpl implements RemainingSumRecordService 
             remainingSumRecord.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             int count = remainingSumRecordMapper.addSelective(remainingSumRecord);
             if (count > 0) {
-                Config config = configMapper.selectConfigInfo();
+                Config config = configMapper.selectConfigInfo(remainingSumRecord.getIdCardType());
                 ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
                 configVO.setRemainingSum(remainingSumRecord.getLastRemainingSum());
                 config.setConfig(JSONObject.toJSONString(configVO));

@@ -1,12 +1,10 @@
 package com.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.project.entity.Config;
-import com.project.entity.ConfigVO;
-import com.project.entity.PayFlowRecord;
-import com.project.entity.PaymentRemittance;
+import com.project.entity.*;
 import com.project.mapper.master.ConfigMapper;
 import com.project.mapper.master.PayFlowRecordMapper;
+import com.project.mapper.master.PaymentFormMapper;
 import com.project.mapper.master.PaymentRemittanceMapper;
 import com.project.service.PaymentRemittanceService;
 import com.project.utils.ReturnUtil;
@@ -29,6 +27,9 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     private static Logger logger = LogManager.getLogger(PaymentFormServiceImpl.class);
 
     @Autowired
+    private PaymentFormMapper paymentFormMapper;
+
+    @Autowired
     private ConfigMapper configMapper;
 
     @Autowired
@@ -48,7 +49,10 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
             if (count > 0) {
                 // 创建支出流水记录
                 Integer idPaymentRemittance = paymentRemittance.getIdPaymentRemittance();
-                Config config = configMapper.selectConfigInfo();
+                PaymentForm paymentForm = paymentFormMapper.selectByPrimaryKey(paymentRemittance.getIdPaymentForm());
+
+                // 获取账目类型配置表
+                Config config = configMapper.selectConfigInfo(paymentForm.getIdCardType());
                 ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
                 BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum()); // 余额
