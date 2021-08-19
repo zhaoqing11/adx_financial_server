@@ -64,6 +64,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 remainingSumVO.setRemainingSum(item.getRemainingSum());
                 remainingSumVO.setIdFlowType(item.getIdFlowType());
                 remainingSumVO.setIdPayFlowRecord(item.getIdPayFlowRecord());
+                remainingSumVO.setIdCardType(item.getIdCardType());
                 remainingSumVO.setCreateTime(item.getCreateTime());
                 arrayList.add(remainingSumVO);
             });
@@ -80,15 +81,39 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 remainingSumVO.setRemainingSum(item.getRemainingSum());
                 remainingSumVO.setIdFlowType(item.getIdFlowType());
                 remainingSumVO.setIdIncomeFlowRecord(item.getIdIncomeFlowRecord());
+                remainingSumVO.setIdCardType(item.getIdCardType());
                 remainingSumVO.setCreateTime(item.getCreateTime());
                 arrayList.add(remainingSumVO);
             });
 
-            pageBean.setList(arrayList);
-            pageBean.setTotalPage(payTotal + incomeTotal);
-            pageBean.setTotalRecord(arrayList.size());
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<RemainingSumVO> publicRemainSumList = new ArrayList<RemainingSumVO>();
+            List<RemainingSumVO> privateRemainSumList = new ArrayList<RemainingSumVO>();
 
-            returnEntity = ReturnUtil.success(pageBean);
+            // 过滤公账私账
+            for (RemainingSumVO remainingSumVO : arrayList) {
+                Integer idCardType = remainingSumVO.getIdCardType();
+                if (idCardType == 1) {
+                    publicRemainSumList.add(remainingSumVO);
+                } else {
+                    privateRemainSumList.add(remainingSumVO);
+                }
+            }
+            Map<String, Object> publicMp = new HashMap<String, Object>();
+            publicMp.put("datas", publicRemainSumList);
+            publicMp.put("totalPage", publicRemainSumList.size());
+
+            Map<String, Object> privateMp = new HashMap<String, Object>();
+            privateMp.put("datas", privateRemainSumList);
+            privateMp.put("totalPage", privateRemainSumList.size());
+
+            map.put("publicRemainSumList", publicMp);
+            map.put("privateRemainSumList", privateMp);
+
+//            pageBean.setList(map);
+//            pageBean.setTotalPage(payTotal + incomeTotal);
+
+            returnEntity = ReturnUtil.success(map);
         } catch (Exception e) {
             logger.error("获取收支流水列表失败，错误消息：---:" + e.getMessage());
             throw new ServiceException(e.getMessage());
@@ -101,13 +126,17 @@ public class PaymentFormServiceImpl implements PaymentFormService {
         try {
             int approvalCount = paymentFormMapper.queryApprovalPaymentCount();
             int remittanceCount = paymentFormMapper.queryPaymentRemittanceCount();
-            RemainingSumRecord sumRecord = remainingSumRecordMapper.queryTodayRemainingSum();
-            String remainingSum = sumRecord != null ? sumRecord.getLastRemainingSum() : null;
+            RemainingSumRecord publicSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(1); // 公账
+            RemainingSumRecord privateSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(2); // 私账
+
+            String publicRemainingSum = publicSumRecord != null ? publicSumRecord.getLastRemainingSum() : null;
+            String privateRemainingSum = privateSumRecord != null ? privateSumRecord.getLastRemainingSum() : null;
 
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("approvalCount", approvalCount);
             map.put("remittanceCount", remittanceCount);
-            map.put("remainingSum", remainingSum);
+            map.put("publicRemainingSum", publicRemainingSum);
+            map.put("privateRemainingSum", privateRemainingSum);
 
             returnEntity = ReturnUtil.success(map);
         } catch (Exception e) {

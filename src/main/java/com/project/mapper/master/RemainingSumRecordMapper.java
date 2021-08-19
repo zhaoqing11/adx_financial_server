@@ -9,7 +9,7 @@ public interface RemainingSumRecordMapper {
 
     List<RemainingSumRecord> queryRemainingSumByMonth(@Param("currentDate") String currentDate);
 
-    RemainingSumRecord queryTodayRemainingSum();
+    RemainingSumRecord queryTodayRemainingSum(@Param("idCardType") Integer idCardType);
 
     int addSelective(RemainingSumRecord remainingSumRecord);
 

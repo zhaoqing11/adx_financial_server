@@ -53,10 +53,9 @@ public class CollectionRecordController {
 
     @ApiOperation(value = "分页条件查询收款列表")
     @PostMapping(value = "/selectByPage")
-    public ReturnEntity selectByPage(Integer pageNum, Integer pageSize,
-                              String startTime, String endTime, Integer idCardType) {
+    public ReturnEntity selectByPage(Integer pageNum, Integer pageSize, CollectionRecord collectionRecord) {
 
-        returnEntity = collectionRecordService.selectByPage(pageNum, pageSize, startTime, endTime, idCardType);
+        returnEntity = collectionRecordService.selectByPage(pageNum, pageSize, collectionRecord);
         return returnEntity;
 
     }

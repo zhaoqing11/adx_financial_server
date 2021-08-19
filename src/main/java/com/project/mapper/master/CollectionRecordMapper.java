@@ -17,6 +17,5 @@ public interface CollectionRecordMapper {
                           @Param("idCardType") Integer idCardType);
 
     List<CollectionRecord> selectByPage(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,
-                                        @Param("startTime") String startTime, @Param("endTime") String endTime,
-                                        @Param("idCardType") Integer idCardType);
+                                        @Param("collectionRecord") CollectionRecord collectionRecord);
 }

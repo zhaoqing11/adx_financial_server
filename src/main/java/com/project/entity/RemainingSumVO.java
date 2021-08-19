@@ -30,6 +30,16 @@ public class RemainingSumVO {
 
     private String createTime;
 
+    private Integer idCardType;
+
+    public Integer getIdCardType() {
+        return idCardType;
+    }
+
+    public void setIdCardType(Integer idCardType) {
+        this.idCardType = idCardType;
+    }
+
     public String getReasonApplication() {
         return reasonApplication;
     }

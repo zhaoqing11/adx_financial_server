@@ -112,18 +112,21 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     }
 
     @Override
-    public ReturnEntity selectByPage(Integer startIndex, Integer pageSize, String startTime, String endTime, Integer idCardType) {
+    public ReturnEntity selectByPage(Integer startIndex, Integer pageSize, CollectionRecord collectionRecord) {
         try {
             startIndex = startIndex == null ? 0 : startIndex;
             pageSize = pageSize == null ? 0 : pageSize;
 
+            String startTime = collectionRecord.getStartTime();
+            String endTime = collectionRecord.getEndTime();
+
             startTime = Tools.notEmpty(startTime) ? Tools.date2Str(Tools.str2Date(startTime), "yyyy-MM-dd") : startTime;
             endTime = Tools.notEmpty(endTime) ? Tools.date2Str(Tools.str2Date(endTime), "yyyy-MM-dd") : endTime;
 
-            int total = collectionRecordMapper.selectByPageTotal(startTime, endTime, idCardType);
+            int total = collectionRecordMapper.selectByPageTotal(startTime, endTime, collectionRecord.getIdCardType());
             PageBean<CollectionRecord> pageBean = new PageBean<CollectionRecord>(startIndex, pageSize, total);
-            List<CollectionRecord> collectionRecordList = collectionRecordMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
-                    startTime, endTime, idCardType);
+            List<CollectionRecord> collectionRecordList = collectionRecordMapper.selectByPage(pageBean.getStartIndex(),
+                    pageBean.getPageSize(),collectionRecord);
 
             pageBean.setList(collectionRecordList);
             returnEntity = ReturnUtil.success(pageBean);

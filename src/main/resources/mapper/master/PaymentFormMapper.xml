@@ -30,6 +30,7 @@
     <select id="queryIncomeFlowRecordDetail" resultType="com.project.entity.PaymentForm">
         SELECT
          cr.`amount` as 'collectionAmount',
+         cr.`id_card_type` as 'idCardType',
          ifr.`remaining_sum` AS 'remainingSum',
          ifr.`id_flow_type` AS 'idFlowType',
          ifr.`id_income_flow_record` AS 'idIncomeFlowRecord',
@@ -62,6 +63,7 @@
          pf.`payment_name` AS 'paymentName',
          pf.`payment_account` AS 'paymentAccount',
          pf.`code`,
+         pf.`id_card_type` as 'idCardType',
          pa.`amount` AS 'approvalAmount',
          pr.`amount` AS 'remittanceAmount',
          pr.`service_charge` AS 'serviceCharge',
@@ -100,6 +102,9 @@
             <if test="paymentForm.code != null and paymentForm.code != ''">
                 AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
             </if>
+            <if test="paymentForm.idCardType != null">
+                and pf.id_card_type = #{paymentForm.idCardType,jdbcType=INTEGER}
+            </if>
         </if>
     </select>
     <select id="queryAllPaymentForm" resultType="com.project.entity.PaymentForm">
@@ -131,6 +136,9 @@
         <if test="paymentForm != null">
             <if test="paymentForm.code != null and paymentForm.code != ''">
                 AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="paymentForm.idCardType != null">
+                and pf.id_card_type = #{paymentForm.idCardType,jdbcType=INTEGER}
             </if>
         </if>
         ORDER BY pf.`create_time` DESC

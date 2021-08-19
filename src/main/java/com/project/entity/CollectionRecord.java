@@ -21,4 +21,8 @@ public class CollectionRecord {
 
     private Integer idCardType;
 
+    private String startTime;
+
+    private String endTime;
+
 }

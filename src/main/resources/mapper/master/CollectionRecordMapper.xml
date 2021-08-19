@@ -68,9 +68,6 @@
             <if test="collectionDate != null and collectionDate != ''">
                 collection_date = #{collectionDate,jdbcType=VARCHAR},
             </if>
-            <if test="collectionAccount != null and collectionAccount != ''">
-                collection_account = #{collectionAccount,jdbcType=VARCHAR},
-            </if>
         </set>
         where id_collection_record = #{idCollectionRecord,jdbcType=INTEGER}
     </update>
@@ -94,7 +91,6 @@
         cr.`id_collection_record` AS 'idCollectionRecord',
         cr.`amount`,
         cr.`collection_date` AS 'collectionDate',
-        cr.`collection_account` AS 'collectionAccount',
         cr.`create_time` AS 'createTime',
         cr.id_card_type as 'idCardType',
 
@@ -103,11 +99,11 @@
         FROM collection_record cr
         LEFT JOIN `user` u ON u.`id_user` = cr.`id_user`
         where 1=1
-        <if test="startTime != null and startTime != ''">
-            AND DATE_FORMAT(cr.`collection_date`,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
+        <if test="collectionRecord.startTime != null and collectionRecord.startTime != ''">
+            AND DATE_FORMAT(cr.`collection_date`,'%Y-%m-%d') BETWEEN #{collectionRecord.startTime} AND #{collectionRecord.endTime}
         </if>
-        <if test="idCardType != null">
-            and cr.id_card_type = #{idCardType,jdbcType=INTEGER}
+        <if test="collectionRecord.idCardType != null">
+            and cr.id_card_type = #{collectionRecord.idCardType,jdbcType=INTEGER}
         </if>
         ORDER BY cr.`collection_date` DESC
         <if test="pageSize > 0">
