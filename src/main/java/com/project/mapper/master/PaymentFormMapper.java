@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface PaymentFormMapper {
 
+    List<PaymentForm> queryLastDayCollectionRecord(@Param("idCardType") Integer idCardType);
+
+    List<PaymentForm> queryLastDayFlowRecord(@Param("idCardType") Integer idCardType);
+
     int queryIncomeFlowRecordDetailTotal(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
     List<PaymentForm> queryIncomeFlowRecordDetail(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,

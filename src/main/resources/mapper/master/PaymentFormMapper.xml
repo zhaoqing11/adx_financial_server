@@ -18,6 +18,34 @@
        id_payment_form, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
        id_payment_form_state, state, create_time
 	</sql>
+    <select id="queryLastDayCollectionRecord" resultType="com.project.entity.PaymentForm">
+         SELECT
+         amount as 'collectionAmount',
+         collection_date as 'collectionDate'
+         FROM `collection_record`
+         WHERE id_card_type = #{idCardType,jdbcType=INTEGER}
+         AND  DATE_FORMAT(NOW(), '%Y%m%d') - DATE_FORMAT(collection_date, '%Y%m%d') = 1
+    </select>
+    <select id="queryLastDayFlowRecord" resultType="com.project.entity.PaymentForm">
+        SELECT
+         pf.`code`,
+         pf.`reason_application` AS 'reasonApplication',
+         pf.`amount`,
+         pf.`payment_name` AS 'paymentName',
+         pf.`payment_account` AS 'paymentAccount',
+
+         pa.`amount` AS 'approvalAmount',
+         pa.`create_time` AS 'approvalCreateTime',
+
+         pr.`amount` AS 'remittanceAmount',
+         pr.`service_charge` AS 'serviceCharge',
+         pr.`remittance_date` AS 'remittanceDate'
+         FROM payment_form pf
+        LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
+        LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form`
+        WHERE pf.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        AND DATE_FORMAT(NOW(), '%Y%m%d') - DATE_FORMAT(pr.`remittance_date`, '%Y%m%d') = 1
+    </select>
     <select id="queryIncomeFlowRecordDetailTotal" resultType="java.lang.Integer">
         SELECT count(1)
         FROM income_flow_record ifr

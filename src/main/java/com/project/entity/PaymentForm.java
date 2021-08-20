@@ -35,6 +35,8 @@ public class PaymentForm {
 
     private String remittanceUser;
 
+    private String remittanceDate;
+
     private String remainingSum;
 
     private Integer idFlowType;
@@ -44,6 +46,8 @@ public class PaymentForm {
     private Integer idIncomeFlowRecord;
 
     private String collectionAmount;
+
+    private String collectionDate;
 
     private Integer idCardType;
 

@@ -35,6 +35,51 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     private ReturnEntity returnEntity;
 
     @Override
+    public ReturnEntity queryLastDayFlowRecord(Integer idCardType) {
+        try {
+            List<PaymentForm> flowRecordList = paymentFormMapper.queryLastDayFlowRecord(idCardType);
+            List<PaymentForm> collectionRcordList = paymentFormMapper.queryLastDayCollectionRecord(idCardType);
+
+            List<RemainingSumVO> remainingSumVOS = new ArrayList<RemainingSumVO>();
+            for (PaymentForm paymentForm : flowRecordList) {
+                RemainingSumVO remainingSumVO = new RemainingSumVO();
+                remainingSumVO.setCode(paymentForm.getCode());
+                remainingSumVO.setReasonApplication(paymentForm.getReasonApplication());
+                remainingSumVO.setAmount(paymentForm.getAmount());
+                remainingSumVO.setPaymentName(paymentForm.getPaymentName());
+                remainingSumVO.setPaymentAccount(paymentForm.getPaymentAccount());
+                remainingSumVO.setApprovalAmount(paymentForm.getApprovalAmount());
+                remainingSumVO.setRemittanceAmount(paymentForm.getRemittanceAmount());
+                remainingSumVO.setServiceCharge(paymentForm.getServiceCharge());
+                remainingSumVO.setRemittanceDate(paymentForm.getRemittanceDate());
+                remainingSumVOS.add(remainingSumVO);
+            }
+
+            for (PaymentForm paymentForm : collectionRcordList) {
+                RemainingSumVO remainingSumVO = new RemainingSumVO();
+                remainingSumVO.setCode(paymentForm.getCode());
+                remainingSumVO.setReasonApplication(paymentForm.getReasonApplication());
+                remainingSumVO.setAmount(paymentForm.getAmount());
+                remainingSumVO.setPaymentName(paymentForm.getPaymentName());
+                remainingSumVO.setPaymentAccount(paymentForm.getPaymentAccount());
+                remainingSumVO.setApprovalAmount(paymentForm.getApprovalAmount());
+                remainingSumVO.setRemittanceAmount(paymentForm.getRemittanceAmount());
+                remainingSumVO.setServiceCharge(paymentForm.getServiceCharge());
+                remainingSumVO.setRemittanceDate(paymentForm.getRemittanceDate());
+
+                remainingSumVO.setCollectionAmount(paymentForm.getCollectionAmount());
+                remainingSumVO.setCollectionDate(paymentForm.getCollectionDate());
+                remainingSumVOS.add(remainingSumVO);
+            }
+            Map<String, Object> map = new HashMap<String, Object>();
+        } catch (Exception e) {
+            logger.error("获取上日收支明细失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity queryFlowRecordDetail(Integer pageNum, Integer pageSize, String startTime, String endTime) {
         try {
             List<RemainingSumVO> arrayList = new ArrayList<RemainingSumVO>();
@@ -50,7 +95,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
 
             // 获取支出流水列表
             List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetail(pageBean.getStartIndex(),
-                    pageBean.getPageSize(), startTime,endTime);
+                    pageBean.getPageSize(), startTime, endTime);
             payFlowRecord.forEach(item -> {
                 RemainingSumVO remainingSumVO = new RemainingSumVO();
                 remainingSumVO.setReasonApplication(item.getReasonApplication());

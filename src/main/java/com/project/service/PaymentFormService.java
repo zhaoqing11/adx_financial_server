@@ -5,6 +5,8 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface PaymentFormService {
 
+    ReturnEntity queryLastDayFlowRecord(Integer idCardType);
+
     ReturnEntity queryFlowRecordDetail(Integer pageNum, Integer pageSize, String startTime, String endTime);
 
     ReturnEntity getDataInfo();

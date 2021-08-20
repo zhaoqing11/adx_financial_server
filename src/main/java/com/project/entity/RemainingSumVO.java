@@ -20,6 +20,8 @@ public class RemainingSumVO {
 
     private String remainingSum;
 
+    private String remittanceDate;
+
     private Integer idFlowType;
 
     private Integer idPayFlowRecord;
@@ -28,9 +30,27 @@ public class RemainingSumVO {
 
     private String collectionAmount;
 
+    private String collectionDate;
+
     private String createTime;
 
     private Integer idCardType;
+
+    public String getCollectionDate() {
+        return collectionDate;
+    }
+
+    public void setCollectionDate(String collectionDate) {
+        this.collectionDate = collectionDate;
+    }
+
+    public String getRemittanceDate() {
+        return remittanceDate;
+    }
+
+    public void setRemittanceDate(String remittanceDate) {
+        this.remittanceDate = remittanceDate;
+    }
 
     public Integer getIdCardType() {
         return idCardType;
