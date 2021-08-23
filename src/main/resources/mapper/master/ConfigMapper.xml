@@ -9,6 +9,9 @@
     <sql id="Base_Column_List">
        id_config, `name`, config
 	</sql>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `config`
+    </select>
     <select id="selectConfigInfo" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from `config`

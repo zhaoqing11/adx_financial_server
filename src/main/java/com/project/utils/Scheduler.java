@@ -38,8 +38,14 @@ public class Scheduler {
     @Autowired
     private PaymentFormMapper paymentFormMapper;
 
-    // 每天零点生成上日收支明细
-    @Scheduled(cron = "0 */1 * * * ?") // 0 0 0 * * ?
+    private static final Integer PRIVATE_TYPE = 0; // 私账类型
+
+    private static final Integer PUBLIC_TYPE = 1; // 公账类型
+
+    /**
+     * 每天零点生成上日收支明细
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void dailyReport() {
         try {
@@ -51,9 +57,8 @@ public class Scheduler {
             List<PaymentForm> privatePayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(2);
             List<PaymentForm> privateCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(2);
 
-            createPublicDaily(publicPayFlowRecord, publicCollectionRecord);
-            createPrivateDaily(privatePayFlowRecord, privateCollectionRecord);
-
+            createDaily(publicPayFlowRecord, publicCollectionRecord, PUBLIC_TYPE);
+            createDaily(privatePayFlowRecord, privateCollectionRecord, PRIVATE_TYPE);
             logger.info("生成日报成功————————————————————————————————————————————");
         } catch (Exception e) {
             logger.error("生成日报失败，错误消息：--->" + e.getMessage());
@@ -61,7 +66,13 @@ public class Scheduler {
         }
     }
 
-    private void createPrivateDaily(List<PaymentForm> payFlow, List<PaymentForm> collectionFlow) {
+    /**
+     * 创建日报
+     * @param payFlow
+     * @param collectionFlow
+     * @param type 账目类型
+     */
+    private void createDaily(List<PaymentForm> payFlow, List<PaymentForm> collectionFlow, int type) {
         BigDecimal payTotal = new BigDecimal("0.00");
         BigDecimal serviceChargeTotal = new BigDecimal("0.00");
         BigDecimal collectionTotal = new BigDecimal("0.00");
@@ -78,11 +89,25 @@ public class Scheduler {
 
         for (PaymentForm paymentForm : collectionFlow) {
             String collectionAmount = paymentForm.getCollectionAmount();
-            BigDecimal convertCollectionAmount = Tools.isEmpty(collectionAmount) ? new BigDecimal("0.00") : new BigDecimal(collectionAmount);
+            BigDecimal convertCollectionAmount = Tools.isEmpty(collectionAmount) ? new BigDecimal("0.00"): new BigDecimal(collectionAmount);
 
             collectionTotal = collectionTotal.add(convertCollectionAmount);
         }
 
+        if (type == 0) {
+            insertPrivateDaily(payTotal, serviceChargeTotal, collectionTotal);
+        } else {
+            insertPublicDaily(payTotal, serviceChargeTotal, collectionTotal);
+        }
+    }
+
+    /**
+     * 创建私账
+     * @param payTotal
+     * @param serviceChargeTotal
+     * @param collectionTotal
+     */
+    private void insertPrivateDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
         PrivateDaily privateDaily = new PrivateDaily();
         privateDaily.setPayAmount(String.valueOf(payTotal));
         privateDaily.setServiceCharge(String.valueOf(serviceChargeTotal));
@@ -91,28 +116,13 @@ public class Scheduler {
         privateDailyMapper.insertSelective(privateDaily);
     }
 
-    private void createPublicDaily(List<PaymentForm> payFlow, List<PaymentForm> collectionFlow) {
-        BigDecimal payTotal = new BigDecimal("0.00");
-        BigDecimal serviceChargeTotal = new BigDecimal("0.00");
-        BigDecimal collectionTotal = new BigDecimal("0.00");
-
-        for (PaymentForm paymentForm : payFlow) {
-            String payAmount = paymentForm.getRemittanceAmount();
-            String serviceCharge = paymentForm.getServiceCharge();
-            BigDecimal convertPayAmount = Tools.isEmpty(payAmount) ? new BigDecimal("0.00") : new BigDecimal(payAmount);
-            BigDecimal convertServiceCharge = Tools.isEmpty(serviceCharge) ? new BigDecimal("0.00") : new BigDecimal(serviceCharge);
-
-            payTotal = payTotal.add(convertPayAmount);
-            serviceChargeTotal = serviceChargeTotal.add(convertServiceCharge);
-        }
-
-        for (PaymentForm paymentForm : collectionFlow) {
-            String collectionAmount = paymentForm.getCollectionAmount();
-            BigDecimal convertCollectionAmount = Tools.isEmpty(collectionAmount) ? new BigDecimal("0.00") : new BigDecimal(collectionAmount);
-
-            collectionTotal = collectionTotal.add(convertCollectionAmount);
-        }
-
+    /**
+     * 创建公账
+     * @param payTotal
+     * @param serviceChargeTotal
+     * @param collectionTotal
+     */
+    private void insertPublicDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
         PublicDaily daily = new PublicDaily();
         daily.setPayAmount(String.valueOf(payTotal));
         daily.setServiceCharge(String.valueOf(serviceChargeTotal));
@@ -121,6 +131,10 @@ public class Scheduler {
         dailyMapper.insertSelective(daily);
     }
 
+    /**
+     * 获取上一天日期
+     * @return
+     */
     private String getLastDay(){
         Date date = new Date();
         String year = Tools.date2Str(date, "yyyy");
@@ -129,7 +143,9 @@ public class Scheduler {
         return year + "-" + month + "-" + day;
     }
 
-    // 生成月报,每月最后一天零点执行
+    /**
+     * 生成月报,每月最后一天零点执行
+     */
     @Scheduled(cron = "0 0 0 L * ?") //  0 */1 * * * ? （每隔一分钟执行）
     @Transactional
     public void maintenanceReport() {

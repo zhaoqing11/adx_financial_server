@@ -1,14 +1,23 @@
 package com.project.service;
 
+import com.project.entity.PrivateDaily;
 import com.project.entity.PublicDaily;
 import com.project.utils.common.base.ReturnEntity;
 
 public interface DailyService {
 
-    ReturnEntity updateSelective(PublicDaily daily);
+    ReturnEntity queryPrivateDailyByDate(String date);
 
-    ReturnEntity insertSelective(PublicDaily daily);
+    ReturnEntity queryPublicDailyByDate(String date);
 
-    ReturnEntity selectByPage(Integer startIndex, Integer pageSize, PublicDaily daily);
+    ReturnEntity updatePublicDaily(PublicDaily daily);
+
+    ReturnEntity updatePrivateDaily(PrivateDaily daily);
+
+    ReturnEntity insertPublicDaily(PublicDaily daily);
+
+    ReturnEntity selectPublicDailyByPage(Integer startIndex, Integer pageSize, PublicDaily daily);
+
+    ReturnEntity selectPrivateDailyByPage(Integer startIndex, Integer pageSize, PrivateDaily daily);
 
 }

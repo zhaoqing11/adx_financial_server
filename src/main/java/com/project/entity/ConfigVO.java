@@ -6,7 +6,15 @@ public class ConfigVO {
 
     private String remainingSum;
 
-    private boolean isCyclical;
+    private String accountName;
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
 
     public String getRemainingSum() {
         return remainingSum;
@@ -24,12 +32,5 @@ public class ConfigVO {
         this.cardNum = cardNum;
     }
 
-    public boolean isCyclical() {
-        return isCyclical;
-    }
-
-    public void setCyclical(boolean cyclical) {
-        isCyclical = cyclical;
-    }
 
 }

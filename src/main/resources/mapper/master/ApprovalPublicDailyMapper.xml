@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ApprovalPublicDailyMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalPublicDaily">
+        <id column="id_approval_public_daily" property="idApprovalPublicDaily" jdbcType="INTEGER"/>
+        <result column="id_public_daily" property="idPublicDaily" jdbcType="INTEGER"/>
+        <result column="id_result_type" property="idResultType" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_approval_public_daily, id_public_daily, id_result_type, `remark`, id_user, create_time
+	</sql>
+    <insert id="insertSelective" parameterType="com.project.entity.ApprovalPublicDaily"
+                      useGeneratedKeys="true" keyProperty="idApprovalPublicDaily">
+       insert into approval_public_daily
+       <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="idApprovalPublicDaily">
+               id_approval_public_daily,
+           </if>
+           <if test="idPublicDaily != null">
+               id_public_daily,
+           </if>
+           <if test="idResultType != null">
+               id_result_type,
+           </if>
+           <if test="remark != null and remark != ''">
+               `remark`,
+           </if>
+           <if test="idUser != null">
+               id_user,
+           </if>
+           <if test="createTime != null and createTime != ''">
+               create_time
+           </if>
+       </trim>
+       <trim prefix="values(" suffix=")" suffixOverrides=",">
+           <if test="idApprovalPublicDaily">
+               #{idApprovalPublicDaily,jdbcType=INTEGER},
+           </if>
+           <if test="idPublicDaily != null">
+               #{idPublicDaily,jdbcType=INTEGER},
+           </if>
+           <if test="idResultType != null">
+               #{idResultType,jdbcType=INTEGER},
+           </if>
+           <if test="remark != null and remark != ''">
+               #{remark,jdbcType=INTEGER},
+           </if>
+           <if test="idUser != null">
+               #{idUser,jdbcType=INTEGER},
+           </if>
+           <if test="createTime != null and createTime != ''">
+               #{createTime,jdbcType=TIMESTAMP}
+           </if>
+       </trim>
+    </insert>
+</mapper>
