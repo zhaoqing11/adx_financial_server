@@ -30,6 +30,7 @@
         LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
         WHERE cr.`id_card_type` = #{idCardType,jdbcType=INTEGER}
         AND DATE_FORMAT(cr.`create_time`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
+        order by cr.create_time desc
     </select>
     <select id="selectPaymentByIdCardType" resultType="com.project.entity.PaymentForm">
         SELECT
@@ -52,6 +53,7 @@
         LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
         WHERE pf.`id_card_type` = #{idCardType,jdbcType=INTEGER}
         AND DATE_FORMAT(pr.`create_time`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
+        order by pr.create_time desc
     </select>
     <select id="queryLastDayCollectionRecord" resultType="com.project.entity.PaymentForm">
          SELECT

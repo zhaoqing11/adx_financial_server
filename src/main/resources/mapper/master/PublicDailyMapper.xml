@@ -6,12 +6,16 @@
       <result column="collection_amount" property="collectionAmount" jdbcType="DECIMAL"/>
       <result column="pay_amount" property="payAmount" jdbcType="DECIMAL"/>
       <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
+      <result column="remaining_sum" property="remainingSum" jdbcType="DECIMAL"/>
       <result column="state" property="state" jdbcType="INTEGER"/>
       <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_public_daily, collection_amount, pay_amount, service_charge, state, create_time
+       id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time
 	</sql>
+    <select id="selectIsExitUnApprovalDaily" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` &lt;&gt; 1
+    </select>
     <update id="updateSelective" parameterType="com.project.entity.PublicDaily">
         update `public_daily`
         <set>
@@ -23,6 +27,9 @@
             </if>
             <if test="serviceCharge != null and serviceCharge != ''">
                 `service_charge` = #{serviceCharge},
+            </if>
+            <if test="remainingSum != null and remainingSum != ''">
+                `remaining_sum` = #{remainingSum},
             </if>
             <if test="state != null">
                 `state` = #{state}
@@ -45,6 +52,9 @@
             <if test="serviceCharge != null and serviceCharge != ''">
                 service_charge,
             </if>
+            <if test="remainingSum != null and remainingSum != ''">
+                `remaining_sum`,
+            </if>
             <if test="state != null">
                 state,
             </if>
@@ -65,6 +75,9 @@
             <if test="serviceCharge != null and serviceCharge != ''">
                 #{serviceCharge},
             </if>
+            <if test="remainingSum != null and remainingSum != ''">
+                #{remainingSum},
+            </if>
             <if test="state != null">
                 #{state,jdbcType=INTEGER},
             </if>
@@ -81,6 +94,9 @@
             <if test="daily.state != null">
                 and state = #{state,jdbcType=INTEGER}
             </if>
+            <if test="daily.createTime != null and daily.createTime != ''">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') = #{daily.createTime}
+            </if>
         </if>
     </select>
     <select id="selectByPage" resultMap="BaseResultMap">
@@ -90,6 +106,9 @@
         <if test="daily != null">
             <if test="daily.state != null">
                and state = #{state,jdbcType=INTEGER}
+            </if>
+            <if test="daily.createTime != null and daily.createTime != ''">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') = #{daily.createTime}
             </if>
         </if>
         <if test="pageSize > 0">

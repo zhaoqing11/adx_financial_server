@@ -1,7 +1,6 @@
 package com.project.utils.excel;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.entity.Report;
+import com.project.entity.PublicReport;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -86,10 +85,10 @@ public class ExcelUtil {
             String[] formatData = new String[5];
 
             String day = String.valueOf(data.get("day")) ;
-            Report report = (Report) data.get("report");
+            PublicReport report = (PublicReport) data.get("report");
 
 //            ObjectMapper objectMapper = new ObjectMapper();
-//            Report report = objectMapper.convertValue(entry.getValue(), Report.class);
+//            PublicReport report = objectMapper.convertValue(entry.getValue(), PublicReport.class);
             if (i >= dataList.size() - 1) {
                 formatData[0] = "合计";
             } else {

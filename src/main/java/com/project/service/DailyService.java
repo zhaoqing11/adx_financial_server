@@ -6,6 +6,8 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface DailyService {
 
+    ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType);
+
     ReturnEntity queryPrivateDailyByDate(String date);
 
     ReturnEntity queryPublicDailyByDate(String date);

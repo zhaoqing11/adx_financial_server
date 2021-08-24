@@ -41,6 +41,23 @@ public class DailyServiceImpl implements DailyService {
     private ReturnEntity returnEntity;
 
     @Override
+    public ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType) {
+        try {
+            int count = 0;
+            if (idCardType == 1) { // 公账
+                count = publicDailyMapper.selectIsExitUnApprovalDaily();
+            } else { // 私账
+                count = privateDailyMapper.selectIsExitUnApprovalDaily();
+            }
+            returnEntity = ReturnUtil.success(count);
+        } catch (Exception e) {
+            logger.error("查询上一天账单核对信息失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity queryPrivateDailyByDate(String date) {
         try {
             // 获取私账收支列表
@@ -85,6 +102,7 @@ public class DailyServiceImpl implements DailyService {
             remainingSumVO.setRemittanceAmount(item.getRemittanceAmount());
             remainingSumVO.setServiceCharge(item.getServiceCharge());
             remainingSumVO.setRemainingSum(item.getRemainingSum());
+            remainingSumVO.setCreateTime(item.getCreateTime());
             remainingSumVOS.add(remainingSumVO);
         }
 
@@ -92,6 +110,7 @@ public class DailyServiceImpl implements DailyService {
             RemainingSumVO remainingSumVO = new RemainingSumVO();
             remainingSumVO.setCollectionAmount(item.getCollectionAmount());
             remainingSumVO.setRemainingSum(item.getRemainingSum());
+            remainingSumVO.setCreateTime(item.getCreateTime());
             remainingSumVOS.add(remainingSumVO);
         }
         return remainingSumVOS;
@@ -153,7 +172,7 @@ public class DailyServiceImpl implements DailyService {
 
             int total = publicDailyMapper.selectByPageTotal(daily);
             PageBean<PublicDaily> pageBean = new PageBean<PublicDaily>(startIndex, pageSize, total);
-            List<PublicDaily> dailyList = publicDailyMapper.selectByPage(startIndex, pageSize, daily);
+            List<PublicDaily> dailyList = publicDailyMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(), daily);
             pageBean.setList(dailyList);
 
             returnEntity = ReturnUtil.success(pageBean);
@@ -172,7 +191,7 @@ public class DailyServiceImpl implements DailyService {
 
             int total = privateDailyMapper.selectByPageTotal(daily);
             PageBean<PublicDaily> pageBean = new PageBean<PublicDaily>(startIndex, pageSize, total);
-            List<PrivateDaily> dailyList = privateDailyMapper.selectByPage(startIndex, pageSize, daily);
+            List<PrivateDaily> dailyList = privateDailyMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(), daily);
             pageBean.setList(dailyList);
 
             returnEntity = ReturnUtil.success(pageBean);

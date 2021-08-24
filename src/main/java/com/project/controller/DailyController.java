@@ -26,6 +26,15 @@ public class DailyController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "查询上一天账单核对信息")
+    @PostMapping(value = "/selectIsExitUnApprovalDaily")
+    public ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType) {
+
+        returnEntity = dailyService.selectIsExitUnApprovalDaily(idCardType);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "根据指定日期获取（私账）收支明细")
     @PostMapping(value = "/selectPrivateDailyByDate")
     public ReturnEntity selectPrivateDailyByDate(String date) {

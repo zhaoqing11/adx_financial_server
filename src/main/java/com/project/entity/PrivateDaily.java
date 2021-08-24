@@ -13,6 +13,8 @@ public class PrivateDaily {
 
     private String serviceCharge;
 
+    private String remainingSum;
+
     private Integer state;
 
     private String createTime;

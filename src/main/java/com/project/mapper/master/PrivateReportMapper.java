@@ -1,18 +1,18 @@
 package com.project.mapper.master;
 
-import com.project.entity.Report;
+import com.project.entity.PrivateReport;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface ReportMapper {
+public interface PrivateReportMapper {
 
     int deleteSelective(@Param("idReport") Integer idReport);
 
-    int addSelective(Report report);
+    int addSelective(PrivateReport report);
 
     int selectByPageTotal(@Param("currentDate") Integer currentDate);
 
-    List<Report> selectByPage(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,
+    List<PrivateReport> selectByPage(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,
                                     @Param("currentDate") Integer currentDate);
 }

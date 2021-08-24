@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface PrivateDailyMapper {
 
+    int selectIsExitUnApprovalDaily();
+
     int updateSelective(PrivateDaily daily);
 
     int insertSelective(PrivateDaily daily);

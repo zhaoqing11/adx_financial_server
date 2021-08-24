@@ -1,11 +1,13 @@
 package com.project.service.impl;
 
 import com.project.entity.PaymentForm;
+import com.project.entity.PrivateReport;
+import com.project.entity.PublicReport;
 import com.project.entity.RemainingSumRecord;
-import com.project.entity.Report;
 import com.project.mapper.master.PaymentFormMapper;
+import com.project.mapper.master.PrivateReportMapper;
 import com.project.mapper.master.RemainingSumRecordMapper;
-import com.project.mapper.master.ReportMapper;
+import com.project.mapper.master.PublicReportMapper;
 import com.project.service.ReportService;
 import com.project.utils.DateUtil;
 import com.project.utils.DecimalFormatUtil;
@@ -15,12 +17,13 @@ import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
 import com.project.utils.common.exception.ServiceException;
-import com.project.utils.excel.ExcelUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.project.utils.excel.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -37,7 +40,10 @@ public class ReportServiceImpl implements ReportService {
     private ReturnEntity returnEntity;
 
     @Autowired
-    private ReportMapper reportMapper;
+    private PublicReportMapper reportMapper;
+
+    @Autowired
+    private PrivateReportMapper privateReportMapper;
 
     @Autowired
     private PaymentFormMapper paymentFormMapper;
@@ -45,13 +51,17 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private RemainingSumRecordMapper remainingSumRecordMapper;
 
+    private static final Integer PUBLIC_NUM = 1; // 公账
+
+    private static final Integer PRIVATE_NUM = 2; // 私账
+
     @Override
-    public void exportToExcel(HttpServletResponse response, int year, int month) {
+    public void exportToExcel(HttpServletResponse response, int year, int month, Integer idCardType) {
         try {
             Date date = Tools.str2DateFormat(year + "-" + month, "yyyy-MM");
             String fileName = Tools.date2Str(date, "yyyyMM");
 
-            List<Map<String, Object>> mapList = getReportDetailByMonth(year, month);
+            List<Map<String, Object>> mapList = getReportDetailByMonth(year, month, idCardType);
 
             HSSFWorkbook wb = ExcelUtil.exportAnalysisData(mapList, fileName);
             ExcelUtil.downExcel(response, wb, fileName + "收支明细表");
@@ -62,9 +72,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReturnEntity selectReportDetailByMonth(int year, int month) {
+    public ReturnEntity selectReportDetailByMonth(int year, int month, Integer idCardType) {
         try {
-            List<Map<String, Object>> mapList = getReportDetailByMonth(year, month);
+            List<Map<String, Object>> mapList = getReportDetailByMonth(year, month, idCardType);
             returnEntity = ReturnUtil.success(mapList);
         } catch (Exception e) {
             logger.error("获取月报详情失败，错误消息：--->" + e.getMessage());
@@ -80,7 +90,8 @@ public class ReportServiceImpl implements ReportService {
      * @param month
      * @return
      */
-    private List<Map<String, Object>> getReportDetailByMonth(int year, int month) {
+    private List<Map<String, Object>> getReportDetailByMonth(int year, int month, Integer idCardType) {
+
         String ctDate = year + "-" + month + "-" + 1;
         int day = DateUtil.getMaxDayOfMonth(Tools.str2DateFormat(ctDate, "yyyy-MM-dd")); // 获取当月天数
         String startTime = DateUtil.getFirstDayOfMonth(month); // 获取当月第一天
@@ -91,13 +102,29 @@ public class ReportServiceImpl implements ReportService {
         List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime); // 收入
         List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(currentDate); // 余额记录列表
 
+        if (idCardType == PUBLIC_NUM) {
+            payFlowList = payFlowList.stream().filter(s ->
+                    s.getIdCardType() == PUBLIC_NUM).collect(Collectors.toList());
+            incomeFlowList = incomeFlowList.stream().filter(s ->
+                    s.getIdCardType() == PUBLIC_NUM).collect(Collectors.toList());
+            remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
+                    s.getIdCardType() == PUBLIC_NUM).collect(Collectors.toList());
+        } else {
+            payFlowList = payFlowList.stream().filter(s ->
+                    s.getIdCardType() == PRIVATE_NUM).collect(Collectors.toList());
+            incomeFlowList = incomeFlowList.stream().filter(s ->
+                    s.getIdCardType() == PRIVATE_NUM).collect(Collectors.toList());
+            remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
+                    s.getIdCardType() == PRIVATE_NUM).collect(Collectors.toList());
+        }
+
         // 循环创建日期
         List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < day; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("day", i + 1);
 
-            Report report = new Report();
+            PublicReport report = new PublicReport();
             Date dateNum = Tools.str2DateFormat(year + "-" + month + "-" + (i + 1), "yyyy-MM-dd");
             String date = Tools.date2Str(dateNum, "yyyy-MM-dd");
 
@@ -165,7 +192,7 @@ public class ReportServiceImpl implements ReportService {
 
         Map<String, Object> mp = new HashMap<String, Object>();
         for (Map<String, Object> map : dataList) {
-            Report report = (Report) map.get("report");
+            PublicReport report = (PublicReport) map.get("report");
 
             BigDecimal newCollectionAmount = Tools.isEmpty(report.getCollectionAmount()) ? new BigDecimal("0.00") : new BigDecimal(report.getCollectionAmount());
             BigDecimal newPayAmount = Tools.isEmpty(report.getPayAmount()) ? new BigDecimal("0.00") : new BigDecimal(report.getPayAmount());
@@ -187,7 +214,7 @@ public class ReportServiceImpl implements ReportService {
             report.setServiceCharge(formatSCharge);
         }
 
-        Report report = new Report();
+        PublicReport report = new PublicReport();
         report.setCollectionAmount(DecimalFormatUtil.formatString(collectionAmount, null));
         report.setPayAmount(DecimalFormatUtil.formatString(payAmount, null));
         report.setServiceCharge(DecimalFormatUtil.formatString(serviceCharge, null));
@@ -213,17 +240,17 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReturnEntity selectByPage(Integer startIndex, Integer pageSize, Integer currentDate) {
+    public ReturnEntity selectPublicReportByPage(Integer startIndex, Integer pageSize, Integer currentDate) {
         try {
             startIndex = startIndex == null ? 0 : startIndex;
             pageSize = pageSize == null ? 0 : pageSize;
 
             int total = reportMapper.selectByPageTotal(currentDate);
-            PageBean<Report> pageBean = new PageBean<Report>(startIndex, pageSize, total);
-            List<Report> reportList = reportMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
+            PageBean<PublicReport> pageBean = new PageBean<PublicReport>(startIndex, pageSize, total);
+            List<PublicReport> reportList = reportMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
                     currentDate);
 
-            for (Report report : reportList) {
+            for (PublicReport report : reportList) {
                 String collectionAmount = report.getCollectionAmount();
                 String payAmount = report.getPayAmount();
                 String serviceCharge = report.getServiceCharge();
@@ -240,10 +267,43 @@ public class ReportServiceImpl implements ReportService {
             pageBean.setList(reportList);
             returnEntity = ReturnUtil.success(pageBean);
         } catch (Exception e) {
-            logger.error("获取月表列表失败，错误消息：--->" + e.getMessage());
+            logger.error("获取（公账）月表列表失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return returnEntity;
     }
 
+    @Override
+    public ReturnEntity selectPrivateReportByPage(Integer startIndex, Integer pageSize, Integer currentDate) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = privateReportMapper.selectByPageTotal(currentDate);
+            PageBean<PrivateReport> pageBean = new PageBean<PrivateReport>(startIndex, pageSize, total);
+            List<PrivateReport> reportList = privateReportMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
+                    currentDate);
+
+            for (PrivateReport report : reportList) {
+                String collectionAmount = report.getCollectionAmount();
+                String payAmount = report.getPayAmount();
+                String serviceCharge = report.getServiceCharge();
+
+                collectionAmount = collectionAmount.matches("^0.*$") ? collectionAmount : DecimalFormatUtil.formatString(new BigDecimal(collectionAmount), null);
+                payAmount = payAmount.matches("^0.*$") ? payAmount : DecimalFormatUtil.formatString(new BigDecimal(payAmount), null);
+                serviceCharge = serviceCharge.matches("^0.*$") ? serviceCharge : DecimalFormatUtil.formatString(new BigDecimal(serviceCharge), null);
+
+                report.setCollectionAmount(collectionAmount);
+                report.setPayAmount(payAmount);
+                report.setServiceCharge(serviceCharge);
+            }
+
+            pageBean.setList(reportList);
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("获取(私账)月表列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 }

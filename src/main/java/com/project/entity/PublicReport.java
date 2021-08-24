@@ -3,9 +3,9 @@ package com.project.entity;
 import lombok.Data;
 
 @Data
-public class Report {
+public class PublicReport {
 
-    private Integer idReport;
+    private Integer idPublicReport;
 
     private Integer year;
 

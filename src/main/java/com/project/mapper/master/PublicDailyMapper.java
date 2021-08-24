@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface PublicDailyMapper {
 
+    int selectIsExitUnApprovalDaily();
+
     int updateSelective(PublicDaily daily);
 
     int insertSelective(PublicDaily daily);

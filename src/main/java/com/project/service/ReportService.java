@@ -6,13 +6,16 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface ReportService {
 
-    void exportToExcel(HttpServletResponse response, int year, int month);
+    void exportToExcel(HttpServletResponse response, int year, int month, Integer idCardType);
 
-    ReturnEntity selectReportDetailByMonth(int year, int month);
+    ReturnEntity selectReportDetailByMonth(int year, int month, Integer idCardType);
 
     ReturnEntity deleteSelective(Integer idReport);
 
-    ReturnEntity selectByPage(Integer startIndex, Integer pageSize,
+    ReturnEntity selectPublicReportByPage(Integer startIndex, Integer pageSize,
                               Integer currentDate);
+
+    ReturnEntity selectPrivateReportByPage(Integer startIndex, Integer pageSize,
+                                           Integer currentDate);
 
 }
