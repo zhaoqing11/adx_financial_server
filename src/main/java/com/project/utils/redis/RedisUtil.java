@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -18,7 +17,7 @@ import org.springframework.util.CollectionUtils;
  *
  * @author ls
  */
-@Repository
+//@Repository
 public class RedisUtil {
 
     @Autowired
