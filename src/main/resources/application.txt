@@ -4,10 +4,10 @@ server:
 
 #mybatis
 mybatis:
+  mapper-locations: classpath*:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
     callSettersOnNulls: true
-  mapper-locations: classpath*:mapper/*.xml
 
 #log
 logging:
@@ -16,9 +16,8 @@ logging:
   config: classpath:logback-boot.xml
 
 project:
-  rootFolder: /SCResource #文件存放根路径
-  imagesPath: /Projects/images/
   tokenExpire: 86400
+  downloadUrl: D:\
 
 spring:
   servlet:
@@ -32,14 +31,13 @@ spring:
       primary: master #设置默认的数据源或者数据源组,默认值即为master
       strict: false #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源.
       master:
-        driverClassName: com.mysql.jdbc.Driver
+        driverClassName: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/adx_financial_db?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
         username: root
-        password: TYFC@mysql789
+        password: 123456
         dbcp2:
           max-idle: 10
           max-wait-millis: 10000
           min-idle: 5
           initial-size: 5
-
 
