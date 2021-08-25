@@ -1,6 +1,7 @@
 package com.project.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.exceptions.ClientException;
 import com.project.entity.*;
 import com.project.mapper.master.*;
 import com.project.utils.common.exception.ServiceException;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,9 +46,9 @@ public class Scheduler {
     private static final Integer PRIVATE_TYPE = 2; // 私账类型
 
     /**
-     * 每天零点生成上日收支明细
+     * 每天早上八点生成上日收支明细
      */
-    @Scheduled(cron = "0 0 0 * * ?") //   0 */2 * * * ?
+    @Scheduled(cron = "0 31 18 * * ?") //   0 */2 * * * ?
     @Transactional
     public void dailyReport() {
         try {
@@ -60,8 +60,30 @@ public class Scheduler {
             List<PaymentForm> privatePayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(2);
             List<PaymentForm> privateCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(2);
 
-            createDaily(publicPayFlowRecord, publicCollectionRecord, PUBLIC_TYPE);
-            createDaily(privatePayFlowRecord, privateCollectionRecord, PRIVATE_TYPE);
+            MessageVO pubMsg = createDaily(publicPayFlowRecord, publicCollectionRecord, PUBLIC_TYPE);
+            MessageVO priMsg = createDaily(privatePayFlowRecord, privateCollectionRecord, PRIVATE_TYPE);
+
+            String telephone = priMsg.getTelephone();
+
+            MessageVO messageVO = new MessageVO();
+            messageVO.setCardPub(pubMsg.getCardPub());
+            messageVO.setCollectionAmountPub(pubMsg.getCollectionAmountPub());
+            messageVO.setPayAmountPub(pubMsg.getPayAmountPub());
+            messageVO.setServiceChargePub(pubMsg.getServiceChargePub());
+            messageVO.setRemainingSumPub(pubMsg.getRemainingSumPub());
+            messageVO.setCardPri(priMsg.getCardPri());
+            messageVO.setCollectionAmountPri(priMsg.getCollectionAmountPri());
+            messageVO.setPayAmountPri(priMsg.getPayAmountPri());
+            messageVO.setServiceChargePri(priMsg.getServiceChargePri());
+            messageVO.setRemainingSumPri(priMsg.getRemainingSumPri());
+            messageVO.setDate(getLastDay2());
+
+            // 发送短信通知
+            try {
+                SmsUtil.sendSms(telephone, messageVO);
+            } catch (ClientException e) {
+                e.printStackTrace();
+            }
             logger.info("生成日报成功————————————————————————————————————————————");
         } catch (Exception e) {
             logger.error("生成日报失败，错误消息：--->" + e.getMessage());
@@ -75,7 +97,7 @@ public class Scheduler {
      * @param collectionFlow
      * @param type 账目类型
      */
-    private void createDaily(List<PaymentForm> payFlow, List<PaymentForm> collectionFlow, int type) {
+    private MessageVO createDaily(List<PaymentForm> payFlow, List<PaymentForm> collectionFlow, int type) {
         BigDecimal payTotal = new BigDecimal("0.00");
         BigDecimal serviceChargeTotal = new BigDecimal("0.00");
         BigDecimal collectionTotal = new BigDecimal("0.00");
@@ -98,9 +120,9 @@ public class Scheduler {
         }
 
         if (type == 1) {
-            insertPublicDaily(payTotal, serviceChargeTotal, collectionTotal);
+            return insertPublicDaily(payTotal, serviceChargeTotal, collectionTotal);
         } else {
-            insertPrivateDaily(payTotal, serviceChargeTotal, collectionTotal);
+            return insertPrivateDaily(payTotal, serviceChargeTotal, collectionTotal);
         }
     }
 
@@ -110,7 +132,7 @@ public class Scheduler {
      * @param serviceChargeTotal
      * @param collectionTotal
      */
-    private void insertPrivateDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
+    private MessageVO insertPrivateDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
         Config config = configMapper.selectConfigInfo(PRIVATE_TYPE);
         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
@@ -121,6 +143,18 @@ public class Scheduler {
         privateDaily.setRemainingSum(configVO.getRemainingSum());
         privateDaily.setCreateTime(getLastDay());
         privateDailyMapper.insertSelective(privateDaily);
+
+        MessageVO messageVO = new MessageVO();
+        int len = configVO.getCardNum().length();
+        String card = configVO.getCardNum().substring(len - 4, len);
+        messageVO.setCardPri(card);
+        messageVO.setCollectionAmountPri(privateDaily.getCollectionAmount());
+        messageVO.setPayAmountPri(privateDaily.getPayAmount());
+        messageVO.setServiceChargePri(privateDaily.getServiceCharge());
+        messageVO.setRemainingSumPri(privateDaily.getRemainingSum());
+
+        messageVO.setTelephone(configVO.getTelephone());
+        return messageVO;
     }
 
     /**
@@ -129,7 +163,7 @@ public class Scheduler {
      * @param serviceChargeTotal
      * @param collectionTotal
      */
-    private void insertPublicDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
+    private MessageVO insertPublicDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
         Config config = configMapper.selectConfigInfo(PUBLIC_TYPE);
         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
@@ -140,6 +174,16 @@ public class Scheduler {
         daily.setRemainingSum(configVO.getRemainingSum());
         daily.setCreateTime(getLastDay());
         dailyMapper.insertSelective(daily);
+
+        MessageVO messageVO = new MessageVO();
+        int len = configVO.getCardNum().length();
+        String card = configVO.getCardNum().substring(len - 4, len);
+        messageVO.setCardPub(card);
+        messageVO.setCollectionAmountPub(daily.getCollectionAmount());
+        messageVO.setPayAmountPub(daily.getPayAmount());
+        messageVO.setServiceChargePub(daily.getServiceCharge());
+        messageVO.setRemainingSumPub(daily.getRemainingSum());
+        return messageVO;
     }
 
     /**
@@ -152,6 +196,14 @@ public class Scheduler {
         String month = Tools.date2Str(date, "MM");
         int day = Integer.parseInt(Tools.date2Str(date, "dd")) - 1;
         return year + "-" + month + "-" + day;
+    }
+
+    private String getLastDay2(){
+        Date date = new Date();
+        String year = Tools.date2Str(date, "yyyy");
+        String month = Tools.date2Str(date, "MM");
+        int day = Integer.parseInt(Tools.date2Str(date, "dd")) - 1;
+        return year + "年" + month + "月" + day + "日";
     }
 
     /**

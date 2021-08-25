@@ -8,6 +8,16 @@ public class ConfigVO {
 
     private String accountName;
 
+    private String telephone;
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
     public String getAccountName() {
         return accountName;
     }

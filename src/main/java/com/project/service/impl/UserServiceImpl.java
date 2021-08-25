@@ -25,7 +25,7 @@ import java.util.Map;
 @SuppressWarnings("all")
 public class UserServiceImpl implements UserService {
 
-    private Logger logger = LogManager.getLogger(ProjectVoServiceImpl.class);
+    private Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     @Autowired
     private ReturnEntity returnEntity;
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         SnowFlakeIdWorker idWorker = new SnowFlakeIdWorker(1, 1);
         String tokenId = Long.toString(idWorker.nextId());
         tokenId = EncryptionUtil.encrypt(tokenId);
-//        redisUtil.set(tokenId, cacheUserInfo, tokenExpire); // 0
+        redisUtil.set(tokenId, cacheUserInfo, tokenExpire); // 0
         // 返回前端 密码置空
         user.setPassword(null);
         Map<String, Object> userMap = BeanToMapUtil.beanToMap(user);

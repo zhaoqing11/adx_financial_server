@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.curtain</groupId>
-    <artifactId>adx_financial_server</artifactId>
+    <artifactId>adx-financial-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>adx_financial_server</name>
-    <description>adx_financial_server</description>
+    <name>adx-financial-server</name>
+    <description>adx-financial-server</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
