@@ -9,6 +9,47 @@
     <sql id="Base_Column_List">
        id_department, `department_name`, `sort`
 	</sql>
+    <delete id="deleteSelective" parameterType="java.lang.Integer">
+        delete from `department` where id_department = #{idDepartment,jdbcType=INTEGER}
+    </delete>
+    <update id="updateSelective" parameterType="com.project.entity.Department">
+        update `department`
+        <set>
+            <if test="departmentName != null and departmentName != ''">
+                department_name = #{departmentName,jdbcType=VARCHAR}
+            </if>
+            <if test="sort != null">
+                `sort` = #{sort,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id_department = #{idDepartment,jdbcType=INTEGER}
+    </update>
+    <insert id="insertSelective" parameterType="com.project.entity.Department"
+            useGeneratedKeys="true" keyProperty="idDepartment">
+        insert into `department`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idDepartment != null">
+                id_department,
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                department_name,
+            </if>
+            <if test="sort != null">
+                `sort`
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="idDepartment != null">
+                #{idDepartment,jdbcType=INTEGER},
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                #{departmentName,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort}
+            </if>
+        </trim>
+    </insert>
     <select id="selectAll" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from `department`
     </select>

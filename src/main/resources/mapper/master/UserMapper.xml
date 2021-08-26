@@ -13,7 +13,7 @@
         <result column="id_department" property="idDepartment" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_user, id_role, real_name, `username`, `password`, `phone`, `email`, enable, id_department
+       id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department
 	</sql>
     <select id="selectUserByUserName" resultMap="BaseResultMap"
             parameterType="java.lang.String">
@@ -21,4 +21,152 @@
 		from `user`
 		where username = #{userName}
 	</select>
+    <delete id="deleteSelective" parameterType="java.lang.Integer">
+        delete from `user` where id_user = #{idUser,jdbcType=INTEGER}
+    </delete>
+    <update id="updateSelective" parameterType="com.project.entity.User">
+        update `user`
+        <set>
+            <if test="idRole != null">
+                id_role = #{idRole,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null and realName != ''">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null and userName != ''">
+                `username` = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password != null">
+                `password` = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                `phone` = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null and email != ''">
+                `email` = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                `enable` = #{enable,jdbcType=INTEGER},
+            </if>
+            <if test="idDepartment != null">
+                id_department = #{idDepartment,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id_user = #{idUser,jdbcType=INTEGER}
+    </update>
+    <insert id="insertSelective" parameterType="com.project.entity.User"
+            useGeneratedKeys="true" keyProperty="idUser">
+        insert into `user`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idUser != null">
+                id_user,
+            </if>
+            <if test="idRole != null">
+                id_role,
+            </if>
+            <if test="realName != null and realName != ''">
+                real_name,
+            </if>
+            <if test="userName != null and userName != ''">
+                `username`,
+            </if>
+            <if test="password != null and password != ''">
+                `password`,
+            </if>
+            <if test="phone != null and phone != ''">
+                `phone`,
+            </if>
+            <if test="email != null and email != ''">
+                `email`,
+            </if>
+            <if test="enable != null">
+                `enable`,
+            </if>
+            <if test="idDepartment != null">
+                id_department
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="idUser != null">
+                #{idUser,jdbcType=INTEGER},
+            </if>
+            <if test="idRole != null">
+                #{idRole,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null and realName != ''">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null and userName != ''">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password != ''">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null and email != ''">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null">
+                #{enable,jdbcType=INTEGER},
+            </if>
+            <if test="idDepartment != null">
+                #{idDepartment,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `user` where id_user = #{idUser,jdbcType=INTEGER}
+    </select>
+    <select id="selectByPageTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM `user` u
+        LEFT JOIN role r ON r.`id_role` = u.`id_role`
+        LEFT JOIN department d ON d.`id_department` = u.`id_department`
+        WHERE 1=1
+        <if test="user != null">
+            <if test="user.realName != null and user.realName != ''">
+                AND u.`real_name` LIKE CONCAT('%',#{user.realName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="user.idRole != null">
+                AND u.`id_role` = #{user.idRole,jdbcType=INTEGER}
+            </if>
+            <if test="user.idDepartment != null">
+                AND u.`id_department` = #{user.idDepartment,jdbcType=INTEGER}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPage" resultType="com.project.entity.User">
+        SELECT
+          u.`id_user` AS 'idUser',
+          u.`id_role` AS 'idRole',
+          u.`id_department` AS 'idDepartment',
+          u.`real_name` AS 'realName',
+          u.`username` AS 'userName',
+          u.`password`,
+          u.`phone`,
+          u.`email`,
+          u.`enable`,
+          r.`name` AS 'roleName',
+          d.`department_name` AS 'departmentName'
+         FROM `user` u
+        LEFT JOIN role r ON r.`id_role` = u.`id_role`
+        LEFT JOIN department d ON d.`id_department` = u.`id_department`
+        WHERE 1=1
+        <if test="user != null">
+            <if test="user.realName != null and user.realName != ''">
+                AND u.`real_name` LIKE CONCAT('%',#{user.realName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="user.idRole != null">
+                AND u.`id_role` = #{user.idRole,jdbcType=INTEGER}
+            </if>
+            <if test="user.idDepartment != null">
+                AND u.`id_department` = #{user.idDepartment,jdbcType=INTEGER}
+            </if>
+        </if>
+        <if test="pageSize > 0">
+            limit #{startIndex},#{pageSize}
+        </if>
+    </select>
 </mapper>

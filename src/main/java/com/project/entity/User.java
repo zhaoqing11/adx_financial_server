@@ -23,6 +23,10 @@ public class User {
 
     private Integer idDepartment;
 
+    private String roleName; // 角色名称
+
+    private String departmentName; // 所属部门
+
     public boolean getEnable() {
         return enable;
     }

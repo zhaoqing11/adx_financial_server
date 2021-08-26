@@ -7,7 +7,9 @@ import com.project.service.UserService;
 import com.project.utils.BeanToMapUtil;
 import com.project.utils.EncryptionUtil;
 import com.project.utils.ReturnUtil;
+import com.project.utils.Tools;
 import com.project.utils.auth.SnowFlakeIdWorker;
+import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
 import com.project.utils.common.exception.ServiceException;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,6 +41,27 @@ public class UserServiceImpl implements UserService {
 
     @Value("${project.tokenExpire}")
     Integer tokenExpire;
+
+    @Override
+    public ReturnEntity updatePassword(Integer idUser, String oldPassword, String newPassword) {
+        try {
+            User user = userMapper.selectByPrimaryKey(idUser);
+            if (!EncryptionUtil.match(oldPassword, user.getPassword())) {
+                return ReturnUtil.validError(HttpCode.CODE_500, "原密码输入错误");
+            }
+            user.setPassword(EncryptionUtil.encrypt(newPassword));
+            int count = userMapper.updateSelective(user);
+            if (count > 0) {
+                returnEntity = ReturnUtil.success("修改成功");
+            } else {
+                returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "修改失败");
+            }
+        } catch (Exception e) {
+            logger.error("修改用户密码失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public ReturnEntity login(User usr) {
@@ -91,6 +115,88 @@ public class UserServiceImpl implements UserService {
         redisUtil.del(token);
         redisUtil.del(userId);
         return ReturnUtil.success();
+    }
+
+    @Override
+    public ReturnEntity deleteSelective(Integer idUser) {
+        try {
+            int count = userMapper.deleteSelective(idUser);
+            if (count > 0) {
+                returnEntity = ReturnUtil.success("删除成功");
+            } else {
+                returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "删除失败");
+            }
+        } catch (Exception e) {
+            logger.error("删除用户失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity updateSelective(User user) {
+        try {
+            int count = userMapper.updateSelective(user);
+            if (count > 0) {
+                returnEntity = ReturnUtil.success("修改成功");
+            } else {
+                returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "修改失败");
+            }
+        } catch (Exception e) {
+            logger.error("修改用户失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity insertSelective(User user) {
+        try {
+            if (Tools.notEmpty(user.getPassword())) {
+                user.setPassword(EncryptionUtil.encrypt(user.getPassword()));
+            }
+            int count = userMapper.insertSelective(user);
+            if (count > 0) {
+                returnEntity = ReturnUtil.success("创建成功");
+            } else {
+                returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "创建失败");
+            }
+        } catch (Exception e) {
+            logger.error("创建用户失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity selectByPrimaryKey(Integer idUser) {
+        try {
+            User user = userMapper.selectByPrimaryKey(idUser);
+            returnEntity = ReturnUtil.success(user);
+        } catch (Exception e) {
+            logger.error("根据用户id查询用户失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity selectByPage(Integer startIndex, Integer pageSize, User user) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = userMapper.selectByPageTotal(user);
+            PageBean<User> pageBean = new PageBean<User>(startIndex, pageSize, total);
+            List<User> userList = userMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
+                    user);
+            pageBean.setList(userList);
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("分页（条件）查询用户列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
     }
 
 }
