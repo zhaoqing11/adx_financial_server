@@ -18,18 +18,37 @@
        id_payment_form, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
        id_payment_form_state, state, create_time
 	</sql>
+    <select id="selectPayFlowRecordDetails" resultType="com.project.entity.PaymentForm">
+        SELECT
+         u.`id_department` AS 'idDepartment',
+         d.`department_name` AS 'departmentName',
+         pr.`amount` AS 'remittanceAmount',
+         pr.`service_charge` AS 'serviceCharge',
+         pr.`remittance_date` AS 'remittanceDate'
+         FROM payment_remittance pr
+         LEFT JOIN  payment_form pf ON pf.`id_payment_form` = pr.`id_payment_form`
+        LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
+        LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+        LEFT JOIN department d ON d.`id_department` = u.`id_department`
+        WHERE pf.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        <if test="year != null">
+            AND YEAR(pr.`remittance_date`) = #{year}
+        </if>
+    </select>
     <select id="selectCollectionByIdCardType" resultType="com.project.entity.PaymentForm">
         SELECT
+         cr.`id_collection_record` as 'idCollectionRecord',
          cr.`amount` AS 'collectionAmount',
          cr.`id_card_type` AS 'idCardType',
          ifr.`remaining_sum` AS 'remainingSum',
          ifr.`id_flow_type` AS 'idFlowType',
          ifr.`id_income_flow_record` AS 'idIncomeFlowRecord',
-         cr.`create_time` AS 'createTime'
+         cr.`remark`,
+         cr.`collection_date` AS 'createTime'
          FROM income_flow_record ifr
         LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
         WHERE cr.`id_card_type` = #{idCardType,jdbcType=INTEGER}
-        AND DATE_FORMAT(cr.`create_time`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
+        AND DATE_FORMAT(cr.`collection_date`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
         order by cr.create_time desc
     </select>
     <select id="selectPaymentByIdCardType" resultType="com.project.entity.PaymentForm">
@@ -41,18 +60,20 @@
          pf.`code`,
          pf.`id_card_type` AS 'idCardType',
          pa.`amount` AS 'approvalAmount',
+         pr.`id_payment_remittance` as 'idPaymentRemittance',
          pr.`amount` AS 'remittanceAmount',
          pr.`service_charge` AS 'serviceCharge',
+         pfr.`id_pay_flow_record` as 'idPayFlowRecord',
          pfr.`remaining_sum` AS 'remainingSum',
          pfr.`id_flow_type` AS 'idFlowType',
          pfr.`id_pay_flow_record` AS 'idPayFlowRecord',
-         pr.`create_time` AS 'createTime'
+         pr.`remittance_date` AS 'createTime'
          FROM pay_flow_record pfr
         LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance`
         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form`
         LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
         WHERE pf.`id_card_type` = #{idCardType,jdbcType=INTEGER}
-        AND DATE_FORMAT(pr.`create_time`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
+        AND DATE_FORMAT(pr.`remittance_date`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
         order by pr.create_time desc
     </select>
     <select id="queryLastDayCollectionRecord" resultType="com.project.entity.PaymentForm">

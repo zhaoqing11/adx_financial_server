@@ -12,6 +12,10 @@
     <sql id="Base_Column_List">
        id_pay_flow_record, id_payment_remittance, id_flow_type, amount, remaining_sum, create_time
 	</sql>
+    <update id="updateSelective">
+        UPDATE `pay_flow_record` set amount = #{amount}, remaining_sum = #{remainingSum}
+        WHERE id_payment_remittance = #{idPaymentRemittance,jdbcType=INTEGER}
+    </update>
     <select id="selectAllFlowRecord" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from pay_flow_record

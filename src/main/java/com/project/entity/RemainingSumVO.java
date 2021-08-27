@@ -36,6 +36,36 @@ public class RemainingSumVO {
 
     private Integer idCardType;
 
+    private Integer idPaymentRemittance;
+
+    private Integer idCollectionRecord;
+
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getIdPaymentRemittance() {
+        return idPaymentRemittance;
+    }
+
+    public void setIdPaymentRemittance(Integer idPaymentRemittance) {
+        this.idPaymentRemittance = idPaymentRemittance;
+    }
+
+    public Integer getIdCollectionRecord() {
+        return idCollectionRecord;
+    }
+
+    public void setIdCollectionRecord(Integer idCollectionRecord) {
+        this.idCollectionRecord = idCollectionRecord;
+    }
+
     public String getCollectionDate() {
         return collectionDate;
     }

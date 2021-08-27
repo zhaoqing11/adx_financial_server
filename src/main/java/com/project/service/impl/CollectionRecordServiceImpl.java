@@ -2,9 +2,7 @@ package com.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.project.entity.*;
-import com.project.mapper.master.CollectionRecordMapper;
-import com.project.mapper.master.ConfigMapper;
-import com.project.mapper.master.IncomeFlowRecordMapper;
+import com.project.mapper.master.*;
 import com.project.service.CollectionRecordService;
 import com.project.utils.ReturnUtil;
 import com.project.utils.Tools;
@@ -28,6 +26,12 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     static private Logger logger = LogManager.getLogger(CollectionRecordServiceImpl.class);
 
     @Autowired
+    private PublicDailyMapper publicDailyMapper;
+
+    @Autowired
+    private PrivateDailyMapper privateDailyMapper;
+
+    @Autowired
     private ConfigMapper configMapper;
 
     @Autowired
@@ -40,34 +44,37 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     private ReturnEntity returnEntity;
 
     @Override
+    public ReturnEntity addSelective(CollectionRecord collectionRecord, Integer idCardType, Integer idDaily) {
+        try {
+            boolean flag = addCollectionRcord(collectionRecord);
+            if (flag) {
+                if (idCardType == 1) {
+                    PublicDaily publicDaily = new PublicDaily();
+                    publicDaily.setIdPublicDaily(idDaily);
+                    publicDaily.setState(0); // 状态置为“待审核”
+                    publicDailyMapper.updateSelective(publicDaily);
+                } else {
+                    PrivateDaily privateDaily = new PrivateDaily();
+                    privateDaily.setIdPrivateDaily(idDaily);
+                    privateDaily.setState(0); // 状态置为“待审核”
+                    privateDailyMapper.updateSelective(privateDaily);
+                }
+                returnEntity = ReturnUtil.success("编辑成功");
+            } else {
+                returnEntity = ReturnUtil.success("创建失败");
+            }
+        } catch (Exception e) {
+            logger.error("添加收款失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity addSelective(CollectionRecord collectionRecord) {
         try {
-            collectionRecord.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            int count = collectionRecordMapper.addSelective(collectionRecord);
-            if (count > 0) {
-                // 创建支出流水记录
-                Integer idCollectionRecord = collectionRecord.getIdCollectionRecord();
-                Config config = configMapper.selectConfigInfo(collectionRecord.getIdCardType());
-                ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
-
-                BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum()); // 余额
-                BigDecimal amount = new BigDecimal(collectionRecord.getAmount()); // 收款金额
-
-                BigDecimal money = remainingSum.add(amount); // 剩余余额
-
-                IncomeFlowRecord flowRecord = new IncomeFlowRecord();
-                flowRecord.setIdCollectionRecord(idCollectionRecord);
-                flowRecord.setAmount(collectionRecord.getAmount());
-                flowRecord.setRemainingSum(String.valueOf(money));
-                flowRecord.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-                incomeFlowRecordMapper.addSelective(flowRecord);
-
-                // 修改config文件余额变量
-                configVO.setRemainingSum(String.valueOf(money));
-                config.setConfig(JSONObject.toJSONString(configVO));
-
-                configMapper.updateConfig(config);
-
+            boolean flag = addCollectionRcord(collectionRecord);
+            if (flag) {
                 returnEntity = ReturnUtil.success("新增成功");
             } else {
                 returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "新增失败");
@@ -77,6 +84,39 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
             throw new ServiceException(e.getMessage());
         }
         return returnEntity;
+    }
+
+    private boolean addCollectionRcord(CollectionRecord collectionRecord) {
+        collectionRecord.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        int count = collectionRecordMapper.addSelective(collectionRecord);
+        if (count > 0) {
+            // 创建支出流水记录
+            Integer idCollectionRecord = collectionRecord.getIdCollectionRecord();
+            Config config = configMapper.selectConfigInfo(collectionRecord.getIdCardType());
+            ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+
+            BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum()); // 余额
+            BigDecimal amount = new BigDecimal(collectionRecord.getAmount()); // 收款金额
+
+            BigDecimal money = remainingSum.add(amount); // 剩余余额
+
+            IncomeFlowRecord flowRecord = new IncomeFlowRecord();
+            flowRecord.setIdCollectionRecord(idCollectionRecord);
+            flowRecord.setAmount(collectionRecord.getAmount());
+            flowRecord.setRemainingSum(String.valueOf(money));
+            flowRecord.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            incomeFlowRecordMapper.addSelective(flowRecord);
+
+            // 修改config文件余额变量
+            configVO.setRemainingSum(String.valueOf(money));
+            config.setConfig(JSONObject.toJSONString(configVO));
+
+            configMapper.updateConfig(config);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -126,7 +166,7 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
             int total = collectionRecordMapper.selectByPageTotal(startTime, endTime, collectionRecord.getIdCardType());
             PageBean<CollectionRecord> pageBean = new PageBean<CollectionRecord>(startIndex, pageSize, total);
             List<CollectionRecord> collectionRecordList = collectionRecordMapper.selectByPage(pageBean.getStartIndex(),
-                    pageBean.getPageSize(),collectionRecord);
+                    pageBean.getPageSize(), collectionRecord);
 
             pageBean.setList(collectionRecordList);
             returnEntity = ReturnUtil.success(pageBean);

@@ -29,6 +29,8 @@ public class PaymentForm {
 
     private String approvalUser;
 
+    private Integer idPaymentRemittance;
+
     private String remittanceAmount;
 
     private String serviceCharge;
@@ -45,6 +47,8 @@ public class PaymentForm {
 
     private Integer idIncomeFlowRecord;
 
+    private Integer idCollectionRecord;
+
     private String collectionAmount;
 
     private String collectionDate;
@@ -52,5 +56,11 @@ public class PaymentForm {
     private Integer idCardType;
 
     private boolean state;
+
+    private String remark;
+
+    private Integer idDepartment;
+
+    private String departmentName;
 
 }

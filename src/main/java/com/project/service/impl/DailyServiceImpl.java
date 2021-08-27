@@ -103,6 +103,8 @@ public class DailyServiceImpl implements DailyService {
             remainingSumVO.setServiceCharge(item.getServiceCharge());
             remainingSumVO.setRemainingSum(item.getRemainingSum());
             remainingSumVO.setCreateTime(item.getCreateTime());
+            remainingSumVO.setIdPayFlowRecord(item.getIdPayFlowRecord());
+            remainingSumVO.setIdPaymentRemittance(item.getIdPaymentRemittance());
             remainingSumVOS.add(remainingSumVO);
         }
 
@@ -111,6 +113,9 @@ public class DailyServiceImpl implements DailyService {
             remainingSumVO.setCollectionAmount(item.getCollectionAmount());
             remainingSumVO.setRemainingSum(item.getRemainingSum());
             remainingSumVO.setCreateTime(item.getCreateTime());
+            remainingSumVO.setIdIncomeFlowRecord(item.getIdIncomeFlowRecord());
+            remainingSumVO.setIdCollectionRecord(item.getIdCollectionRecord());
+            remainingSumVO.setRemark(item.getRemark());
             remainingSumVOS.add(remainingSumVO);
         }
         return remainingSumVOS;

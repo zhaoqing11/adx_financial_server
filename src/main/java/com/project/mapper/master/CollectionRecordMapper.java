@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface CollectionRecordMapper {
 
+    List<CollectionRecord> selectPageDetailByYear(@Param("idCardType") Integer idCardType, @Param("year") int year);
+
+    String selectCollectionTotalByYear(@Param("idCardType") Integer idCardType, @Param("year") int year);
+
     int addSelective(CollectionRecord collectionRecord);
 
     int updateSelective(CollectionRecord collectionRecord);

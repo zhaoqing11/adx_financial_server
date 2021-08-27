@@ -25,4 +25,6 @@ public class CollectionRecord {
 
     private String endTime;
 
+    private String remark;
+
 }

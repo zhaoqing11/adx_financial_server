@@ -24,6 +24,15 @@ public class CollectionRecordController {
     @Autowired
     CollectionRecordService collectionRecordService;
 
+    @ApiOperation(value = "新增收款信息(审核)")
+    @PostMapping(value = "/addCollection")
+    public ReturnEntity addSelective(CollectionRecord collectionRecord, Integer idCardType, Integer idDaily) {
+
+        returnEntity = collectionRecordService.addSelective(collectionRecord, idCardType, idDaily);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "新增收款信息")
     @PostMapping(value = "/addSelective")
     public ReturnEntity addSelective(CollectionRecord collectionRecord) {

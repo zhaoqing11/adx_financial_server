@@ -13,6 +13,46 @@
     <sql id="Base_Column_List">
        id_payment_remittance, id_payment_form, amount, service_charge, remittance_date, id_user, create_time
 	</sql>
+    <select id="selectPaymentRemittanceByDepartment" resultType="com.project.entity.PaymentRemittance">
+        SELECT
+         d.`id_department` AS 'idDepartment',
+         d.`department_name` AS 'departmentName',
+        SUM(pr.`amount`) AS 'amount',
+        SUM(pr.`service_charge`) AS 'serviceCharge'
+         FROM payment_remittance pr
+         LEFT JOIN  payment_form pf ON pf.`id_payment_form` = pr.`id_payment_form`
+        LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
+        LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
+        LEFT JOIN department d ON d.`id_department` = u.`id_department`
+        WHERE pf.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        <if test="year != null">
+            AND YEAR(pr.`remittance_date`) = #{year}
+        </if>
+        GROUP BY u.`id_department`
+    </select>
+    <select id="selectRemittanceTotalByYear" resultType="com.project.entity.PaymentRemittance">
+        SELECT
+          SUM(pr.amount) as 'amount',
+          SUM(pr.service_charge) as 'serviceCharge'
+        FROM `payment_remittance` pr
+        LEFT JOIN payment_form pf ON pf.`id_payment_form` = pr.`id_payment_form`
+        WHERE pf.id_card_type = #{idCardType,jdbcType=INTEGER}
+        <if test="year != null">
+            AND YEAR(pr.remittance_date) = #{year}
+        </if>
+    </select>
+    <update id="updateSelective" parameterType="com.project.entity.PaymentRemittance">
+        UPDATE `payment_remittance`
+        <set>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="serviceCharge != null">
+                server_charge = #{serviceCharge}
+            </if>
+        </set>
+        WHERE id_payment_remittance = #{idPaymentRemittance,jdbcType=INTEGER}
+    </update>
     <insert id="addSelective" parameterType="com.project.entity.PaymentRemittance"
             useGeneratedKeys="true" keyProperty="idPaymentRemittance">
         insert into payment_remittance

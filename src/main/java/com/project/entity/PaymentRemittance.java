@@ -19,4 +19,8 @@ public class PaymentRemittance {
 
     private String createTime;
 
+    private Integer idDepartment;
+
+    private String departmentName;
+
 }
