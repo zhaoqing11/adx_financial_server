@@ -4,7 +4,7 @@ import com.project.service.IndexService;
 import com.project.utils.common.base.ReturnEntity;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +24,7 @@ public class IndexController {
     IndexService indexService;
 
     @ApiOperation(value = "获取年收入支出总数")
-    @GetMapping(value = "/getDataInfo")
+    @PostMapping(value = "/getDataInfo")
     ReturnEntity getDataInfo(Integer idCardType, int year) {
 
         returnEntity = indexService.getDataInfo(idCardType, year);
@@ -33,7 +33,7 @@ public class IndexController {
     }
 
     @ApiOperation(value = "获取（公账）部门支出流水")
-    @GetMapping(value = "/publicFlowRecordByDepartment")
+    @PostMapping(value = "/publicFlowRecordByDepartment")
     ReturnEntity publicFlowRecordByDepartment(int year) {
 
         returnEntity = indexService.publicFlowRecordByDepartment(year);
@@ -42,7 +42,7 @@ public class IndexController {
     }
 
     @ApiOperation(value = "获取（私账）部门支出流水")
-    @GetMapping(value = "/privateFlowRecordByDepartment")
+    @PostMapping(value = "/privateFlowRecordByDepartment")
     ReturnEntity privateFlowRecordByDepartment(int year) {
 
         returnEntity = indexService.privateFlowRecordByDepartment(year);
@@ -51,7 +51,7 @@ public class IndexController {
     }
 
     @ApiOperation(value = "获取（公账）部门支出明细")
-    @GetMapping(value = "/getPublicFlowRecordDetails")
+    @PostMapping(value = "/getPublicFlowRecordDetails")
     ReturnEntity getPublicFlowRecordDetails(int year) {
 
         returnEntity = indexService.getPublicFlowRecordDetails(year);
@@ -60,7 +60,7 @@ public class IndexController {
     }
 
     @ApiOperation(value = "获取（私账）部门支出明细")
-    @GetMapping(value = "/getPrivateFlowRecordDetails")
+    @PostMapping(value = "/getPrivateFlowRecordDetails")
     ReturnEntity getPrivateFlowRecordDetails(int year) {
 
         returnEntity = indexService.getPrivateFlowRecordDetails(year);
@@ -69,7 +69,7 @@ public class IndexController {
     }
 
     @ApiOperation(value = "获取指定年分每月收入明细")
-    @GetMapping(value = "/getCollectionRecordByMonth")
+    @PostMapping(value = "/getCollectionRecordByMonth")
     ReturnEntity getCollectionRecordByMonth(Integer idCardType, int year) {
 
         returnEntity = indexService.getCollectionRecordByMonth(idCardType, year);

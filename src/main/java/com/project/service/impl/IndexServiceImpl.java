@@ -53,9 +53,13 @@ public class IndexServiceImpl implements IndexService {
             String collectionAmount = collectionRecordMapper.selectCollectionTotalByYear(idCardType, year);
 
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("payAmount", paymentRemittance.getAmount());
-            map.put("serviceCharge", paymentRemittance.getServiceCharge());
-            map.put("collectionAmount", collectionAmount);
+
+            String payAmount = paymentRemittance == null ? "0.00" : paymentRemittance.getAmount();
+            String serviceCharge = paymentRemittance == null ? "0.00" : paymentRemittance.getServiceCharge();
+            String cAmount = collectionAmount == null ? "0.00" : collectionAmount;
+            map.put("payAmount", payAmount);
+            map.put("serviceCharge", serviceCharge);
+            map.put("collectionAmount", cAmount);
 
             returnEntity = ReturnUtil.success(map);
         } catch (Exception e) {
@@ -134,7 +138,6 @@ public class IndexServiceImpl implements IndexService {
             List<Department> departmentList = departmentMapper.selectAll();
             List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(PUBLIC_NUM, year);
 
-            // { department: xx, data: [{month: 1, amount: 0.00, service: 0.00},{month: 2, amount: 0.00, service: 0.00}] }
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             for (Department item : departmentList) {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -199,7 +202,6 @@ public class IndexServiceImpl implements IndexService {
             List<Department> departmentList = departmentMapper.selectAll();
             List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(PRIVATE_NUM, year);
 
-            // { department: xx, data: [{month: 1, amount: 0.00, service: 0.00},{month: 2, amount: 0.00, service: 0.00}] }
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             departmentList.forEach(item -> {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -221,7 +223,7 @@ public class IndexServiceImpl implements IndexService {
                     BigDecimal amountTotal = new BigDecimal("0.00"); // 月总支出
                     BigDecimal serviceCharegeTotal = new BigDecimal("0.00"); // 月总手续费
 
-                    for (PaymentForm paymentForm : filterList) {
+                    for (PaymentForm paymentForm : filterMonth) {
                         String amount = paymentForm.getRemittanceAmount();
                         String serviceCharge = paymentForm.getServiceCharge();
 
