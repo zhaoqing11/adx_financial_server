@@ -23,4 +23,6 @@ public class PaymentRemittance {
 
     private String departmentName;
 
+    private String remark;
+
 }

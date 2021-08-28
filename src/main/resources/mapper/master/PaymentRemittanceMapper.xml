@@ -8,10 +8,11 @@
         <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
         <result column="remittance_date" property="remittanceDate" jdbcType="TIMESTAMP"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_remittance, id_payment_form, amount, service_charge, remittance_date, id_user, create_time
+       id_payment_remittance, id_payment_form, amount, service_charge, remittance_date, remark, id_user, create_time
 	</sql>
     <select id="selectPaymentRemittanceByDepartment" resultType="com.project.entity.PaymentRemittance">
         SELECT
@@ -48,7 +49,10 @@
                 amount = #{amount},
             </if>
             <if test="serviceCharge != null">
-                server_charge = #{serviceCharge}
+                server_charge = #{serviceCharge},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark}
             </if>
         </set>
         WHERE id_payment_remittance = #{idPaymentRemittance,jdbcType=INTEGER}
@@ -72,6 +76,9 @@
             <if test="remittanceDate != null and remittanceDate != ''">
                 remittance_date,
             </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
             <if test="idUser != null">
                 id_user,
             </if>
@@ -94,6 +101,9 @@
             </if>
             <if test="remittanceDate != null and remittanceDate != ''">
                 #{remittanceDate,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark,jdbcType=VARCHAR},
             </if>
             <if test="idUser != null">
                 #{idUser,jdbcType=INTEGER},

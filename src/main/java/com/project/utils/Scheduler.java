@@ -48,7 +48,7 @@ public class Scheduler {
     /**
      * 每天早上八点生成上日收支明细
      */
-    @Scheduled(cron = "0 0 8 * * ?") //   0 */2 * * * ?
+    @Scheduled(cron = "0 0 8 * * ?")
     @Transactional
     public void dailyReport() {
         try {
