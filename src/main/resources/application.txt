@@ -18,6 +18,7 @@ logging:
 project:
   tokenExpire: 86400
   downloadUrl: D:\
+  telephone: 18602076288
 
 spring:
   servlet:

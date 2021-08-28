@@ -14,6 +14,7 @@ import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,6 +31,9 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Autowired
     private ReturnEntity returnEntity;
+
+    @Value("${project.telephone}")
+    private String telephone;
 
     @Override
     public ReturnEntity selectAll() {
@@ -48,9 +52,8 @@ public class ConfigServiceImpl implements ConfigService {
         try {
             ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
             BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum());
+            configVO.setTelephone(telephone);
             configVO.setRemainingSum(DecimalFormatUtil.formatString2(remainingSum, null));
-
-
             config.setConfig(JSON.toJSONString(configVO));
             int count = configMapper.updateConfig(config);
             if (count > 0) {
