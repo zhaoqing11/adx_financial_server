@@ -207,9 +207,9 @@ public class Scheduler {
     }
 
     /**
-     * 生成月报,每月最后一天零点执行
+     * 生成月报,每月最后一天晚上十点执行
      */
-    @Scheduled(cron = "0 0 0 L * ?") //   （每隔一分钟执行） 0 */1 * * * ?
+    @Scheduled(cron = "0 0 22 L * ?") //（每隔一分钟执行） 0 */1 * * * ?
     @Transactional
     public void maintenanceReport() {
         try {
