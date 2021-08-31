@@ -43,20 +43,64 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     @Autowired
     private ReturnEntity returnEntity;
 
+    private static final Integer PUBLIC_NUM = 1;
+
+    private static final Integer PRIVATE_NUM = 2;
+
     @Override
-    public ReturnEntity addSelective(CollectionRecord collectionRecord, Integer idCardType, Integer idDaily) {
+    public ReturnEntity updateCollectionRecord(Integer idCardType, Integer idDaily) {
         try {
+            if (idCardType == 1) {
+                PublicDaily publicDaily = new PublicDaily();
+                publicDaily.setIdPublicDaily(idDaily);
+                publicDaily.setState(0); // 状态置为“待审核”
+                publicDailyMapper.updateSelective(publicDaily);
+            } else {
+                PrivateDaily privateDaily = new PrivateDaily();
+                privateDaily.setIdPrivateDaily(idDaily);
+                privateDaily.setState(0); // 状态置为“待审核”
+                privateDailyMapper.updateSelective(privateDaily);
+            }
+        } catch (Exception e) {
+            logger.error("修改审核状态失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity addCollectionRecord(CollectionRecord collectionRecord, Integer idCardType, Integer idDaily) {
+        try {
+            collectionRecord.setIdCardType(idCardType);
             boolean flag = addCollectionRcord(collectionRecord);
             if (flag) {
-                if (idCardType == 1) {
-                    PublicDaily publicDaily = new PublicDaily();
-                    publicDaily.setIdPublicDaily(idDaily);
-                    publicDaily.setState(0); // 状态置为“待审核”
+                if (idCardType == PUBLIC_NUM) {
+                    PublicDaily publicDaily = publicDailyMapper.selectByPrimaryKey(idDaily);
+
+                    BigDecimal oldAmount = new BigDecimal(publicDaily.getCollectionAmount());
+                    BigDecimal newAmount = new BigDecimal(collectionRecord.getAmount());
+                    BigDecimal amountTotal = oldAmount.add(newAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(publicDaily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.add(newAmount);
+
+                    publicDaily.setCollectionAmount(String.valueOf(amountTotal));
+                    publicDaily.setRemainingSum(String.valueOf(remainingTotal));
+
                     publicDailyMapper.updateSelective(publicDaily);
                 } else {
-                    PrivateDaily privateDaily = new PrivateDaily();
-                    privateDaily.setIdPrivateDaily(idDaily);
-                    privateDaily.setState(0); // 状态置为“待审核”
+                    PrivateDaily privateDaily = privateDailyMapper.selectByPrimaryKey(idDaily);
+
+                    BigDecimal oldAmount = new BigDecimal(privateDaily.getCollectionAmount());
+                    BigDecimal newAmount = new BigDecimal(collectionRecord.getAmount());
+                    BigDecimal amountTotal = oldAmount.add(newAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(privateDaily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.add(newAmount);
+
+                    privateDaily.setCollectionAmount(String.valueOf(amountTotal));
+                    privateDaily.setRemainingSum(String.valueOf(remainingTotal));
+
                     privateDailyMapper.updateSelective(privateDaily);
                 }
                 returnEntity = ReturnUtil.success("编辑成功");

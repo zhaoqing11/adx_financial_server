@@ -9,6 +9,8 @@ public class PaymentRemittance {
 
     private Integer idPaymentForm;
 
+    private Integer idCardType;
+
     private String amount;
 
     private String serviceCharge;

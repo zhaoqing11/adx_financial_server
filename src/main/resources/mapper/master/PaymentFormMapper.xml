@@ -4,19 +4,20 @@
     <resultMap id="BaseResultMap" type="com.project.entity.PaymentForm">
         <id column="id_payment_form" property="idPaymentForm" jdbcType="INTEGER"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
         <result column="reason_application" property="reasonApplication" jdbcType="VARCHAR"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="payment_name" property="paymentName" jdbcType="VARCHAR"/>
         <result column="payment_account" property="paymentAccount" jdbcType="VARCHAR"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
         <result column="id_payment_form_state" property="idPaymentFormState" jdbcType="INTEGER"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
         <result column="state" property="state" jdbcType="BOOLEAN"/>
+        <result column="files" property="files" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
        id_payment_form, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
-       id_payment_form_state, state, create_time
+       id_payment_form_state, state, files, create_time
 	</sql>
     <select id="selectPayFlowRecordDetails" resultType="com.project.entity.PaymentForm">
         SELECT
@@ -67,12 +68,13 @@
          pfr.`remaining_sum` AS 'remainingSum',
          pfr.`id_flow_type` AS 'idFlowType',
          pfr.`id_pay_flow_record` AS 'idPayFlowRecord',
+         pr.remark as 'remark',
          pr.`remittance_date` AS 'createTime'
          FROM pay_flow_record pfr
         LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance`
         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form`
         LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
-        WHERE pf.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        WHERE pr.`id_card_type` = #{idCardType,jdbcType=INTEGER}
         AND DATE_FORMAT(pr.`remittance_date`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
         order by pr.create_time desc
     </select>
@@ -120,6 +122,7 @@
          ifr.`remaining_sum` AS 'remainingSum',
          ifr.`id_flow_type` AS 'idFlowType',
          ifr.`id_income_flow_record` AS 'idIncomeFlowRecord',
+         cr.`remark` as 'remark',
          cr.`create_time` AS 'createTime'
          FROM income_flow_record ifr
         LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
@@ -149,13 +152,14 @@
          pf.`payment_name` AS 'paymentName',
          pf.`payment_account` AS 'paymentAccount',
          pf.`code`,
-         pf.`id_card_type` as 'idCardType',
+         pr.`id_card_type` as 'idCardType',
          pa.`amount` AS 'approvalAmount',
          pr.`amount` AS 'remittanceAmount',
          pr.`service_charge` AS 'serviceCharge',
          pfr.`remaining_sum` AS 'remainingSum',
          pfr.`id_flow_type` AS 'idFlowType',
          pfr.`id_pay_flow_record` AS 'idPayFlowRecord',
+         pr.`remark` AS 'remark',
          pr.`create_time` AS 'createTime'
          FROM pay_flow_record pfr
         LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance`
@@ -206,6 +210,7 @@
          pf.`id_user` AS 'idUser',
          pf.`id_card_type` as 'idCardType',
          pf.`state`,
+         pf.`files`,
          pa.`amount` AS 'approvalAmount',
          ua.`real_name` AS 'approvalUser',
          pr.`amount` AS 'remittanceAmount',
@@ -255,9 +260,9 @@
         pf.`payment_name` AS 'paymentName',
         pf.`payment_account` AS 'paymentAccount',
         pf.`id_payment_form_state` as 'idPaymentFormState',
-        pf.`create_time` AS 'createTime',
         pf.`id_user` AS 'idUser',
-
+        pf.`create_time` AS 'createTime',
+        pf.`files`,
         u.`real_name` AS 'userName'
         FROM payment_form pf
         LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
@@ -307,6 +312,9 @@
           <if test="idUser != null">
               id_user,
           </if>
+          <if test="files != null and files != ''">
+              `files`,
+          </if>
           <if test="createTime != null and createTime != ''">
               create_time
           </if>
@@ -336,6 +344,9 @@
             <if test="idUser != null">
                 #{idUser,jdbcType=INTEGER},
             </if>
+            <if test="files != null and files != ''">
+                #{files,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null and createTime != ''">
                 #{createTime,jdbcType=VARCHAR}
             </if>
@@ -363,7 +374,10 @@
                 id_payment_form_state = #{idPaymentFormState, jdbcType=INTEGER},
             </if>
             <if test="state != null">
-                `state` = #{state}
+                `state` = #{state},
+            </if>
+            <if test="files != null and files != ''">
+                `files` = #{files}
             </if>
         </set>
         where id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
@@ -398,7 +412,7 @@
          pf.`create_time` AS 'createTime',
          pf.`id_user` AS 'idUser',
          pf.`state`,
-
+         pf.`files`,
          u.`real_name` AS 'userName'
         FROM payment_form pf
         LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`

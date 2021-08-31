@@ -105,6 +105,7 @@ public class DailyServiceImpl implements DailyService {
             remainingSumVO.setCreateTime(item.getCreateTime());
             remainingSumVO.setIdPayFlowRecord(item.getIdPayFlowRecord());
             remainingSumVO.setIdPaymentRemittance(item.getIdPaymentRemittance());
+            remainingSumVO.setRemark(item.getRemark());
             remainingSumVOS.add(remainingSumVO);
         }
 

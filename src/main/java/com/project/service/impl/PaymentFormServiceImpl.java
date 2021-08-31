@@ -110,6 +110,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 remainingSumVO.setIdFlowType(item.getIdFlowType());
                 remainingSumVO.setIdPayFlowRecord(item.getIdPayFlowRecord());
                 remainingSumVO.setIdCardType(item.getIdCardType());
+                remainingSumVO.setRemark(item.getRemark());
                 remainingSumVO.setCreateTime(item.getCreateTime());
                 arrayList.add(remainingSumVO);
             });
@@ -127,6 +128,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 remainingSumVO.setIdFlowType(item.getIdFlowType());
                 remainingSumVO.setIdIncomeFlowRecord(item.getIdIncomeFlowRecord());
                 remainingSumVO.setIdCardType(item.getIdCardType());
+                remainingSumVO.setRemark(item.getRemark());
                 remainingSumVO.setCreateTime(item.getCreateTime());
                 arrayList.add(remainingSumVO);
             });

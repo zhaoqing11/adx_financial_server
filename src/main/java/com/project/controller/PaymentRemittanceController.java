@@ -24,6 +24,15 @@ public class PaymentRemittanceController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "审核创建支出流水记录")
+    @PostMapping(value = "/addApprovalPaymentRemittance")
+    public ReturnEntity addApprovalPaymentRemittance(PaymentRemittance paymentRemittance, Integer idDaily, Integer idCardType) {
+
+        returnEntity = paymentRemittanceService.addApprovalPaymentRemittance(paymentRemittance, idDaily, idCardType);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "新增汇款记录")
     @PostMapping(value = "/addSelective")
     public ReturnEntity addSelective(PaymentRemittance paymentRemittance) {

@@ -9,6 +9,8 @@ public class PaymentForm {
 
     private String code;
 
+    private Integer idCardType;
+
     private String reasonApplication;
 
     private String amount;
@@ -20,6 +22,10 @@ public class PaymentForm {
     private Integer idUser;
 
     private Integer idPaymentFormState;
+
+    private boolean state;
+
+    private String files;
 
     private String createTime;
 
@@ -52,10 +58,6 @@ public class PaymentForm {
     private String collectionAmount;
 
     private String collectionDate;
-
-    private Integer idCardType;
-
-    private boolean state;
 
     private String remark;
 

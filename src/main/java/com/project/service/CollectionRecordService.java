@@ -5,7 +5,9 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface CollectionRecordService {
 
-    ReturnEntity addSelective(CollectionRecord collectionRecord, Integer idCardType, Integer idDaily);
+    ReturnEntity updateCollectionRecord(Integer idCardType, Integer idDaily);
+
+    ReturnEntity addCollectionRecord(CollectionRecord collectionRecord, Integer idCardType, Integer idDaily);
 
     ReturnEntity addSelective(CollectionRecord collectionRecord);
 

@@ -24,11 +24,20 @@ public class CollectionRecordController {
     @Autowired
     CollectionRecordService collectionRecordService;
 
+    @ApiOperation(value = "设置审核状态")
+    @PostMapping(value = "/updateCollectionRecord")
+    public ReturnEntity updateCollectionRecord(Integer idCardType, Integer idDaily) {
+
+        returnEntity = collectionRecordService.updateCollectionRecord(idCardType, idDaily);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "新增收款信息(审核)")
     @PostMapping(value = "/addCollection")
     public ReturnEntity addSelective(CollectionRecord collectionRecord, Integer idCardType, Integer idDaily) {
 
-        returnEntity = collectionRecordService.addSelective(collectionRecord, idCardType, idDaily);
+        returnEntity = collectionRecordService.addCollectionRecord(collectionRecord, idCardType, idDaily);
         return returnEntity;
 
     }

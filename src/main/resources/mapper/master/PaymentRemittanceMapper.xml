@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.project.entity.PaymentRemittance">
         <id column="id_payment_remittance" property="idPaymentRemittance" jdbcType="INTEGER"/>
         <result column="id_payment_form" property="idPaymentForm" jdbcType="INTEGER"/>
+        <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
         <result column="remittance_date" property="remittanceDate" jdbcType="TIMESTAMP"/>
@@ -12,7 +13,7 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_remittance, id_payment_form, amount, service_charge, remittance_date, remark, id_user, create_time
+       id_payment_remittance, id_payment_form, id_card_type, amount, service_charge, remittance_date, remark, id_user, create_time
 	</sql>
     <select id="selectPaymentRemittanceByDepartment" resultType="com.project.entity.PaymentRemittance">
         SELECT
@@ -37,7 +38,7 @@
           SUM(pr.service_charge) as 'serviceCharge'
         FROM `payment_remittance` pr
         LEFT JOIN payment_form pf ON pf.`id_payment_form` = pr.`id_payment_form`
-        WHERE pf.id_card_type = #{idCardType,jdbcType=INTEGER}
+        WHERE pr.id_card_type = #{idCardType,jdbcType=INTEGER}
         <if test="year != null">
             AND YEAR(pr.remittance_date) = #{year}
         </if>
@@ -45,6 +46,9 @@
     <update id="updateSelective" parameterType="com.project.entity.PaymentRemittance">
         UPDATE `payment_remittance`
         <set>
+            <if test="idCardType != null">
+                id_card_type = #{idCardType},
+            </if>
             <if test="amount != null">
                 amount = #{amount},
             </if>
@@ -66,6 +70,9 @@
             </if>
             <if test="idPaymentForm != null">
                 id_payment_form,
+            </if>
+            <if test="idCardType != null">
+                id_card_type,
             </if>
             <if test="amount != null">
                 amount,
@@ -92,6 +99,9 @@
             </if>
             <if test="idPaymentForm != null">
                 #{idPaymentForm,jdbcType=INTEGER},
+            </if>
+            <if test="idCardType != null">
+                #{idCardType,jdbcType=INTEGER},
             </if>
             <if test="amount != null">
                 #{amount,jdbcType=DECIMAL},
