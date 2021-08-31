@@ -26,6 +26,15 @@ public class DailyController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "查询待审批账单数量")
+    @PostMapping(value = "/selectDailyByState")
+    public ReturnEntity selectDailyByState(Integer idRole) {
+
+        returnEntity = dailyService.selectDailyByState(idRole);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "查询上一天账单核对信息")
     @PostMapping(value = "/selectIsExitUnApprovalDaily")
     public ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType) {

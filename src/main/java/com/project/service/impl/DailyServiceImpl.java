@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -39,6 +41,37 @@ public class DailyServiceImpl implements DailyService {
 
     @Autowired
     private ReturnEntity returnEntity;
+
+    private static final Integer PUBLIC_NUM = 1;
+
+    private static final Integer PRIVATE_NUM = 2;
+
+    @Override
+    public ReturnEntity selectDailyByState(Integer idRole) {
+        try {
+            int countPub = 0;
+            int countPri = 0;
+            switch (idRole) {
+                case 2: // 审批人
+                    countPri = privateDailyMapper.selectPrivateDailyByState(0);
+                    countPub = publicDailyMapper.selectPublicDailyByState(0);
+                    break;
+                case 3: // 汇款人
+                    countPri = privateDailyMapper.selectPrivateDailyByState(2);
+                    countPub = publicDailyMapper.selectPublicDailyByState(2);
+                    break;
+            }
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("countPub", countPub);
+            map.put("countPri", countPri);
+
+            returnEntity = ReturnUtil.success(map);
+        } catch (Exception e) {
+            logger.error("" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType) {

@@ -13,6 +13,9 @@
     <sql id="Base_Column_List">
        id_private_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time
 	</sql>
+    <select id="selectPrivateDailyByState" resultType="java.lang.Integer">
+        select count(1) from private_daily WHERE state = #{state,jdbcType=INTEGER}
+    </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from private_daily where id_private_daily = #{idDaily,jdbcType=INTEGER}
     </select>
