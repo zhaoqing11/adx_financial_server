@@ -19,7 +19,7 @@ project:
   tokenExpire: 86400
 #  downloadUrl: D:\
   uploadPath: D:\project\adx-financial\File\images\
-  telephone: 18602076288
+  telephone: 13662459025
 
 spring:
   servlet:

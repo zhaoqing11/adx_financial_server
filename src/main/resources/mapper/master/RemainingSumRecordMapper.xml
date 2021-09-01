@@ -13,7 +13,7 @@
     <select id="queryRemainingSumByMonth" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM `remaining_sum_record`
-        WHERE DATE_FORMAT(create_time, '%Y%m') = #{currentDate}
+        WHERE DATE_FORMAT(create_time, '%Y%m') = DATE_FORMAT(#{currentDate}, '%Y%m')
     </select>
     <select id="queryTodayRemainingSum" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>

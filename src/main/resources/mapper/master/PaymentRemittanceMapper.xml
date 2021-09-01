@@ -15,6 +15,9 @@
     <sql id="Base_Column_List">
        id_payment_remittance, id_payment_form, id_card_type, amount, service_charge, remittance_date, remark, id_user, create_time
 	</sql>
+    <select id="selectRemittanceByIdPamentForm" resultType="java.lang.Integer">
+        SELECT count(1) FROM `payment_remittance` WHERE id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
+    </select>
     <select id="selectPaymentRemittanceByDepartment" resultType="com.project.entity.PaymentRemittance">
         SELECT
          d.`id_department` AS 'idDepartment',

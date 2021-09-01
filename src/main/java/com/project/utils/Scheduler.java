@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.project.utils.DateUtil.getLastDay;
+
 @Component
 @SuppressWarnings("all")
 public class Scheduler {
@@ -41,6 +43,9 @@ public class Scheduler {
     @Autowired
     private PaymentFormMapper paymentFormMapper;
 
+    @Autowired
+    private RemainingSumRecordMapper remainingSumRecordMapper;
+
     private static final Integer PUBLIC_TYPE = 1; // 公账类型
 
     private static final Integer PRIVATE_TYPE = 2; // 私账类型
@@ -53,12 +58,13 @@ public class Scheduler {
     public void dailyReport() {
         try {
             logger.info("日报定时器执行————————————————————————————————————————————");
+            String currentDate = getLastDay("yyyy-MM-dd");
             // 获取公账收支列表
-            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(1);
-            List<PaymentForm> publicCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(1);
+            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(1, currentDate);
+            List<PaymentForm> publicCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(1, currentDate);
             // 获取私账收支明细
-            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(2);
-            List<PaymentForm> privateCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(2);
+            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(2, currentDate);
+            List<PaymentForm> privateCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(2, currentDate);
 
             MessageVO pubMsg = createDaily(publicPayFlowRecord, publicCollectionRecord, PUBLIC_TYPE);
             MessageVO priMsg = createDaily(privatePayFlowRecord, privateCollectionRecord, PRIVATE_TYPE);
@@ -76,7 +82,7 @@ public class Scheduler {
             messageVO.setPayAmountPri(priMsg.getPayAmountPri());
             messageVO.setServiceChargePri(priMsg.getServiceChargePri());
             messageVO.setRemainingSumPri(priMsg.getRemainingSumPri());
-            messageVO.setDate(getLastDay2());
+            messageVO.setDate(getLastDay("yyyy年MM月dd日"));
 
             // 发送短信通知
             try {
@@ -141,8 +147,15 @@ public class Scheduler {
         privateDaily.setPayAmount(String.valueOf(payTotal));
         privateDaily.setServiceCharge(String.valueOf(serviceChargeTotal));
         privateDaily.setRemainingSum(configVO.getRemainingSum());
-        privateDaily.setCreateTime(getLastDay());
+        privateDaily.setCreateTime(getLastDay("yyyy-MM-dd"));
         privateDailyMapper.insertSelective(privateDaily);
+
+        // 设置上一天余额
+        RemainingSumRecord record = new RemainingSumRecord();
+        record.setIdCardType(2);
+        record.setLastRemainingSum(configVO.getRemainingSum());
+        record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        remainingSumRecordMapper.addSelective(record);
 
         MessageVO messageVO = new MessageVO();
         int len = configVO.getCardNum().length();
@@ -172,8 +185,15 @@ public class Scheduler {
         daily.setPayAmount(String.valueOf(payTotal));
         daily.setServiceCharge(String.valueOf(serviceChargeTotal));
         daily.setRemainingSum(configVO.getRemainingSum());
-        daily.setCreateTime(getLastDay());
+        daily.setCreateTime(getLastDay("yyyy-MM-dd"));
         dailyMapper.insertSelective(daily);
+
+        // 设置上一天余额
+        RemainingSumRecord record = new RemainingSumRecord();
+        record.setIdCardType(1);
+        record.setLastRemainingSum(configVO.getRemainingSum());
+        record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        remainingSumRecordMapper.addSelective(record);
 
         MessageVO messageVO = new MessageVO();
         int len = configVO.getCardNum().length();
@@ -187,34 +207,15 @@ public class Scheduler {
     }
 
     /**
-     * 获取上一天日期
-     * @return
+     * 每月一号晚上十点半执行生成上个月 月报
      */
-    private String getLastDay(){
-        Date date = new Date();
-        String year = Tools.date2Str(date, "yyyy");
-        String month = Tools.date2Str(date, "MM");
-        int day = Integer.parseInt(Tools.date2Str(date, "dd")) - 1;
-        return year + "-" + month + "-" + day;
-    }
-
-    private String getLastDay2(){
-        Date date = new Date();
-        String year = Tools.date2Str(date, "yyyy");
-        String month = Tools.date2Str(date, "MM");
-        int day = Integer.parseInt(Tools.date2Str(date, "dd")) - 1;
-        return year + "年" + month + "月" + day + "日";
-    }
-
-    /**
-     * 生成月报,每月最后一天晚上十点执行
-     */
-    @Scheduled(cron = "0 0 22 L * ?") //（每隔一分钟执行） 0 */1 * * * ?
+    @Scheduled(cron = "0 30 22 1 * ?") //（每隔一分钟执行）0 */1 * * * ?     (每月最后一天晚上十点执行)0 0 22 L * ?
     @Transactional
     public void maintenanceReport() {
         try {
             logger.info("月报定时器执行————————————————————————————————————————————");
             Date date = getCurrentDate();
+            // 获取上个月第一天和最后一天日期
             String startTime = DateUtil.getFirstDayOfMonth(date.getMonth() + 1);
             String endTime = DateUtil.getLastDayOfMonth(date.getMonth() + 1);
             // 获取月收支列表
@@ -292,7 +293,7 @@ public class Scheduler {
         report.setCollectionAmount(String.valueOf(collectionTotal));
         report.setPayAmount(String.valueOf(payTotal));
         report.setServiceCharge(String.valueOf(serviceChargeTotal));
-        report.setCreateTime(Tools.date2Str(date, "yyyy-MM-dd HH:mm:ss"));
+        report.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         reportMapper.addSelective(report);
     }
 
@@ -310,11 +311,13 @@ public class Scheduler {
         report.setCollectionAmount(String.valueOf(collectionTotal));
         report.setPayAmount(String.valueOf(payTotal));
         report.setServiceCharge(String.valueOf(serviceChargeTotal));
-        report.setCreateTime(Tools.date2Str(date, "yyyy-MM-dd HH:mm:ss"));
+        report.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         privateReportMapper.addSelective(report);
     }
 
     private Date getCurrentDate() {
-        return new Date();
+        String lastDay = DateUtil.getLastDay("yyyy-MM-dd");
+        Date date = Tools.str2DateFormat(lastDay, "yyyy-MM-dd");
+        return date;
     }
 }

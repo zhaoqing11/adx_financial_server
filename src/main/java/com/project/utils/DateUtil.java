@@ -7,6 +7,24 @@ import java.util.Date;
 public class DateUtil {
 
     /**
+     * 获取上一天日期
+     * @return
+     */
+    public static String getLastDay(String formatVal){
+        Date date = new Date();
+        Date dBefore = new Date();
+
+        Calendar calendar = Calendar.getInstance(); //得到日历
+        calendar.setTime(date);//把当前时间赋给日历
+        calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
+        dBefore = calendar.getTime();   //得到前一天的时间
+
+        SimpleDateFormat sdf = new SimpleDateFormat(formatVal); //设置时间格式
+        String defaultStartDate = sdf.format(dBefore);    //格式化前一天
+        return defaultStartDate;
+    }
+
+    /**
      * 获取指定月份天数
      *
      * @param date

@@ -49,6 +49,18 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     private static final Integer PRIVATE_NUM = 2;
 
     @Override
+    public ReturnEntity selectRemittanceByIdPamentForm(Integer idPaymentForm) {
+        try {
+            int count = paymentRemittanceMapper.selectRemittanceByIdPamentForm(idPaymentForm);
+            returnEntity = ReturnUtil.success(count);
+        } catch (Exception e) {
+            logger.error("根据请款id查询汇款记录失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity addApprovalPaymentRemittance(PaymentRemittance paymentRemittance, Integer idDaily, Integer idCardType) {
         try {
             paymentRemittance.setIdCardType(idCardType);
@@ -131,7 +143,7 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     }
 
 
-    private boolean addRemittance(PaymentRemittance paymentRemittance){
+    private boolean addRemittance(PaymentRemittance paymentRemittance) {
         paymentRemittance.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         int count = paymentRemittanceMapper.addSelective(paymentRemittance);
         if (count > 0) {

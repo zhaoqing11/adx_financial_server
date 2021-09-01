@@ -6,6 +6,7 @@ import com.project.entity.RemainingSumVO;
 import com.project.mapper.master.PaymentFormMapper;
 import com.project.mapper.master.RemainingSumRecordMapper;
 import com.project.service.PaymentFormService;
+import com.project.utils.DateUtil;
 import com.project.utils.ReturnUtil;
 import com.project.utils.Tools;
 import com.project.utils.common.PageBean;
@@ -37,8 +38,9 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     @Override
     public ReturnEntity queryLastDayFlowRecord(Integer idCardType) {
         try {
-            List<PaymentForm> flowRecordList = paymentFormMapper.queryLastDayFlowRecord(idCardType);
-            List<PaymentForm> collectionRcordList = paymentFormMapper.queryLastDayCollectionRecord(idCardType);
+            String date = DateUtil.getLastDay("yyyy-MM-dd");
+            List<PaymentForm> flowRecordList = paymentFormMapper.queryLastDayFlowRecord(idCardType, date);
+            List<PaymentForm> collectionRcordList = paymentFormMapper.queryLastDayCollectionRecord(idCardType, date);
 
             List<RemainingSumVO> remainingSumVOS = new ArrayList<RemainingSumVO>();
             for (PaymentForm paymentForm : flowRecordList) {

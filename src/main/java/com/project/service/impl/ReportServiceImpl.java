@@ -100,7 +100,7 @@ public class ReportServiceImpl implements ReportService {
 
         List<PaymentForm> payFlowList = paymentFormMapper.queryPayFlowRecordDetail(0, 0, startTime, endTime); // 支出
         List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime); // 收入
-        List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(currentDate); // 余额记录列表
+        List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(startTime); // 余额记录列表
 
         if (idCardType == PUBLIC_NUM) {
             payFlowList = payFlowList.stream().filter(s ->
@@ -141,7 +141,7 @@ public class ReportServiceImpl implements ReportService {
 
             // 筛选当月每日支出流水
             List<PaymentForm> newPayFlowList = payFlowList.stream().filter(s ->
-                    Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
+                    Tools.date2Str(Tools.str2Date(s.getRemittanceDate()), "yyyy-MM-dd").equals(date))
                     .collect(Collectors.toList());
             for (PaymentForm paymentForm : newPayFlowList) {
                 String payAmount = paymentForm.getRemittanceAmount();
@@ -156,7 +156,7 @@ public class ReportServiceImpl implements ReportService {
 
             // 筛选当月每日收入流水
             List<PaymentForm> newIncomeFlowList = incomeFlowList.stream().filter(s ->
-                    Tools.date2Str(Tools.str2Date(s.getCreateTime()), "yyyy-MM-dd").equals(date))
+                    Tools.date2Str(Tools.str2Date(s.getCollectionDate()), "yyyy-MM-dd").equals(date))
                     .collect(Collectors.toList());
             for (PaymentForm paymentForm : newIncomeFlowList) {
                 String collectionAmount = paymentForm.getCollectionAmount();
