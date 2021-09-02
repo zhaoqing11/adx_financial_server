@@ -7,6 +7,8 @@ public class PaymentForm {
 
     private Integer idPaymentForm;
 
+    private Integer idApproval;
+
     private String code;
 
     private Integer idCardType;
@@ -23,7 +25,7 @@ public class PaymentForm {
 
     private Integer idPaymentFormState;
 
-    private boolean state;
+    private Integer state;
 
     private String files;
 

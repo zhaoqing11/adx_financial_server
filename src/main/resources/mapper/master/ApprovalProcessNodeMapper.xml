@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ApprovalProcessNodeMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalProcessNode">
+        <id column="id_approval_process_node" property="idApprovalProcessNode" jdbcType="INTEGER"/>
+        <result column="id_approval" property="idApproval" jdbcType="INTEGER"/>
+        <result column="submit_id_user" property="submitIdUser" jdbcType="INTEGER"/>
+        <result column="id_approval_case_node_user" property="idApprovalCaseNodeUser" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="id_check_result" property="idCheckResult" jdbcType="INTEGER"/>
+        <result column="check_common" property="checkCommon" jdbcType="VARCHAR"/>
+        <result column="next_id_approval_case_node_user" property="nextIdApprovalCaseNodeUser" jdbcType="INTEGER"/>
+        <result column="approval_id_user" property="approvalIdUser" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_approval_process_node, `id_approval`, submit_id_user, id_approval_case_node_user, create_time, id_check_result, check_common,
+       next_id_approval_case_node_user, approval_id_user
+	</sql>
+    <select id="selectProcessNodeByIdApproval" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from approval_process_node
+        where id_approval = #{idApproval,jdbcType=INTEGER}
+    </select>
+    <update id="updateSelective" parameterType="com.project.entity.ApprovalProcessNode">
+        update approval_process_node
+        <set>
+            <if test="idApproval != null">
+                id_approval = #{idApproval,jdbcType=INTEGER},
+            </if>
+            <if test="submitIdUser != null">
+                submit_id_user = #{submitIdUser,jdbcType=INTEGER},
+            </if>
+            <if test="idApprovalCaseNodeUser != null">
+                id_approval_case_node_user = #{idApprovalCaseNodeUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="idCheckResult != null">
+                id_check_result = #{idCheckResult,jdbcType=INTEGER},
+            </if>
+            <if test="checkCommon != null and checkCommon != ''">
+                check_common = #{checkCommon,jdbcType=VARCHAR},
+            </if>
+            <if test="nextIdApprovalCaseNodeUser != null">
+                next_id_approval_case_node_user = #{nextIdApprovalCaseNodeUser,jdbvType=INTEGER},
+            </if>
+            <if test="approvalIdUser != null">
+                approval_id_user = #{approvalIdUser,jdbvType=INTEGER}
+            </if>
+        </set>
+        where id_approval_process_node = #{idApprovalProcessNode,jdbcType=INTEGER}
+    </update>
+    <insert id="addSelective" parameterType="com.project.entity.ApprovalProcessNode"
+                              useGeneratedKeys="true" keyProperty="idApprovalProcessNode">
+        insert into approval_process_node
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idApprovalProcessNode != null">
+                id_approval_process_node,
+            </if>
+            <if test="idApproval != null">
+                id_approval,
+            </if>
+            <if test="submitIdUser != null">
+                submit_id_user,
+            </if>
+            <if test="idApprovalCaseNodeUser != null">
+                id_approval_case_node_user,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time,
+            </if>
+            <if test="idCheckResult != null">
+                id_check_result,
+            </if>
+            <if test="checkCommon != null and checkCommon != ''">
+                check_common,
+            </if>
+            <if test="nextIdApprovalCaseNodeUser != null">
+                next_id_approval_case_node_user,
+            </if>
+            <if test="approvalIdUser != null">
+                approval_id_user
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="idApprovalProcessNode != null">
+                #{idApprovalProcessNode,jdbcType=INTEGER},
+            </if>
+            <if test="idApproval != null">
+                #{idApproval,jdbcType=INTEGER},
+            </if>
+            <if test="submitIdUser != null">
+                #{submitIdUser,jdbcType=INTEGER},
+            </if>
+            <if test="idApprovalCaseNodeUser != null">
+                #{idApprovalCaseNodeUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime},
+            </if>
+            <if test="idCheckResult != null">
+                #{idCheckResult,jdbcType=INTEGER},
+            </if>
+            <if test="checkCommon != null and checkCommon != ''">
+                #{checkCommon,jdbcType=VARCHAR},
+            </if>
+            <if test="nextIdApprovalCaseNodeUser != null">
+                #{nextIdApprovalCaseNodeUser,jdbcType=INTEGER},
+            </if>
+            <if test="approvalIdUser != null">
+                #{approvalIdUser,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `approval_process_node` where id_approval_process_node = #{idApprovalProcessNode,jdbcType=INTEGER}
+    </select>
+</mapper>

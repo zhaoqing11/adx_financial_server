@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ApprovalCaseMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalCase">
+        <id column="id_approval_case" property="idApprovalCase" jdbcType="INTEGER"/>
+        <result column="id_approval_model" property="idApprovalModel" jdbcType="INTEGER"/>
+        <result column="id_department" property="idDepartment" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="active" property="active" jdbcType="BOOLEAN"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_approval_case, `id_approval_model`, id_department, `name`, `active`
+	</sql>
+    <select id="selectApprovalCaseById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from approval_case
+        where id_approval_case = #{idApprovalCase,jdbcType=INTEGER}
+    </select>
+    <select id="selectApprovalCaseByDepartment" resultType="java.lang.Integer">
+        select id_approval_case from `approval_case`
+        where id_approval_model = #{idApprovalModel,jdbcType=INTEGER}
+        and id_department = #{idDepartment,jdbcType=INTEGER}
+    </select>
+</mapper>

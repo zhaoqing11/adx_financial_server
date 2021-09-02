@@ -3,6 +3,7 @@
 <mapper namespace="com.project.mapper.master.PaymentFormMapper">
     <resultMap id="BaseResultMap" type="com.project.entity.PaymentForm">
         <id column="id_payment_form" property="idPaymentForm" jdbcType="INTEGER"/>
+        <result column="id_approval" property="idApproval" jdbcType="INTEGER"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
         <result column="reason_application" property="reasonApplication" jdbcType="VARCHAR"/>
@@ -11,12 +12,12 @@
         <result column="payment_account" property="paymentAccount" jdbcType="VARCHAR"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
         <result column="id_payment_form_state" property="idPaymentFormState" jdbcType="INTEGER"/>
-        <result column="state" property="state" jdbcType="BOOLEAN"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
         <result column="files" property="files" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_form, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
+       id_payment_form, id_approval, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
        id_payment_form_state, state, files, create_time
 	</sql>
     <select id="selectPayFlowRecordDetails" resultType="com.project.entity.PaymentForm">
@@ -202,7 +203,8 @@
     <select id="queryAllPaymentForm" resultType="com.project.entity.PaymentForm">
          SELECT
          pf.`id_payment_form` AS 'idPaymentForm',
-         pf.`code`,
+        pf.`id_approval` as 'idApproval',
+        pf.`code`,
          pf.`reason_application` AS 'reasonApplication',
          pf.`amount`,
          pf.`payment_name` AS 'paymentName',
@@ -256,6 +258,7 @@
     <select id="selectApprovalPaymentFormByPage" resultType="com.project.entity.PaymentForm">
         SELECT
         pf.`id_payment_form` AS 'idPaymentForm',
+        pf.`id_approval` as 'idApproval',
         pf.`code`,
         pf.`reason_application` AS 'reasonApplication',
         pf.`amount`,
@@ -293,6 +296,9 @@
           <if test="idPaymentForm != null">
               id_payment_form,
           </if>
+          <if test="idApproval != null">
+              id_approval,
+          </if>
           <if test="code != null and code != ''">
               `code`,
           </if>
@@ -324,6 +330,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="idPaymentForm != null">
                 #{idPaymentForm,jdbcType=INTEGER},
+            </if>
+            <if test="idApproval != null">
+                #{idApproval,jdbcType=INTEGER},
             </if>
             <if test="code != null and code != ''">
                 #{code,jdbcType=VARCHAR},
@@ -379,7 +388,10 @@
                 `state` = #{state},
             </if>
             <if test="files != null and files != ''">
-                `files` = #{files}
+                `files` = #{files},
+            </if>
+            <if test="idApproval != null">
+                id_approval = #{idApproval, jdbcType=INTEGER}
             </if>
         </set>
         where id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
@@ -404,6 +416,7 @@
     <select id="selectByPage" resultType="com.project.entity.PaymentForm">
          SELECT
          pf.`id_payment_form` AS 'idPaymentForm',
+         pf.`id_approval` as 'idApproval',
          pf.`code`,
          pf.`id_card_type` as 'idCardType',
          pf.`reason_application` AS 'reasonApplication',

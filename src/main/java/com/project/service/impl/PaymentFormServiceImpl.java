@@ -5,6 +5,8 @@ import com.project.entity.RemainingSumRecord;
 import com.project.entity.RemainingSumVO;
 import com.project.mapper.master.PaymentFormMapper;
 import com.project.mapper.master.RemainingSumRecordMapper;
+import com.project.mapper.master.UserMapper;
+import com.project.service.ApprovalService;
 import com.project.service.PaymentFormService;
 import com.project.utils.DateUtil;
 import com.project.utils.ReturnUtil;
@@ -25,6 +27,12 @@ import java.util.*;
 public class PaymentFormServiceImpl implements PaymentFormService {
 
     private static Logger logger = LogManager.getLogger(PaymentFormServiceImpl.class);
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private ApprovalService approvalService;
 
     @Autowired
     private RemainingSumRecordMapper remainingSumRecordMapper;
@@ -238,40 +246,59 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     @Override
     public ReturnEntity addSelective(PaymentForm paymentForm) {
         try {
-            if (paymentForm != null) {
-                String newCode = "";
-                // 获取当日最大编号数
-                String code = paymentFormMapper.queryMaxCode(new Date());
-                if (Tools.notEmpty(code)) { // 编号不为空接上一个产生编号数+1
-                    int num = Integer.parseInt(code.substring(10, 13));
-                    newCode = code.substring(0, 10) + formatNum(String.valueOf(num + 1));
+            Integer idApproval = paymentForm.getIdApproval();
+            Integer idUser = paymentForm.getIdUser();
+            Integer idDepartment = userMapper.selectByPrimaryKey(idUser).getIdDepartment();
 
-                } else { // 为空创建当日首个编号
-                    String date = Tools.date2Str(new Date(), "yy-MM-dd");
-                    String[] dataArrays = date.split("-");
-                    String year = dataArrays[0];
-                    String month = dataArrays[1];
-                    String day = dataArrays[2];
-                    newCode = "A" + year + "-" + month + "-" + day + "-" + "001";
+            if (paymentForm.getIdPaymentForm() != null) { // 编辑
+                if (paymentForm.getState() == 2) {
+                    idApproval = approvalService.approvalComm(idDepartment, idUser, idApproval, 1, "提交付款申请");
+                    paymentForm.setIdApproval(idApproval);
                 }
+                paymentFormMapper.updateSelective(paymentForm);
+            } else {
+                String newCode = getTodayMaxCode();
                 paymentForm.setCode(newCode);
-                paymentForm.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-
+                paymentForm.setCreateTime(Tools.date2Str(new Date()));
                 int count = paymentFormMapper.addSelective(paymentForm);
                 if (count > 0) {
+                    if (paymentForm.getState() == 2) {
+                        idApproval = approvalService.approvalComm(idDepartment, idUser, idApproval, 1, "提交付款申请");
+                        paymentForm.setIdApproval(idApproval);
+                        paymentFormMapper.updateSelective(paymentForm);
+                    }
                     returnEntity = ReturnUtil.success("创建成功");
                 } else {
                     returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "创建失败");
                 }
-            } else {
-                throw new ServiceException("获取参数错误！");
             }
-
         } catch (Exception e) {
             logger.error("创建请款单失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return returnEntity;
+    }
+
+    /**
+     * 获取当日最大编号数
+     * @return
+     */
+    private String getTodayMaxCode() {
+        String newCode = "";
+        String code = paymentFormMapper.queryMaxCode(new Date());
+        if (Tools.notEmpty(code)) { // 编号不为空接上一个产生编号数+1
+            int num = Integer.parseInt(code.substring(10, 13));
+            newCode = code.substring(0, 10) + formatNum(String.valueOf(num + 1));
+
+        } else { // 为空创建当日首个编号
+            String date = Tools.date2Str(new Date(), "yy-MM-dd");
+            String[] dataArrays = date.split("-");
+            String year = dataArrays[0];
+            String month = dataArrays[1];
+            String day = dataArrays[2];
+            newCode = "A" + year + "-" + month + "-" + day + "-" + "001";
+        }
+        return newCode;
     }
 
     private String formatNum(String code) {

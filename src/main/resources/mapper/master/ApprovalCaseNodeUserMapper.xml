@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ApprovalCaseNodeUserMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalCaseNodeCheckUser">
+        <id column="id_approval_case_node_user" property="idApprovalCaseNodeUser" jdbcType="INTEGER"/>
+        <result column="id_approval_case" property="idApprovalCase" jdbcType="INTEGER"/>
+        <result column="id_approval_model_node" property="idApprovalModelNode" jdbcType="INTEGER"/>
+        <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_approval_case_node_user, `id_approval_case`, id_approval_model_node, id_user
+	</sql>
+    <select id="selectByIdApprovalCase" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `approval_case_node_check_user`
+        where id_approval_case = #{idApprovalCase,jdbcType=INTEGER}
+        and id_approval_model_node = #{idApprovalModelNode,jdbcType=INTEGER}
+    </select>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ApprovalModelNodeMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalModelNode">
+        <id column="id_approval_model_node" property="idApprovalModelNode" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="id_approval_model" property="idApprovalModel" jdbcType="INTEGER"/>
+        <result column="id_role" property="idRole" jdbcType="INTEGER"/>
+        <result column="next_id_approval_model_node" property="nextIdApprovalModelNode" jdbcType="INTEGER"/>
+        <result column="node_index" property="nodeIndex" jdbcType="INTEGER"/>
+        <result column="close_role" property="closeRole" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_approval_model_node, `name`, id_approval_model, id_role, next_id_approval_model_node, node_index, close_role
+	</sql>
+    <select id="selectByNodeIndex" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `approval_model_node`
+        where id_approval_model = #{idApprovalModel,jdbcType=INTEGER}
+        and node_index = #{nodeIndex,jdbcType=INTEGER}
+    </select>
+</mapper>

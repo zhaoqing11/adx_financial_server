@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ApprovalMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.Approval">
+        <id column="id_approval" property="idApproval" jdbcType="INTEGER"/>
+        <result column="id_user" property="idUser" jdbcType="INTEGER"/>
+        <result column="id_approval_case" property="idApprovalCase" jdbcType="INTEGER"/>
+        <result column="check_state" property="checkState" jdbcType="INTEGER"/>
+        <result column="is_done" property="isDone" jdbcType="BOOLEAN"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="guid" property="guid" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_approval, `id_user`, id_approval_case, check_state, is_done, create_time, guid
+	</sql>
+    <update id="updateSelective" parameterType="com.project.entity.Approval">
+        update approval
+        <set>
+            <if test="idUser != null">
+                id_user = #{idUser,jdbcType=INTEGER},
+            </if>
+            <if test="idApprovalCase != null">
+                id_approval_case = #{idApprovalCase,jdbcType=INTEGER},
+            </if>
+            <if test="checkState != null">
+                check_state = #{checkState,jdbcType=INTEGER},
+            </if>
+            <if test="isDone != null">
+                is_done = #{isDone,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="guid != null and guid != ''">
+                guid = #{guid,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id_approval = #{idApproval,jdbcType=INTEGER}
+    </update>
+    <insert id="addSelective" parameterType="com.project.entity.Approval" useGeneratedKeys="true" keyProperty="idApproval">
+        insert into approval
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idApproval != null">
+                id_approval,
+            </if>
+            <if test="idUser != null">
+                id_user,
+            </if>
+            <if test="idApprovalCase != null">
+                id_approval_case,
+            </if>
+            <if test="checkState != null">
+                check_state,
+            </if>
+            <if test="isDone != null">
+                is_done,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time,
+            </if>
+            <if test="guid != null and guid != ''">
+                guid
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="idApproval != null">
+                #{idApproval,jdbcType=INTEGER},
+            </if>
+            <if test="idUser != null">
+                #{idUser,jdbcType=INTEGER},
+            </if>
+            <if test="idApprovalCase != null">
+                #{idApprovalCase,jdbcType=INTEGER},
+            </if>
+            <if test="checkState != null">
+                #{checkState,jdbcType=INTEGER},
+            </if>
+            <if test="isDone != null">
+                #{isDone,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime},
+            </if>
+            <if test="guid != null and guid != ''">
+                #{guid,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `approval` where id_approval = #{idApproval,jdbcType=INTEGER}
+    </select>
+</mapper>
