@@ -42,10 +42,10 @@
                 check_common = #{checkCommon,jdbcType=VARCHAR},
             </if>
             <if test="nextIdApprovalCaseNodeUser != null">
-                next_id_approval_case_node_user = #{nextIdApprovalCaseNodeUser,jdbvType=INTEGER},
+                next_id_approval_case_node_user = #{nextIdApprovalCaseNodeUser,jdbcType=INTEGER},
             </if>
             <if test="approvalIdUser != null">
-                approval_id_user = #{approvalIdUser,jdbvType=INTEGER}
+                approval_id_user = #{approvalIdUser,jdbcType=INTEGER}
             </if>
         </set>
         where id_approval_process_node = #{idApprovalProcessNode,jdbcType=INTEGER}

@@ -1,9 +1,7 @@
 package com.project.service.impl;
 
-import com.project.entity.Approval;
-import com.project.entity.ApprovalCaseNodeCheckUser;
-import com.project.entity.ApprovalModelNode;
-import com.project.entity.ApprovalProcessNode;
+import com.alibaba.fastjson.JSONObject;
+import com.project.entity.*;
 import com.project.mapper.master.*;
 import com.project.service.ApprovalService;
 import com.project.utils.ReturnUtil;
@@ -17,15 +15,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @SuppressWarnings("all")
 public class ApprovalServiceImpl implements ApprovalService {
 
     private static Logger logger = LogManager.getLogger(ApprovalServiceImpl.class);
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private PaymentFormMapper paymentFormMapper;
+
+    @Autowired
+    private PaymentApprovalMapper paymentApprovalMapper;
+
+    @Autowired
+    private ApprovalModelMapper approvalModelMapper;
 
     @Autowired
     private ApprovalCaseNodeUserMapper approvalCaseNodeUserMapper;
@@ -48,33 +56,86 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Override
     public ReturnEntity selectApprovalInfo(Integer idApproval) {
         try {
-            // Todo: test
             List<ApprovalProcessNode> processNodeList = approvalProcessNodeMapper.selectProcessNodeByIdApproval(idApproval);
 
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("processNodeList", processNodeList);
+            for (ApprovalProcessNode processNode : processNodeList) {
+                String modelNodeName = "";
+                if (processNode.getIdApprovalCaseNodeUser() > 0) {
+                    ApprovalCaseNodeCheckUser approvalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByPrimaryKey(processNode.getIdApprovalCaseNodeUser());
+                    modelNodeName = approvalModelNodeMapper.selectByPrimaryKey(approvalCaseNodeCheckUser.getIdApprovalModelNode()).getName();
+                } else {
+                    modelNodeName = "业务部门审核";
+                }
 
-            returnEntity = ReturnUtil.success(map);
+                if (processNode.getIdCheckResult() != null && processNode.getIdCheckResult() == 2) {
+                    processNode.setCheckCommon("不通过：" + processNode.getCheckCommon());
+                }
+
+                if (processNode.getIdApprovalCaseNodeUser() == 0) {
+                    processNode.setCaseName("提交申请");
+                } else {
+                    processNode.setCaseName(modelNodeName); // 业务部门审核
+                }
+
+                String realName = userMapper.selectByPrimaryKey(processNode.getSubmitIdUser()).getRealName();
+                processNode.setCaseUserName(realName);
+
+                if (processNode.getApprovalIdUser() != null) {
+                    if (processNode.getApprovalIdUser() == 0) { // 没有下一环节审批人，流程结束
+                        processNode.setNextCaseName("业务部门汇款");
+                        processNode.setNextCaseUserName("结束");
+                    } else { // 有下一环节需要判断是审批还是退回
+                        String nextCaseUserName = userMapper.selectByPrimaryKey(processNode.getApprovalIdUser()).getRealName();
+                        processNode.setNextCaseUserName(nextCaseUserName);
+
+                        if (processNode.getNextIdApprovalCaseNodeUser() == 0) { // 退回
+                            processNode.setNextCaseName("提交申请");
+                        } else {
+                            processNode.setNextCaseName(modelNodeName); // 业务部门审核
+                        }
+                    }
+                }
+            }
+
+            Approval approval = approvalMapper.selectByPrimaryKey(idApproval);
+            ApprovalCase approvalCase = approvalCaseMapper.selectApprovalCaseById(approval.getIdApprovalCase());
+            ApprovalModel approvalModel = approvalModelMapper.selectByPrimaryKey(approvalCase.getIdApprovalModel());
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("list", processNodeList);
+            jsonObject.put("name", approvalCase.getName() + approvalModel.getName() + "审核流程");
+
+            returnEntity = ReturnUtil.success(jsonObject);
         } catch (Exception e) {
-            logger.error("" + e.getMessage());
+            logger.error("查询审批流失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return returnEntity;
     }
 
     @Override
-    public ReturnEntity verify(ApprovalProcessNode approvalProcessNode) {
+    public ReturnEntity verify(ApprovalProcessNode approvalProcessNode, PaymentApproval paymentApproval) {
         try {
             Approval approval = new Approval();
             if (approvalProcessNode.getIdCheckResult() != null && approvalProcessNode.getIdCheckResult() != 4) {
                 Integer idApprovalCase = approval.getIdApprovalCase();
                 Integer idApproval = approvalProcessNode.getIdApproval();
                 approval = approvalMapper.selectByPrimaryKey(idApproval);
-                Integer idApprovalModel = approvalCaseMapper.selectApprovalCaseById(idApprovalCase).getIdApprovalModel();
+                Integer idApprovalModel = approvalCaseMapper.selectApprovalCaseById(approval.getIdApprovalCase()).getIdApprovalModel();
 
                 if (approvalProcessNode.getIdCheckResult() == 1) {
-                    approvalProcessNode.setNextIdApprovalCaseNodeUser(0);
-                    approvalProcessNode.setApprovalIdUser(0);
+                    // 判断审批金额是否为空
+                    if (Tools.isEmpty(paymentApproval.getAmount()) || paymentApproval.getIdPaymentForm() == null) {
+                        throw new ServiceException("获取审批参数错误");
+                    }
+
+                    ApprovalModelNode reApprovalModelNode = approvalModelNodeMapper.selectByNodeIndex(idApprovalModel, 3);
+                    ApprovalCaseNodeCheckUser reApprovalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
+                            reApprovalModelNode.getIdApprovalModelNode());
+
+                    approvalProcessNode.setNextIdApprovalCaseNodeUser(reApprovalCaseNodeCheckUser.getIdApprovalCaseNodeUser()); // 0
+                    approvalProcessNode.setApprovalIdUser(reApprovalCaseNodeCheckUser.getIdUser()); // 0
+
                     if (Tools.isEmpty(approvalProcessNode.getCheckCommon())) {
                         approvalProcessNode.setCheckCommon("通过");
                     }
@@ -84,6 +145,18 @@ public class ApprovalServiceImpl implements ApprovalService {
                     approval.setCheckState(2);
                     approval.setDone(true);
                     approvalMapper.updateSelective(approval);
+
+                    // 创建审批金额
+                    paymentApproval.setCreateTime(Tools.date2Str(new Date()));
+                    int count = paymentApprovalMapper.addSelective(paymentApproval);
+                    if (count > 0) {
+                        PaymentForm paymentForm = new PaymentForm();
+                        paymentForm.setIdPaymentForm(paymentApproval.getIdPaymentForm());
+                        paymentForm.setIdPaymentFormState(2);
+                        paymentForm.setState(3); // 审核通过
+
+                        paymentFormMapper.updateSelective(paymentForm);
+                    }
 
                 } else if (approvalProcessNode.getIdCheckResult() == 2) {
                     approvalProcessNode.setNextIdApprovalCaseNodeUser(0);
@@ -97,12 +170,19 @@ public class ApprovalServiceImpl implements ApprovalService {
                     approval.setCheckState(3);
                     approval.setDone(true);
                     approvalMapper.updateSelective(approval);
+
+                    PaymentForm paymentForm = new PaymentForm();
+                    paymentForm.setIdPaymentForm(paymentApproval.getIdPaymentForm());
+                    paymentForm.setState(4); // 退回
+
+                    paymentFormMapper.updateSelective(paymentForm);
                 }
             } else {
                 throw new ServiceException("参数错误");
             }
+            returnEntity = ReturnUtil.success("审批成功");
         } catch (Exception e) {
-            logger.error("" + e.getMessage());
+            logger.error("审批请款失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return returnEntity;
@@ -157,7 +237,7 @@ public class ApprovalServiceImpl implements ApprovalService {
             ApprovalCaseNodeCheckUser approvalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
                     approvalModelNode.getIdApprovalModelNode());
 
-            Integer nextIdApprovalCaseNodeUser = approvalCaseNodeCheckUser.getIdApprovalCaseNodeUser(); // 下一环节操作人
+            Integer nextIdApprovalCaseNodeUser = approvalCaseNodeCheckUser.getIdApprovalCaseNodeUser(); // 下一环节操作人 （审批人）
             Integer approvalIdUser = approvalCaseNodeCheckUser.getIdUser();
 
             // 自动生成申请记录
@@ -179,8 +259,22 @@ public class ApprovalServiceImpl implements ApprovalService {
             processNode.setSubmitIdUser(approvalIdUser);
             approvalProcessNodeMapper.addSelective(processNode);
 
+            ApprovalModelNode remittanceApprovalModelNode = approvalModelNodeMapper.selectByNodeIndex(idApprovalModel, 3);
+            ApprovalCaseNodeCheckUser remittanceApprovalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
+                    remittanceApprovalModelNode.getIdApprovalModelNode());
+
+            Integer reNextIdApprovalCaseNodeUser = remittanceApprovalCaseNodeCheckUser.getIdApprovalCaseNodeUser(); // 下一环节操作人 (汇款人)
+            Integer reApprovalIdUser = remittanceApprovalCaseNodeCheckUser.getIdUser();
+
+            // 生成待汇款记录
+            ApprovalProcessNode processRemittance = new ApprovalProcessNode();
+            processRemittance.setIdApproval(approval.getIdApproval());
+            processRemittance.setIdApprovalCaseNodeUser(reNextIdApprovalCaseNodeUser);
+            processRemittance.setSubmitIdUser(reApprovalIdUser);
+            approvalProcessNodeMapper.addSelective(processRemittance);
+
         } catch (Exception e) {
-            logger.error("" + e.getMessage());
+            logger.error("创建审批记录失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return approval.getIdApproval();

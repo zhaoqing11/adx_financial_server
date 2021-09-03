@@ -250,12 +250,14 @@ public class PaymentFormServiceImpl implements PaymentFormService {
             Integer idUser = paymentForm.getIdUser();
             Integer idDepartment = userMapper.selectByPrimaryKey(idUser).getIdDepartment();
 
-            if (paymentForm.getIdPaymentForm() != null) { // 编辑
+            if (paymentForm.getIdPaymentForm() != null) {
                 if (paymentForm.getState() == 2) {
                     idApproval = approvalService.approvalComm(idDepartment, idUser, idApproval, 1, "提交付款申请");
                     paymentForm.setIdApproval(idApproval);
                 }
+                paymentForm.setState(2); // 待审核
                 paymentFormMapper.updateSelective(paymentForm);
+                returnEntity = ReturnUtil.success("编辑成功");
             } else {
                 String newCode = getTodayMaxCode();
                 paymentForm.setCode(newCode);

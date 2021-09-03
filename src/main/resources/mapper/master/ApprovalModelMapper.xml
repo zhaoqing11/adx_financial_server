@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.ApprovalModelMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalModel">
+        <id column="id_approval_model" property="idApprovalModel" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_approval_model, `name`
+	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from approval_model
+        where id_approval_model = #{idApprovalModel,jdbcType=INTEGER}
+    </select>
+</mapper>

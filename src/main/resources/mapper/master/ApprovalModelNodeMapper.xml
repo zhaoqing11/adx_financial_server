@@ -13,6 +13,10 @@
     <sql id="Base_Column_List">
        id_approval_model_node, `name`, id_approval_model, id_role, next_id_approval_model_node, node_index, close_role
 	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from approval_model_node
+        where id_approval_model_node = #{idApprovalModelNode,jdbcType=INTEGER}
+    </select>
     <select id="selectByNodeIndex" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from `approval_model_node`
         where id_approval_model = #{idApprovalModel,jdbcType=INTEGER}

@@ -10,6 +10,10 @@
     <sql id="Base_Column_List">
        id_approval_case_node_user, `id_approval_case`, id_approval_model_node, id_user
 	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from approval_case_node_check_user
+        where id_approval_case_node_user = #{idApprovalCaseNodeUser,jdbcType=INTEGER}
+    </select>
     <select id="selectByIdApprovalCase" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from `approval_case_node_check_user`
         where id_approval_case = #{idApprovalCase,jdbcType=INTEGER}

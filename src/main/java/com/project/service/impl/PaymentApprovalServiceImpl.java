@@ -34,7 +34,7 @@ public class PaymentApprovalServiceImpl implements PaymentApprovalService {
     @Override
     public ReturnEntity addSelective(PaymentApproval paymentApproval) {
         try {
-            paymentApproval.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            paymentApproval.setCreateTime(Tools.date2Str(new Date()));
             int count = paymentApprovalMapper.addSelective(paymentApproval);
             if (count > 0) {
                 PaymentForm paymentForm = new PaymentForm();

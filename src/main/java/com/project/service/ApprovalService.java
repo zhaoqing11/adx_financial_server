@@ -2,13 +2,14 @@ package com.project.service;
 
 import com.project.entity.Approval;
 import com.project.entity.ApprovalProcessNode;
+import com.project.entity.PaymentApproval;
 import com.project.utils.common.base.ReturnEntity;
 
 public interface ApprovalService {
 
     ReturnEntity selectApprovalInfo(Integer idApproval);
 
-    ReturnEntity verify(ApprovalProcessNode approvalProcessNode);
+    ReturnEntity verify(ApprovalProcessNode approvalProcessNode, PaymentApproval paymentApproval);
 
     ReturnEntity updateSelective(Approval approval);
 
