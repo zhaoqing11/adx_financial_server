@@ -255,7 +255,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                     idApproval = approvalService.approvalComm(idDepartment, idUser, idApproval, 1, "提交付款申请");
                     paymentForm.setIdApproval(idApproval);
                 }
-                paymentForm.setState(2); // 待审核
+//                paymentForm.setState(2); // 待审核
                 paymentFormMapper.updateSelective(paymentForm);
                 returnEntity = ReturnUtil.success("编辑成功");
             } else {
