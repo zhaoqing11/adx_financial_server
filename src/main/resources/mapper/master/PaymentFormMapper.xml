@@ -191,6 +191,7 @@
         LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
         LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user`
         WHERE 1=1
+        AND pf.`state` &lt;&gt; 1
         <if test="paymentForm != null">
             <if test="paymentForm.code != null and paymentForm.code != ''">
                 AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')
@@ -228,6 +229,7 @@
          LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user`
          LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user`
          WHERE 1=1
+         AND pf.`state` &lt;&gt; 1
         <if test="paymentForm != null">
             <if test="paymentForm.code != null and paymentForm.code != ''">
                 AND pf.`code` LIKE CONCAT('%',#{paymentForm.code,jdbcType=VARCHAR},'%')

@@ -129,12 +129,14 @@ public class ApprovalServiceImpl implements ApprovalService {
                         throw new ServiceException("获取审批参数错误");
                     }
 
-                    ApprovalModelNode reApprovalModelNode = approvalModelNodeMapper.selectByNodeIndex(idApprovalModel, 3);
-                    ApprovalCaseNodeCheckUser reApprovalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
-                            reApprovalModelNode.getIdApprovalModelNode());
+//                    ApprovalModelNode reApprovalModelNode = approvalModelNodeMapper.selectByNodeIndex(idApprovalModel, 3);
+//                    ApprovalCaseNodeCheckUser reApprovalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
+//                            reApprovalModelNode.getIdApprovalModelNode());
 
-                    approvalProcessNode.setNextIdApprovalCaseNodeUser(reApprovalCaseNodeCheckUser.getIdApprovalCaseNodeUser()); // 0
-                    approvalProcessNode.setApprovalIdUser(reApprovalCaseNodeCheckUser.getIdUser()); // 0
+                    // reApprovalCaseNodeCheckUser.getIdApprovalCaseNodeUser()
+                    // reApprovalCaseNodeCheckUser.getIdUser()
+                    approvalProcessNode.setNextIdApprovalCaseNodeUser(0);
+                    approvalProcessNode.setApprovalIdUser(0);
 
                     if (Tools.isEmpty(approvalProcessNode.getCheckCommon())) {
                         approvalProcessNode.setCheckCommon("通过");
@@ -259,19 +261,19 @@ public class ApprovalServiceImpl implements ApprovalService {
             processNode.setSubmitIdUser(approvalIdUser);
             approvalProcessNodeMapper.addSelective(processNode);
 
-            ApprovalModelNode remittanceApprovalModelNode = approvalModelNodeMapper.selectByNodeIndex(idApprovalModel, 3);
-            ApprovalCaseNodeCheckUser remittanceApprovalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
-                    remittanceApprovalModelNode.getIdApprovalModelNode());
-
-            Integer reNextIdApprovalCaseNodeUser = remittanceApprovalCaseNodeCheckUser.getIdApprovalCaseNodeUser(); // 下一环节操作人 (汇款人)
-            Integer reApprovalIdUser = remittanceApprovalCaseNodeCheckUser.getIdUser();
-
-            // 生成待汇款记录
-            ApprovalProcessNode processRemittance = new ApprovalProcessNode();
-            processRemittance.setIdApproval(approval.getIdApproval());
-            processRemittance.setIdApprovalCaseNodeUser(reNextIdApprovalCaseNodeUser);
-            processRemittance.setSubmitIdUser(reApprovalIdUser);
-            approvalProcessNodeMapper.addSelective(processRemittance);
+//            ApprovalModelNode remittanceApprovalModelNode = approvalModelNodeMapper.selectByNodeIndex(idApprovalModel, 3);
+//            ApprovalCaseNodeCheckUser remittanceApprovalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
+//                    remittanceApprovalModelNode.getIdApprovalModelNode());
+//
+//            Integer reNextIdApprovalCaseNodeUser = remittanceApprovalCaseNodeCheckUser.getIdApprovalCaseNodeUser(); // 下一环节操作人 (汇款人)
+//            Integer reApprovalIdUser = remittanceApprovalCaseNodeCheckUser.getIdUser();
+//
+//            // 生成待汇款记录
+//            ApprovalProcessNode processRemittance = new ApprovalProcessNode();
+//            processRemittance.setIdApproval(approval.getIdApproval());
+//            processRemittance.setIdApprovalCaseNodeUser(reNextIdApprovalCaseNodeUser);
+//            processRemittance.setSubmitIdUser(reApprovalIdUser);
+//            approvalProcessNodeMapper.addSelective(processRemittance);
 
         } catch (Exception e) {
             logger.error("创建审批记录失败，错误消息：--->" + e.getMessage());
