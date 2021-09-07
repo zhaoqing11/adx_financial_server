@@ -1,7 +1,6 @@
 package com.project.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.exceptions.ClientException;
 import com.project.entity.*;
 import com.project.mapper.master.*;
 import com.project.utils.common.exception.ServiceException;
@@ -157,17 +156,6 @@ public class Scheduler {
         record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         remainingSumRecordMapper.addSelective(record);
 
-//        MessageVO messageVO = new MessageVO();
-//        int len = configVO.getCardNum().length();
-//        String card = configVO.getCardNum().substring(len - 4, len);
-//        messageVO.setCardPri(card);
-//        messageVO.setCollectionAmountPri(privateDaily.getCollectionAmount());
-//        messageVO.setPayAmountPri(privateDaily.getPayAmount());
-//        messageVO.setServiceChargePri(privateDaily.getServiceCharge());
-//        messageVO.setRemainingSumPri(privateDaily.getRemainingSum());
-//
-//        messageVO.setTelephone(configVO.getTelephone());
-//        return messageVO;
     }
 
     /**
@@ -195,15 +183,6 @@ public class Scheduler {
         record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         remainingSumRecordMapper.addSelective(record);
 
-//        MessageVO messageVO = new MessageVO();
-//        int len = configVO.getCardNum().length();
-//        String card = configVO.getCardNum().substring(len - 4, len);
-//        messageVO.setCardPub(card);
-//        messageVO.setCollectionAmountPub(daily.getCollectionAmount());
-//        messageVO.setPayAmountPub(daily.getPayAmount());
-//        messageVO.setServiceChargePub(daily.getServiceCharge());
-//        messageVO.setRemainingSumPub(daily.getRemainingSum());
-//        return messageVO;
     }
 
     /**

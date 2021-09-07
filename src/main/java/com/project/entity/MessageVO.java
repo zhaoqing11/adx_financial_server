@@ -25,21 +25,6 @@ public class MessageVO {
     // 手续费（公账）
     private String serviceCharge;
 
-//    // 账号（私账）
-//    private String cardPri;
-//
-//    // 余额（私账）
-//    private String remainingSumPri;
-//
-//    // 收入（私账）
-//    private String collectionAmountPri;
-//
-//    // 支出（私账）
-//    private String payAmountPri;
-//
-//    // 手续费（私账）
-//    private String serviceChargePri;
-
     // 接收短信手机号
     private String telephone;
 
@@ -99,43 +84,4 @@ public class MessageVO {
         this.serviceCharge = serviceCharge;
     }
 
-    //    public String getCardPri() {
-//        return cardPri;
-//    }
-//
-//    public void setCardPri(String cardPri) {
-//        this.cardPri = cardPri;
-//    }
-//
-//    public String getRemainingSumPri() {
-//        return remainingSumPri;
-//    }
-//
-//    public void setRemainingSumPri(String remainingSumPri) {
-//        this.remainingSumPri = remainingSumPri;
-//    }
-//
-//    public String getCollectionAmountPri() {
-//        return collectionAmountPri;
-//    }
-//
-//    public void setCollectionAmountPri(String collectionAmountPri) {
-//        this.collectionAmountPri = collectionAmountPri;
-//    }
-//
-//    public String getPayAmountPri() {
-//        return payAmountPri;
-//    }
-//
-//    public void setPayAmountPri(String payAmountPri) {
-//        this.payAmountPri = payAmountPri;
-//    }
-//
-//    public String getServiceChargePri() {
-//        return serviceChargePri;
-//    }
-//
-//    public void setServiceChargePri(String serviceChargePri) {
-//        this.serviceChargePri = serviceChargePri;
-//    }
 }
