@@ -132,6 +132,7 @@
         <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
             AND DATE_FORMAT(cr.`collection_date`, '%Y-%m-%d') between #{startTime} and #{endTime}
         </if>
+        ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC
         <if test="pageSize > 0">
             LIMIT #{startIndex},#{pageSize}
         </if>
@@ -172,13 +173,14 @@
         <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
             AND DATE_FORMAT(pr.`remittance_date`, '%Y-%m-%d') between #{startTime} and #{endTime}
         </if>
+        ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC
         <if test="pageSize > 0">
             LIMIT #{startIndex},#{pageSize}
         </if>
     </select>
     <select id="queryPaymentRemittanceCount" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN (
-            SELECT id_payment_form FROM payment_remittance
+            SELECT id_payment_form FROM payment_remittance WHERE id_payment_form IS NOT NULL
         )
     </select>
     <select id="queryApprovalPaymentCount" resultType="java.lang.Integer">

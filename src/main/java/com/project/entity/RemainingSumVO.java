@@ -2,6 +2,8 @@ package com.project.entity;
 
 public class RemainingSumVO {
 
+    private Integer id;
+
     private String reasonApplication;
 
     private String amount;
@@ -41,6 +43,14 @@ public class RemainingSumVO {
     private Integer idCollectionRecord;
 
     private String remark;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getRemark() {
         return remark;

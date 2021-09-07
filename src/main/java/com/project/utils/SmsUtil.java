@@ -40,12 +40,10 @@ public class SmsUtil {
         // 必填:短信签名-可在短信控制台中找到
         request.setSignName("安德信财务管理系统");
         // 必填:短信模板-可在短信控制台中找到
-        request.setTemplateCode("SMS_222860619");
+        request.setTemplateCode("SMS_223581913");
         // 可选:模板中的变量替换JSON串,如模板内容为"亲爱的用户,您的验证码为${code}"时,此处的值为
-        request.setTemplateParam("{\"date\":\"" + messageVO.getDate() + "\",\"card_pub\":\"" + messageVO.getCardPub() + "\",\"remainingSum_pub\":\""+ messageVO.getRemainingSumPub() +"\"," +
-                "\"collectionAmount_pub\":\""+ messageVO.getCollectionAmountPub() +"\",\"payAmount_pub\":\""+ messageVO.getPayAmountPub() +"\",\"serviceCharge_pub\":\""+ messageVO.getServiceChargePub() +"\"," +
-                "\"card_pri\":\""+ messageVO.getCardPri() +"\",\"remainingSum_pri\":\""+ messageVO.getRemainingSumPri() +"\",\"collectionAmount_pri\":\""+ messageVO.getCollectionAmountPri() +"\"," +
-                "\"payAmount_pri\":\""+ messageVO.getPayAmountPri() +"\",\"serviceCharge_pri\":\""+ messageVO.getServiceChargePri() +"\"}");
+        request.setTemplateParam("{\"date\":\"" + messageVO.getDate() + "\",\"card\":\"" + messageVO.getCard() + "\",\"remainingSum\":\""+ messageVO.getRemainingSum() +"\"," +
+                "\"collectionAmount\":\""+ messageVO.getCollectionAmount() +"\",\"payAmount\":\""+ messageVO.getPayAmount() +"\",\"serviceCharge\":\""+ messageVO.getServiceCharge()  +"\"}");
 
         // 可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
         request.setOutId("yourOutId");
