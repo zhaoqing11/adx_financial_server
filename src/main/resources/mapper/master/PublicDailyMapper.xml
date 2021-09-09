@@ -117,6 +117,7 @@
                 and DATE_FORMAT(create_time, '%Y-%m-%d') = #{daily.createTime}
             </if>
         </if>
+        ORDER BY create_time DESC
         <if test="pageSize > 0">
             limit #{startIndex},#{pageSize}
         </if>
