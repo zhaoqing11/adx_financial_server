@@ -9,6 +9,7 @@ import com.project.service.IndexService;
 import com.project.utils.ReturnUtil;
 import com.project.utils.Tools;
 import com.project.utils.common.base.ReturnEntity;
+import com.project.utils.common.base.enums.CardType;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,10 +41,6 @@ public class IndexServiceImpl implements IndexService {
     @Autowired
     private ReturnEntity returnEntity;
 
-    private static final Integer PUBLIC_NUM = 1;
-
-    private static final Integer PRIVATE_NUM = 2;
-
     private static final Integer MONTH_NUM = 12;
 
     @Override
@@ -73,7 +70,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity publicFlowRecordByDepartment(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(PUBLIC_NUM, year);
+            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.PUBLICTYPE, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             departmentList.forEach(item -> {
@@ -106,7 +103,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity privateFlowRecordByDepartment(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(PRIVATE_NUM, year);
+            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.PRIVATETYPE, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             departmentList.forEach(item -> {
@@ -136,7 +133,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity getPublicFlowRecordDetails(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(PUBLIC_NUM, year);
+            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.PUBLICTYPE, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             for (Department item : departmentList) {
@@ -200,7 +197,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity getPrivateFlowRecordDetails(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(PRIVATE_NUM, year);
+            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.PRIVATETYPE, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             departmentList.forEach(item -> {

@@ -14,7 +14,6 @@ import com.project.utils.Tools;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
 import com.project.utils.common.base.enums.CardType;
-import com.project.utils.common.base.enums.FileSeparator;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

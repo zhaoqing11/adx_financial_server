@@ -1,0 +1,1056 @@
+2021-09-08 08:28:23,159 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select * from `user` where username = ? 
+2021-09-08 08:28:23,249 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: wangfen(String)
+2021-09-08 08:28:23,305 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:28,207 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 08:28:28,210 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:28,214 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 08:28:28,511 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1 
+2021-09-08 08:28:28,513 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:28,518 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:28,520 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN ( SELECT id_payment_form FROM payment_remittance WHERE id_payment_form IS NOT NULL ) 
+2021-09-08 08:28:28,522 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:28,525 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:28,526 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from private_daily WHERE state = ? 
+2021-09-08 08:28:28,529 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:28,533 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:28,533 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:28,534 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 08:28:28,535 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from public_daily WHERE state = ? 
+2021-09-08 08:28:28,536 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:28,538 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:28,539 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:28,539 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:28,540 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 08:28:28,542 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:32,178 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 08:28:32,181 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:32,185 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 08:28:32,270 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 08:28:32,271 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:32,283 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:32,287 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 08:28:32,288 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 08:28:32,306 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 08:28:35,197 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 08:28:35,199 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:35,202 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 08:28:35,508 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1 
+2021-09-08 08:28:35,508 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from private_daily WHERE state = ? 
+2021-09-08 08:28:35,510 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:35,510 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:35,513 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:35,513 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:35,515 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from public_daily WHERE state = ? 
+2021-09-08 08:28:35,515 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN ( SELECT id_payment_form FROM payment_remittance WHERE id_payment_form IS NOT NULL ) 
+2021-09-08 08:28:35,516 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:35,517 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:35,519 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:35,523 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:35,529 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:35,531 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 08:28:35,533 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:35,536 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:35,537 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 08:28:35,539 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:37,346 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 08:28:37,348 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:37,350 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:37,353 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 08:28:37,354 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 08:28:37,358 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 3
+2021-09-08 08:28:38,660 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 08:28:38,662 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:38,664 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 08:28:38,984 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1 
+2021-09-08 08:28:38,984 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from private_daily WHERE state = ? 
+2021-09-08 08:28:38,985 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:38,985 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:38,987 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:38,987 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:38,989 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from public_daily WHERE state = ? 
+2021-09-08 08:28:38,989 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN ( SELECT id_payment_form FROM payment_remittance WHERE id_payment_form IS NOT NULL ) 
+2021-09-08 08:28:38,990 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:38,990 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:38,992 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:38,993 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:38,994 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:38,996 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 08:28:38,999 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:39,001 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:39,003 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 08:28:39,005 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:39,710 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `private_daily` where 1=1 
+2021-09-08 08:28:39,711 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:39,713 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:39,715 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_private_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `private_daily` where 1=1 limit ?,? 
+2021-09-08 08:28:39,717 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 08:28:39,731 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 3
+2021-09-08 08:28:49,864 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 08:28:49,866 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:49,868 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 08:28:50,181 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1 
+2021-09-08 08:28:50,181 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from private_daily WHERE state = ? 
+2021-09-08 08:28:50,182 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:50,182 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:50,185 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:50,185 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:50,186 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN ( SELECT id_payment_form FROM payment_remittance WHERE id_payment_form IS NOT NULL ) 
+2021-09-08 08:28:50,186 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from public_daily WHERE state = ? 
+2021-09-08 08:28:50,198 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:50,198 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer)
+2021-09-08 08:28:50,201 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:50,201 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:50,202 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:50,204 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 08:28:50,206 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:50,207 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 08:28:50,208 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 08:28:50,210 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 08:28:51,178 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 08:28:51,180 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:28:51,182 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:28:51,184 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 08:28:51,185 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 08:28:51,189 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 3
+2021-09-08 08:31:44,408 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? 
+2021-09-08 08:31:44,410 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 08:31:44,412 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 08:31:44,414 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 08:31:44,415 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:31:44,415 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`id_card_type` as 'idCardType', pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` as 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`state`, pf.`files`, u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 08:31:44,416 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer), 0(Integer), 10(Integer)
+2021-09-08 08:31:44,417 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 08:31:44,424 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 4
+2021-09-08 08:31:45,803 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 08:31:45,805 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:31:45,836 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 08:31:45,840 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 08:31:45,841 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:31:45,863 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 08:31:50,248 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 08:31:50,250 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:31:50,284 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 08:31:50,286 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 08:31:50,287 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:31:50,308 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 08:31:52,656 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 08:31:52,657 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:31:52,679 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 08:31:52,681 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 08:31:52,681 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:31:52,693 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 08:52:37,730 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 08:52:37,731 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:52:37,754 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 08:52:37,756 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 08:52:37,758 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:52:37,775 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 08:54:52,321 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 08:54:52,323 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:54:52,353 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 08:54:52,354 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 08:54:52,355 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 08:54:52,374 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 09:03:51,091 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:03:51,158 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:03:51,249 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 09:03:51,255 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:03:51,257 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:03:51,277 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 09:05:33,024 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:05:33,026 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:05:33,060 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 09:05:33,062 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:05:33,064 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:05:33,083 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 09:05:35,228 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:05:35,230 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:05:35,255 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 5
+2021-09-08 09:05:35,256 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:05:35,257 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:05:35,271 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 7
+2021-09-08 09:09:50,244 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:09:50,246 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:09:50,282 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:09:50,284 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:09:50,285 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:09:50,297 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:09:58,327 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:09:58,329 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:09:58,363 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:09:58,364 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:09:58,365 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:09:58,376 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:09:59,521 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:09:59,522 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:09:59,545 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:09:59,546 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:09:59,546 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:09:59,557 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:10:03,644 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:10:03,646 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:03,674 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:10:03,675 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:10:03,675 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:03,686 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:10:04,539 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:10:04,541 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:04,573 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:10:04,575 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:10:04,576 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:04,588 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:10:06,768 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:10:06,769 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:06,794 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:10:06,795 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:10:06,796 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:06,807 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:10:09,024 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:10:09,025 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:09,043 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:10:09,044 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:10:09,044 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:09,054 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:10:49,766 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:10:49,767 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:49,788 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:10:49,789 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:10:49,790 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:49,804 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:10:52,709 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:10:52,710 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:52,734 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:10:52,735 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:10:52,735 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:10:52,748 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:14:16,794 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:14:16,795 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:14:16,818 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:14:16,819 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:14:16,820 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:14:16,830 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:15:25,288 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:15:25,289 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:15:25,312 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:15:25,313 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:15:25,313 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:15:25,322 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:16:02,546 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:16:02,547 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:16:02,569 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:16:02,570 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:16:02,571 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:16:02,580 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:16:08,402 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`id_payment_remittance` AS 'idPaymentRemittance', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:16:08,402 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:16:08,424 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:16:08,425 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:16:08,426 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:16:08,434 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:31:12,325 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:31:12,360 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:31:12,428 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:31:12,432 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:31:12,433 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:31:12,447 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:31:43,719 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:31:43,720 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:31:43,722 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:31:44,048 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 09:31:44,048 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:31:44,051 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:31:44,054 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 09:31:44,055 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:31:44,063 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:31:57,706 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:31:57,707 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:31:57,709 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:31:57,710 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 09:31:57,711 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:31:57,714 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:31:57,715 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 09:31:57,716 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:31:57,727 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:34:13,831 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select * from `user` where username = ? 
+2021-09-08 09:34:13,832 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: weidanxia(String)
+2021-09-08 09:34:13,834 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:16,536 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:34:16,537 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:16,539 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:34:16,843 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1 
+2021-09-08 09:34:16,846 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:16,848 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:16,849 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN ( SELECT id_payment_form FROM payment_remittance WHERE id_payment_form IS NOT NULL ) 
+2021-09-08 09:34:16,850 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:16,852 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:16,853 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 09:34:16,854 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 09:34:16,855 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:16,856 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 09:34:16,857 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 09:34:16,858 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:16,873 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from private_daily WHERE state = ? 
+2021-09-08 09:34:16,874 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 09:34:16,875 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:16,877 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from public_daily WHERE state = ? 
+2021-09-08 09:34:16,878 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 09:34:16,880 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:17,686 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:34:17,688 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:17,688 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 09:34:17,688 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:17,689 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:17,689 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:34:17,691 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 09:34:17,692 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:34:17,699 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:34:19,860 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:34:19,861 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:19,863 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:34:19,899 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 09:34:19,900 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:19,901 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:34:19,902 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 09:34:19,903 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:34:19,907 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:34:43,316 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:34:43,317 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:43,351 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:34:43,352 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:34:43,353 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:43,365 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:34:48,337 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_config, `name`, config from `config` 
+2021-09-08 09:34:48,338 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:34:48,340 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:35:02,045 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:35:02,045 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:35:02,075 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:35:02,077 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:35:02,078 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:35:02,091 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:35:46,046 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:35:46,047 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:35:46,087 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:35:46,088 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:35:46,089 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:35:46,099 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:36:05,664 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:36:05,665 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:36:05,684 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:36:05,685 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:36:05,685 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:36:05,696 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:36:09,656 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:36:09,657 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:36:09,687 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:36:09,688 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:36:09,689 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:36:09,699 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:36:15,852 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:36:15,852 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:36:15,853 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:36:15,854 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 09:36:15,855 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:36:15,857 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:36:18,758 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:36:18,759 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:36:18,759 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:36:18,760 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 09:36:18,761 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 10(Integer), 10(Integer)
+2021-09-08 09:36:18,763 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:36:20,220 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:36:20,221 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:36:20,222 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:36:20,223 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 09:36:20,224 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:36:20,228 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:38:08,120 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:38:08,121 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:38:08,122 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:38:08,124 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 09:38:08,124 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 15(Integer)
+2021-09-08 09:38:08,126 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:38:13,043 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:38:13,044 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:38:13,046 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:38:13,047 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 09:38:13,048 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:38:13,051 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:38:36,722 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:38:36,723 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:38:36,724 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:38:36,726 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 limit ?,? 
+2021-09-08 09:38:36,727 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:38:36,729 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:42:22,363 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:42:22,416 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:22,469 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:42:22,475 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:42:22,478 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:42:22,494 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:42:25,607 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:42:25,608 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:25,609 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:42:25,610 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:42:25,611 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 10(Integer), 10(Integer)
+2021-09-08 09:42:25,613 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:42:27,761 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:42:27,762 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:27,764 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:42:27,765 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:42:27,766 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:42:27,775 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:42:34,301 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:42:34,303 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:34,359 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:42:34,363 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:42:34,363 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:34,374 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:42:35,495 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:42:35,496 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:35,521 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:42:35,522 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:42:35,523 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:35,536 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:42:47,223 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:42:47,224 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:47,254 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:42:47,255 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:42:47,255 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:47,267 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:42:47,981 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:42:47,982 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:48,009 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:42:48,010 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:42:48,011 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:48,024 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:42:50,873 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:42:50,874 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:50,894 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:42:50,896 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:42:50,897 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:50,909 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:42:54,544 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:42:54,545 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:54,547 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:42:54,548 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:42:54,549 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:42:54,552 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:42:55,388 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `private_daily` where 1=1 
+2021-09-08 09:42:55,389 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:55,390 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:42:55,391 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_private_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `private_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:42:55,392 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:42:55,394 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:42:58,618 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `private_daily` where 1=1 
+2021-09-08 09:42:58,619 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:42:58,621 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:42:58,622 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_private_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `private_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:42:58,623 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 10(Integer), 10(Integer)
+2021-09-08 09:42:58,625 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:00,577 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:43:00,578 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:00,580 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:00,581 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:43:00,581 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:43:00,584 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:43:28,926 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:43:28,927 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:28,929 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:28,930 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:43:28,931 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:43:28,934 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:43:31,951 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:43:31,952 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:31,954 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:43:31,964 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 09:43:31,965 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:31,967 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:31,969 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 09:43:31,970 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:43:31,973 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:43:32,598 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 09:43:32,599 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:32,624 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 09:43:32,625 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 09:43:32,626 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:32,643 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 09:43:35,948 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 09:43:35,949 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:35,951 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:35,953 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 09:43:35,954 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:43:35,957 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:43:39,263 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:43:39,264 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:39,265 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:43:39,293 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 09:43:39,294 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:39,295 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:39,296 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 09:43:39,297 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:43:39,302 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 09:43:47,592 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:43:47,594 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:47,596 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:43:47,605 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? 
+2021-09-08 09:43:47,606 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 09:43:47,608 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:47,610 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`id_card_type` as 'idCardType', pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` as 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`state`, pf.`files`, u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 09:43:47,610 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer), 0(Integer), 10(Integer)
+2021-09-08 09:43:47,612 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 09:43:50,038 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 09:43:50,039 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:50,041 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:51,558 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `private_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 09:43:51,559 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:51,560 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:54,745 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:43:54,747 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:43:54,749 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:43:54,750 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? 
+2021-09-08 09:43:54,751 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 8(Integer)
+2021-09-08 09:43:54,754 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:43:54,755 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`id_card_type` as 'idCardType', pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` as 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`state`, pf.`files`, u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 09:43:54,756 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 8(Integer), 0(Integer), 10(Integer)
+2021-09-08 09:43:54,759 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 6
+2021-09-08 09:44:04,696 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 09:44:04,697 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:44:04,699 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 09:44:04,712 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 09:44:04,713 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 09:44:04,714 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 09:44:04,715 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 09:44:04,716 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 09:44:04,719 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:13:43,476 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:13:43,485 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:13:43,493 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:13:43,502 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? 
+2021-09-08 17:13:43,503 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 17:13:43,505 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:13:43,506 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`id_card_type` as 'idCardType', pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` as 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`state`, pf.`files`, u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:13:43,508 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer), 0(Integer), 10(Integer)
+2021-09-08 17:13:43,510 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 0
+2021-09-08 17:13:48,650 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 17:13:48,651 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:13:48,653 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:13:48,654 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 17:13:48,655 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:13:48,659 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:13:54,688 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `private_daily` where 1=1 
+2021-09-08 17:13:54,689 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:13:54,690 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:13:54,691 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_private_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `private_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 17:13:54,692 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:13:54,698 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:13:55,242 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from `public_daily` where 1=1 
+2021-09-08 17:13:55,242 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:13:55,244 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:13:55,245 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_public_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time from `public_daily` where 1=1 ORDER BY create_time DESC limit ?,? 
+2021-09-08 17:13:55,246 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:13:55,250 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:13:58,245 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_config, `name`, config from `config` 
+2021-09-08 17:13:58,247 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:13:58,250 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:14:03,654 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 17:14:03,656 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:03,698 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 17:14:03,699 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 17:14:03,700 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:03,711 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 17:14:06,673 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:14:06,675 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:06,676 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:14:06,677 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:14:06,678 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:06,681 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:06,682 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:14:06,684 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:14:06,702 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:14:33,320 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:14:33,321 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:33,325 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:14:33,326 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:14:33,326 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:33,329 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:33,331 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:14:33,332 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:14:33,339 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:14:39,334 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select * from `user` where username = ? 
+2021-09-08 17:14:39,335 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: weidanxia(String)
+2021-09-08 17:14:39,337 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:42,448 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form_state = 1 
+2021-09-08 17:14:42,448 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:14:42,449 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:42,449 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:42,451 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:14:42,451 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:42,452 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from private_daily WHERE state = ? 
+2021-09-08 17:14:42,453 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM payment_form WHERE id_payment_form NOT IN ( SELECT id_payment_form FROM payment_remittance WHERE id_payment_form IS NOT NULL ) 
+2021-09-08 17:14:42,453 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:14:42,453 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 17:14:42,455 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:42,456 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:42,456 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select count(1) from public_daily WHERE state = ? 
+2021-09-08 17:14:42,457 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 17:14:42,457 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 17:14:42,458 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 17:14:42,459 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:42,460 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:14:42,461 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT id_remaining_sum_record, id_card_type, last_remaining_sum, create_time FROM `remaining_sum_record` WHERE id_card_type = ? and DATE_FORMAT(create_time, '%y-%m-%d') = DATE_FORMAT(NOW(), '%y-%m-%d') 
+2021-09-08 17:14:42,462 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 17:14:42,464 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:22:22,737 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:22:22,738 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:22:22,739 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:22:22,747 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:22:22,747 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:22:22,749 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:22:22,751 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:22:22,751 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:22:22,770 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:22:23,007 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`code`, pr.`id_card_type` as 'idCardType', pa.`amount` AS 'approvalAmount', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', pfr.`remaining_sum` AS 'remainingSum', pfr.`id_flow_type` AS 'idFlowType', pfr.`id_pay_flow_record` AS 'idPayFlowRecord', pr.`remark` AS 'remark', pr.`remittance_date` as 'remittanceDate', pr.`create_time` AS 'createTime' FROM pay_flow_record pfr LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance` LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form` LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form` WHERE 1=1 ORDER BY pr.`remittance_date` DESC, pr.`id_payment_remittance` DESC 
+2021-09-08 17:22:23,007 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:22:23,023 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 39
+2021-09-08 17:22:23,024 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`amount` as 'collectionAmount', cr.`id_card_type` as 'idCardType', ifr.`remaining_sum` AS 'remainingSum', ifr.`id_flow_type` AS 'idFlowType', ifr.`id_income_flow_record` AS 'idIncomeFlowRecord', cr.`remark` as 'remark', cr.`collection_date` as 'collectionDate', cr.`create_time` AS 'createTime' FROM income_flow_record ifr LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record` WHERE 1=1 ORDER BY cr.`collection_date` DESC, cr.`id_collection_record` DESC 
+2021-09-08 17:22:23,025 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:22:23,035 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 11
+2021-09-08 17:22:23,895 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:22:23,896 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:22:23,898 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:22:24,200 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:22:24,201 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:22:24,202 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:22:24,203 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:22:24,204 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:22:24,208 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:28:34,409 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:28:34,410 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:28:34,412 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:28:34,596 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:28:34,597 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:28:34,598 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:28:34,604 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:28:34,605 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:28:34,606 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:28:34,608 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:28:34,609 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:28:34,614 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:28:34,701 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:28:34,701 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:28:34,703 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:28:34,704 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:28:34,705 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:28:34,710 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:36:28,973 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:36:28,973 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:36:28,975 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:36:28,976 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:36:28,983 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:36:28,985 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:28,987 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:36:28,988 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:36:28,993 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:36:30,681 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:36:30,682 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:36:30,682 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:36:30,682 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:36:30,683 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:36:30,683 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:30,684 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:36:30,685 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:36:30,689 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:36:31,862 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:36:31,863 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:36:31,864 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:36:32,149 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:36:32,149 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:36:32,151 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:32,152 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:36:32,152 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:36:32,157 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:36:46,835 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_process_node, `id_approval`, submit_id_user, id_approval_case_node_user, create_time, id_check_result, check_common, next_id_approval_case_node_user, approval_id_user from approval_process_node where id_approval = ? 
+2021-09-08 17:36:46,836 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3(Integer)
+2021-09-08 17:36:46,839 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:36:46,841 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:36:46,842 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 21(Integer)
+2021-09-08 17:36:46,844 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:46,845 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:36:46,846 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 17:36:46,848 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:46,850 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case_node_user, `id_approval_case`, id_approval_model_node, id_user from approval_case_node_check_user where id_approval_case_node_user = ? 
+2021-09-08 17:36:46,851 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:36:46,854 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:46,855 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_model_node, `name`, id_approval_model, id_role, next_id_approval_model_node, node_index, close_role from approval_model_node where id_approval_model_node = ? 
+2021-09-08 17:36:46,856 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 17:36:46,858 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:46,859 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:36:46,860 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 17:36:46,862 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:46,863 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval, `id_user`, id_approval_case, check_state, is_done, create_time, guid from `approval` where id_approval = ? 
+2021-09-08 17:36:46,864 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3(Integer)
+2021-09-08 17:36:46,866 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:46,868 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case, `id_approval_model`, id_department, `name`, `active` from approval_case where id_approval_case = ? 
+2021-09-08 17:36:46,868 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:36:46,870 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:46,871 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_model, `name` from approval_model where id_approval_model = ? 
+2021-09-08 17:36:46,871 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 17:36:46,872 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:54,828 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval, `id_user`, id_approval_case, check_state, is_done, create_time, guid from `approval` where id_approval = ? 
+2021-09-08 17:36:54,829 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3(Integer)
+2021-09-08 17:36:54,830 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:54,830 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case, `id_approval_model`, id_department, `name`, `active` from approval_case where id_approval_case = ? 
+2021-09-08 17:36:54,830 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:36:54,831 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:54,835 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update approval_process_node SET id_approval = ?, id_approval_case_node_user = ?, create_time = ?, id_check_result = ?, check_common = ?, next_id_approval_case_node_user = ?, approval_id_user = ? where id_approval_process_node = ? 
+2021-09-08 17:36:54,835 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3(Integer), 4(Integer), 2021-09-08 17:36:54(String), 1(Integer), 通过(String), 0(Integer), 0(Integer), 6(Integer)
+2021-09-08 17:36:54,849 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:36:54,851 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update approval SET id_user = ?, id_approval_case = ?, check_state = ?, is_done = ?, create_time = ?, guid = ? where id_approval = ? 
+2021-09-08 17:36:54,852 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 21(Integer), 4(Integer), 2(Integer), true(Boolean), 2021-09-07 18:40:17(String), hp3ykf8sup4igriv2gbme6fh5qng62nv(String), 3(Integer)
+2021-09-08 17:36:54,854 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:36:54,856 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: insert into payment_approval ( id_payment_form, amount, id_user, create_time ) values ( ?, ?, ?, ? ) 
+2021-09-08 17:36:54,858 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 30(Integer), 10000(String), 7(Integer), 2021-09-08 17:36:54(String)
+2021-09-08 17:36:54,861 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:36:54,865 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update payment_form SET id_payment_form_state = ?, `state` = ? where id_payment_form = ? 
+2021-09-08 17:36:54,866 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer), 3(Integer), 30(Integer)
+2021-09-08 17:36:54,869 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:36:55,082 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:36:55,083 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:36:55,084 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:36:55,085 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:36:55,085 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:36:55,090 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:37:04,643 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:37:04,644 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:37:04,645 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:37:04,647 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:37:04,647 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:37:04,653 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:37:06,113 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:37:06,114 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:37:06,116 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:37:18,005 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:37:18,006 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:37:18,008 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:38:16,576 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:38:16,578 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:38:16,580 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:38:16,885 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:38:16,886 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:38:16,887 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:38:16,888 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:38:16,888 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:38:16,892 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:38:16,918 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:38:16,919 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:38:16,921 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:38:16,930 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:38:16,931 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:38:16,933 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:38:16,934 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:38:16,935 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:38:16,939 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:38:26,023 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:38:26,024 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:38:26,025 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:39:15,912 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:39:15,913 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:39:15,913 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:39:15,914 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:39:15,915 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:39:15,916 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:39:15,918 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:39:15,919 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:39:15,925 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:39:17,703 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:39:17,705 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:39:17,705 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:39:17,705 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:39:17,706 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:39:17,707 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:39:17,709 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:39:17,711 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:39:17,716 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:39:22,686 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:39:22,686 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:39:22,688 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:40:44,074 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:40:44,075 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:40:44,078 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:40:44,386 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:40:44,387 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:40:44,388 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:40:44,389 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:40:44,390 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:40:44,395 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:40:45,337 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:40:45,338 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:40:45,341 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:40:45,655 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:40:45,656 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:40:45,657 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:40:45,659 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:40:45,660 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:40:45,664 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:41:03,365 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:41:03,366 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:03,368 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:41:03,372 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:41:03,373 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:03,374 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:41:03,375 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:03,377 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:41:03,378 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:03,380 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:41:03,381 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:41:03,382 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:41:03,382 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:03,386 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:03,387 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:41:03,388 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:41:03,388 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:41:03,394 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:41:22,553 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:41:22,553 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:41:22,554 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:22,554 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:22,555 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:41:22,555 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:22,556 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:41:22,557 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:41:22,561 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:41:26,289 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:41:26,290 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:26,291 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:30,446 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:41:30,447 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:30,448 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:35,716 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:41:35,717 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:35,718 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:40,603 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:41:40,604 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:40,605 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:44,329 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:41:44,329 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:41:44,331 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,633 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_process_node, `id_approval`, submit_id_user, id_approval_case_node_user, create_time, id_check_result, check_common, next_id_approval_case_node_user, approval_id_user from approval_process_node where id_approval = ? 
+2021-09-08 17:41:59,634 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:41:59,636 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:41:59,637 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:41:59,637 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 6(Integer)
+2021-09-08 17:41:59,638 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,639 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:41:59,640 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 17:41:59,641 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,641 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case_node_user, `id_approval_case`, id_approval_model_node, id_user from approval_case_node_check_user where id_approval_case_node_user = ? 
+2021-09-08 17:41:59,642 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:41:59,643 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,644 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_model_node, `name`, id_approval_model, id_role, next_id_approval_model_node, node_index, close_role from approval_model_node where id_approval_model_node = ? 
+2021-09-08 17:41:59,645 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 17:41:59,646 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,647 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:41:59,647 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 17:41:59,649 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,650 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval, `id_user`, id_approval_case, check_state, is_done, create_time, guid from `approval` where id_approval = ? 
+2021-09-08 17:41:59,651 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:41:59,652 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,653 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case, `id_approval_model`, id_department, `name`, `active` from approval_case where id_approval_case = ? 
+2021-09-08 17:41:59,654 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:41:59,655 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:41:59,656 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_model, `name` from approval_model where id_approval_model = ? 
+2021-09-08 17:41:59,657 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 17:41:59,658 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,648 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_process_node, `id_approval`, submit_id_user, id_approval_case_node_user, create_time, id_check_result, check_common, next_id_approval_case_node_user, approval_id_user from approval_process_node where id_approval = ? 
+2021-09-08 17:42:11,649 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:42:11,651 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:42:11,652 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:42:11,653 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 6(Integer)
+2021-09-08 17:42:11,655 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,655 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:42:11,656 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 17:42:11,657 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,659 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case_node_user, `id_approval_case`, id_approval_model_node, id_user from approval_case_node_check_user where id_approval_case_node_user = ? 
+2021-09-08 17:42:11,659 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:42:11,660 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,661 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_model_node, `name`, id_approval_model, id_role, next_id_approval_model_node, node_index, close_role from approval_model_node where id_approval_model_node = ? 
+2021-09-08 17:42:11,662 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 17:42:11,664 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,664 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_user, id_role, real_name, `username`, `password`, `phone`, `email`, `enable`, id_department from `user` where id_user = ? 
+2021-09-08 17:42:11,665 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 7(Integer)
+2021-09-08 17:42:11,667 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,668 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval, `id_user`, id_approval_case, check_state, is_done, create_time, guid from `approval` where id_approval = ? 
+2021-09-08 17:42:11,668 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:42:11,670 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,670 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case, `id_approval_model`, id_department, `name`, `active` from approval_case where id_approval_case = ? 
+2021-09-08 17:42:11,671 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:42:11,673 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:11,674 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_model, `name` from approval_model where id_approval_model = ? 
+2021-09-08 17:42:11,674 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 1(Integer)
+2021-09-08 17:42:11,676 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:14,390 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval, `id_user`, id_approval_case, check_state, is_done, create_time, guid from `approval` where id_approval = ? 
+2021-09-08 17:42:14,391 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:42:14,392 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:14,393 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_approval_case, `id_approval_model`, id_department, `name`, `active` from approval_case where id_approval_case = ? 
+2021-09-08 17:42:14,393 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer)
+2021-09-08 17:42:14,395 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:14,396 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update approval_process_node SET id_approval = ?, id_approval_case_node_user = ?, create_time = ?, id_check_result = ?, check_common = ?, next_id_approval_case_node_user = ?, approval_id_user = ? where id_approval_process_node = ? 
+2021-09-08 17:42:14,397 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 4(Integer), 4(Integer), 2021-09-08 17:42:14(String), 1(Integer), 通过(String), 0(Integer), 0(Integer), 8(Integer)
+2021-09-08 17:42:14,409 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:42:14,411 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update approval SET id_user = ?, id_approval_case = ?, check_state = ?, is_done = ?, create_time = ?, guid = ? where id_approval = ? 
+2021-09-08 17:42:14,412 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 6(Integer), 4(Integer), 2(Integer), true(Boolean), 2021-09-07 18:43:22(String), hp3ykf8sup4igriv2gbme6fh5qng62nv(String), 4(Integer)
+2021-09-08 17:42:14,415 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:42:14,416 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: insert into payment_approval ( id_payment_form, amount, id_user, create_time ) values ( ?, ?, ?, ? ) 
+2021-09-08 17:42:14,418 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 29(Integer), 2352.20(String), 7(Integer), 2021-09-08 17:42:14(String)
+2021-09-08 17:42:14,421 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:42:14,422 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update payment_form SET id_payment_form_state = ?, `state` = ? where id_payment_form = ? 
+2021-09-08 17:42:14,422 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer), 3(Integer), 29(Integer)
+2021-09-08 17:42:14,425 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:42:14,653 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:42:14,654 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:42:14,655 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:14,657 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:42:14,657 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:42:14,662 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:42:18,192 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:42:18,193 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:42:18,193 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:42:18,193 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:42:18,194 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:42:18,194 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:42:18,196 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:42:18,197 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:42:18,202 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:42:23,131 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `private_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:42:23,132 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:42:23,133 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:43:11,697 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_payment_form, id_approval, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user, id_payment_form_state, state, files, create_time from payment_form where id_payment_form = ? 
+2021-09-08 17:43:11,698 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 29(Integer)
+2021-09-08 17:43:11,700 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:43:11,702 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: insert into payment_remittance ( id_payment_form, id_card_type, amount, service_charge, remittance_date, id_user, create_time ) values ( ?, ?, ?, ?, ?, ?, ? ) 
+2021-09-08 17:43:11,705 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 29(Integer), 2(Integer), 2352.20(String), 0(String), 2021-09-08 17:42:47(String), 8(Integer), 2021-09-08 17:43:11(String)
+2021-09-08 17:43:11,717 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:43:11,718 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_config, `name`, config from `config` where `id_config` = ? 
+2021-09-08 17:43:11,718 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2021-09-08 17:43:11,719 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:43:11,805 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: insert into `pay_flow_record` ( id_payment_remittance, amount, remaining_sum, create_time ) values ( ?, ?, ?, ? ) 
+2021-09-08 17:43:11,807 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 41(Integer), 2352.20(String), 205863.01(String), 2021-09-08 17:43:11(String)
+2021-09-08 17:43:11,810 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:43:11,823 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update `config` set `config` = ? where id_config = ? 
+2021-09-08 17:43:11,823 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: {"accountName":"上海浦东发展银行股份有限公司广州琶洲支行","cardNum":"6217921071105418","remainingSum":"205863.01","telephone":"18602076288"}(String), 2(Integer)
+2021-09-08 17:43:11,825 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2021-09-08 17:43:11,864 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:43:11,864 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:43:11,866 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:43:11,867 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:43:11,868 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:43:11,873 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:44:35,263 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:44:35,264 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:44:35,265 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:44:35,566 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:44:35,567 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:44:35,568 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:44:36,889 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:44:36,890 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:44:36,892 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:44:38,139 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:44:38,139 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:44:38,140 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:50:35,006 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:50:35,007 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:50:35,009 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:50:35,298 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:50:35,299 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:50:35,300 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:50:35,301 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:50:35,302 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:50:35,306 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:50:36,384 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:50:36,386 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:50:36,387 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:50:36,695 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` WHERE 1=1 AND pf.`state` <> 1 
+2021-09-08 17:50:36,695 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:50:36,697 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:50:36,698 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` AS 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`id_card_type` as 'idCardType', pf.`state`, pf.`files`, pa.`amount` AS 'approvalAmount', ua.`real_name` AS 'approvalUser', pr.`amount` AS 'remittanceAmount', pr.`service_charge` AS 'serviceCharge', ur.`real_name` AS 'remittanceUser', u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form` LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form` LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` LEFT JOIN `user` ua ON ua.`id_user` = pa.`id_user` LEFT JOIN `user` ur ON ur.`id_user` = pr.`id_user` WHERE 1=1 AND pf.`state` <> 1 ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:50:36,699 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:50:36,703 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:50:41,172 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:50:41,173 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:50:41,174 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:50:41,187 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? 
+2021-09-08 17:50:41,188 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 8(Integer)
+2021-09-08 17:50:41,189 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:50:41,190 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT pf.`id_payment_form` AS 'idPaymentForm', pf.`id_approval` as 'idApproval', pf.`code`, pf.`id_card_type` as 'idCardType', pf.`reason_application` AS 'reasonApplication', pf.`amount`, pf.`payment_name` AS 'paymentName', pf.`payment_account` AS 'paymentAccount', pf.`id_payment_form_state` as 'idPaymentFormState', pf.`create_time` AS 'createTime', pf.`id_user` AS 'idUser', pf.`state`, pf.`files`, u.`real_name` AS 'userName' FROM payment_form pf LEFT JOIN `user` u ON u.`id_user` = pf.`id_user` WHERE pf.id_user = ? ORDER BY pf.`create_time` DESC LIMIT ?,? 
+2021-09-08 17:50:41,191 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 8(Integer), 0(Integer), 10(Integer)
+2021-09-08 17:50:41,193 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 6
+2021-09-08 17:50:41,396 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:50:41,396 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:50:41,398 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:50:41,424 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 17:50:41,425 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:50:41,426 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:50:41,428 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 17:50:41,428 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:50:41,433 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:55:04,645 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 17:55:04,646 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:55:04,647 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:55:04,647 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 17:55:04,648 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:55:04,649 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:55:04,649 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:55:04,651 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:55:04,653 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:55:07,825 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:55:07,826 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:55:07,826 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:55:11,328 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `private_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:55:11,329 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:55:11,331 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:55:15,803 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:55:15,804 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:55:15,805 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:56:16,113 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:56:16,114 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:56:16,116 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:56:16,408 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 17:56:16,409 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:56:16,410 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:56:16,412 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 17:56:16,413 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:56:16,418 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:56:18,779 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:56:18,780 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:56:18,781 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:56:18,787 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 17:56:18,788 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:56:18,789 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:56:18,790 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 17:56:18,791 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:56:18,798 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:56:22,615 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:56:22,616 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:56:22,618 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:56:27,327 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `private_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:56:27,328 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:56:27,329 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:56:29,992 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:56:29,993 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:56:29,994 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:57:11,465 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select id_card_type, `name` from `card_type` 
+2021-09-08 17:57:11,465 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT count(1) FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 
+2021-09-08 17:57:11,466 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:57:11,466 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:57:11,467 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 2
+2021-09-08 17:57:11,467 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:57:11,468 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT cr.`id_collection_record` AS 'idCollectionRecord', cr.`amount`, cr.`collection_date` AS 'collectionDate', cr.`remark`, cr.`create_time` AS 'createTime', cr.id_card_type as 'idCardType', cr.`id_user` AS 'idUser', u.`real_name` AS 'userName' FROM collection_record cr LEFT JOIN `user` u ON u.`id_user` = cr.`id_user` where 1=1 ORDER BY cr.`collection_date` DESC LIMIT ?,? 
+2021-09-08 17:57:11,469 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 0(Integer), 10(Integer)
+2021-09-08 17:57:11,475 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 10
+2021-09-08 17:57:14,452 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `public_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:57:14,453 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:57:14,455 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2021-09-08 17:57:17,492 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: SELECT COUNT(1) FROM `private_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` <> 1 
+2021-09-08 17:57:17,493 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2021-09-08 17:57:17,494 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1

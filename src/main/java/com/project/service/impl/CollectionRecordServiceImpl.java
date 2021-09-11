@@ -9,6 +9,7 @@ import com.project.utils.Tools;
 import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
+import com.project.utils.common.base.enums.CardType;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,14 +44,10 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     @Autowired
     private ReturnEntity returnEntity;
 
-    private static final Integer PUBLIC_NUM = 1;
-
-    private static final Integer PRIVATE_NUM = 2;
-
     @Override
     public ReturnEntity updateCollectionRecord(Integer idCardType, Integer idDaily) {
         try {
-            if (idCardType == 1) {
+            if (idCardType == CardType.PUBLICTYPE) {
                 PublicDaily publicDaily = new PublicDaily();
                 publicDaily.setIdPublicDaily(idDaily);
                 publicDaily.setState(0); // 状态置为“待审核”
@@ -74,7 +71,7 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
             collectionRecord.setIdCardType(idCardType);
             boolean flag = addCollectionRcord(collectionRecord);
             if (flag) {
-                if (idCardType == PUBLIC_NUM) {
+                if (idCardType == CardType.PUBLICTYPE) {
                     PublicDaily publicDaily = publicDailyMapper.selectByPrimaryKey(idDaily);
 
                     BigDecimal oldAmount = new BigDecimal(publicDaily.getCollectionAmount());

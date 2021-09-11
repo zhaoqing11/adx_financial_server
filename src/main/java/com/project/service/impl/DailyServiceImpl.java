@@ -12,6 +12,7 @@ import com.project.utils.ReturnUtil;
 import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
+import com.project.utils.common.base.enums.CardType;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,10 +42,6 @@ public class DailyServiceImpl implements DailyService {
 
     @Autowired
     private ReturnEntity returnEntity;
-
-    private static final Integer PUBLIC_NUM = 1;
-
-    private static final Integer PRIVATE_NUM = 2;
 
     @Override
     public ReturnEntity selectDailyByState(Integer idRole) {
@@ -77,9 +74,9 @@ public class DailyServiceImpl implements DailyService {
     public ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType) {
         try {
             int count = 0;
-            if (idCardType == 1) { // 公账
+            if (idCardType == CardType.PUBLICTYPE) {
                 count = publicDailyMapper.selectIsExitUnApprovalDaily();
-            } else { // 私账
+            } else {
                 count = privateDailyMapper.selectIsExitUnApprovalDaily();
             }
             returnEntity = ReturnUtil.success(count);
@@ -94,8 +91,8 @@ public class DailyServiceImpl implements DailyService {
     public ReturnEntity queryPrivateDailyByDate(String date) {
         try {
             // 获取私账收支列表
-            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(2, date);
-            List<PaymentForm> privateCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(2, date);
+            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.PRIVATETYPE, date);
+            List<PaymentForm> privateCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.PRIVATETYPE, date);
 
             List<RemainingSumVO> remainingSumVOS = formatDaily(privatePayFlowRecord, privateCollectionFlowRecord);
             returnEntity = ReturnUtil.success(remainingSumVOS);
@@ -110,8 +107,8 @@ public class DailyServiceImpl implements DailyService {
     public ReturnEntity queryPublicDailyByDate(String date) {
         try {
             // 获取公账收支列表
-            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(1, date);
-            List<PaymentForm> publicCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(1, date);
+            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.PUBLICTYPE, date);
+            List<PaymentForm> publicCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.PUBLICTYPE, date);
 
             List<RemainingSumVO> remainingSumVOS = formatDaily(publicPayFlowRecord, publicCollectionFlowRecord);
             returnEntity = ReturnUtil.success(remainingSumVOS);

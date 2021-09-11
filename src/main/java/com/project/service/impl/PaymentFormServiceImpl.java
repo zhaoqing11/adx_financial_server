@@ -14,15 +14,14 @@ import com.project.utils.Tools;
 import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
+import com.project.utils.common.base.enums.CardType;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @SuppressWarnings("all")
@@ -144,7 +143,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
             // 过滤公账私账
             for (RemainingSumVO remainingSumVO : remainingSumVOList) {
                 Integer idCardType = remainingSumVO.getIdCardType();
-                if (idCardType == 1) {
+                if (idCardType == CardType.PUBLICTYPE) {
                     publicRemainSumList.add(remainingSumVO);
                 } else {
                     privateRemainSumList.add(remainingSumVO);
@@ -178,8 +177,8 @@ public class PaymentFormServiceImpl implements PaymentFormService {
         try {
             int approvalCount = paymentFormMapper.queryApprovalPaymentCount();
             int remittanceCount = paymentFormMapper.queryPaymentRemittanceCount();
-            RemainingSumRecord publicSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(1); // 公账
-            RemainingSumRecord privateSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(2); // 私账
+            RemainingSumRecord publicSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(CardType.PUBLICTYPE);
+            RemainingSumRecord privateSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(CardType.PRIVATETYPE);
 
             String publicRemainingSum = publicSumRecord != null ? publicSumRecord.getLastRemainingSum() : null;
             String privateRemainingSum = privateSumRecord != null ? privateSumRecord.getLastRemainingSum() : null;

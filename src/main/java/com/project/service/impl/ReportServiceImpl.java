@@ -16,11 +16,11 @@ import com.project.utils.Tools;
 import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
+import com.project.utils.common.base.enums.CardType;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.utils.excel.*;
@@ -50,10 +50,6 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private RemainingSumRecordMapper remainingSumRecordMapper;
-
-    private static final Integer PUBLIC_NUM = 1; // 公账
-
-    private static final Integer PRIVATE_NUM = 2; // 私账
 
     @Override
     public void exportToExcel(HttpServletResponse response, int year, int month, Integer idCardType) {
@@ -102,20 +98,20 @@ public class ReportServiceImpl implements ReportService {
         List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime); // 收入
         List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(startTime); // 余额记录列表
 
-        if (idCardType == PUBLIC_NUM) {
+        if (idCardType == CardType.PUBLICTYPE) {
             payFlowList = payFlowList.stream().filter(s ->
-                    s.getIdCardType() == PUBLIC_NUM).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.PUBLICTYPE).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
-                    s.getIdCardType() == PUBLIC_NUM).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.PUBLICTYPE).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
-                    s.getIdCardType() == PUBLIC_NUM).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.PUBLICTYPE).collect(Collectors.toList());
         } else {
             payFlowList = payFlowList.stream().filter(s ->
-                    s.getIdCardType() == PRIVATE_NUM).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.PRIVATETYPE).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
-                    s.getIdCardType() == PRIVATE_NUM).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.PRIVATETYPE).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
-                    s.getIdCardType() == PRIVATE_NUM).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.PRIVATETYPE).collect(Collectors.toList());
         }
 
         // 循环创建日期

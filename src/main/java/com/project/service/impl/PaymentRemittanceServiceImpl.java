@@ -8,6 +8,7 @@ import com.project.utils.ReturnUtil;
 import com.project.utils.Tools;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
+import com.project.utils.common.base.enums.CardType;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,10 +45,6 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     @Autowired
     private ReturnEntity returnEntity;
 
-    private static final Integer PUBLIC_NUM = 1;
-
-    private static final Integer PRIVATE_NUM = 2;
-
     @Override
     public ReturnEntity selectRemittanceByIdPamentForm(Integer idPaymentForm) {
         try {
@@ -66,7 +63,7 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
             paymentRemittance.setIdCardType(idCardType);
             boolean flag = addRemittance(paymentRemittance);
             if (flag) {
-                if (idCardType == PUBLIC_NUM) { // 公账
+                if (idCardType == CardType.PUBLICTYPE) { // 公账
                     PublicDaily publicDaily = publicDailyMapper.selectByPrimaryKey(idDaily);
 
                     // 获取原本支出数据
