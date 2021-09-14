@@ -20,6 +20,15 @@
        id_payment_form, id_approval, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
        id_payment_form_state, state, files, create_time
 	</sql>
+    <select id="selectByStateCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM `payment_form`
+        WHERE state = #{state}
+    </select>
+    <select id="selectByState" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM `payment_form`
+        WHERE id_user = #{idUser,jdbcType=INTEGER}
+        AND state = #{state,jdbcType=INTEGER}
+    </select>
     <select id="selectPayFlowRecordDetails" resultType="com.project.entity.PaymentForm">
         SELECT
          u.`id_department` AS 'idDepartment',
@@ -324,6 +333,9 @@
           <if test="idUser != null">
               id_user,
           </if>
+          <if test="state != null">
+              `state`,
+          </if>
           <if test="files != null and files != ''">
               `files`,
           </if>
@@ -358,6 +370,9 @@
             </if>
             <if test="idUser != null">
                 #{idUser,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state, jdbcType=INTEGER},
             </if>
             <if test="files != null and files != ''">
                 #{files,jdbcType=VARCHAR},

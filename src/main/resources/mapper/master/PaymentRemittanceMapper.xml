@@ -18,6 +18,10 @@
     <select id="selectRemittanceByIdPamentForm" resultType="java.lang.Integer">
         SELECT count(1) FROM `payment_remittance` WHERE id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
     </select>
+    <select id="selectRemittanceCount" resultType="java.lang.Integer">
+        select count(1) from payment_remittance
+        WHERE id_payment_form IS NOT NULL
+    </select>
     <select id="selectPaymentRemittanceByDepartment" resultType="com.project.entity.PaymentRemittance">
         SELECT
          d.`id_department` AS 'idDepartment',

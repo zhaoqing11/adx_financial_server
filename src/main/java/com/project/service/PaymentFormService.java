@@ -5,6 +5,10 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface PaymentFormService {
 
+    ReturnEntity selectByStateCount();
+
+    ReturnEntity selectByState(Integer idUser);
+
     ReturnEntity queryLastDayFlowRecord(Integer idCardType);
 
     ReturnEntity queryFlowRecordDetail(Integer pageNum, Integer pageSize, String startTime, String endTime);

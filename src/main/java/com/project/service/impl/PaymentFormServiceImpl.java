@@ -4,6 +4,7 @@ import com.project.entity.PaymentForm;
 import com.project.entity.RemainingSumRecord;
 import com.project.entity.RemainingSumVO;
 import com.project.mapper.master.PaymentFormMapper;
+import com.project.mapper.master.PaymentRemittanceMapper;
 import com.project.mapper.master.RemainingSumRecordMapper;
 import com.project.mapper.master.UserMapper;
 import com.project.service.ApprovalService;
@@ -42,7 +43,43 @@ public class PaymentFormServiceImpl implements PaymentFormService {
     private PaymentFormMapper paymentFormMapper;
 
     @Autowired
+    private PaymentRemittanceMapper paymentRemittanceMapper;
+
+    @Autowired
     private ReturnEntity returnEntity;
+
+    @Override
+    public ReturnEntity selectByStateCount() {
+        try {
+            int approvaled = paymentFormMapper.selectByStateCount(3);
+            int unApproval = paymentFormMapper.selectByStateCount(2);
+            int unRemittance = paymentFormMapper.queryPaymentRemittanceCount();
+            int remittanceCount = paymentRemittanceMapper.selectRemittanceCount();
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("approvaled", approvaled);
+            map.put("unApproval", unApproval);
+            map.put("unRemittance", unRemittance);
+            map.put("remittanceCount", remittanceCount);
+            returnEntity = ReturnUtil.success(map);
+        } catch (Exception e) {
+            logger.error("获取审批数据失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity selectByState(Integer idUser) {
+        try {
+            PaymentForm paymentForm = paymentFormMapper.selectByState(idUser, 1);
+            returnEntity = ReturnUtil.success(paymentForm);
+        } catch (Exception e) {
+            logger.error("根据用户id获取草稿项目失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public ReturnEntity queryLastDayFlowRecord(Integer idCardType) {
@@ -103,7 +140,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
             endTime = !Tools.isEmpty(endTime) ? Tools.date2Str(Tools.str2Date(endTime), "yyyy-MM-dd") : endTime;
 
             // 获取支出流水列表
-            List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetail(0,0, startTime, endTime);
+            List<PaymentForm> payFlowRecord = paymentFormMapper.queryPayFlowRecordDetail(0, 0, startTime, endTime);
             payFlowRecord.forEach(item -> {
                 RemainingSumVO remainingSumVO = new RemainingSumVO();
                 remainingSumVO.setReasonApplication(item.getReasonApplication());
@@ -124,7 +161,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
             });
 
             // 获取收入流水列表
-            List<PaymentForm> incomeFlowRecord = paymentFormMapper.queryIncomeFlowRecordDetail(0,0, startTime, endTime);
+            List<PaymentForm> incomeFlowRecord = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime);
             incomeFlowRecord.forEach(item -> {
                 RemainingSumVO remainingSumVO = new RemainingSumVO();
                 remainingSumVO.setCollectionAmount(item.getCollectionAmount());
@@ -277,6 +314,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
 
     /**
      * 获取当日最大编号数
+     *
      * @return
      */
     private String getTodayMaxCode() {

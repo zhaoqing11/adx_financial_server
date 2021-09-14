@@ -24,6 +24,24 @@ public class PaymentFormController {
     @Autowired
     PaymentFormService paymentFormService;
 
+    @ApiOperation(value = "获取审批数据")
+    @PostMapping(value = "/selectByStateCount")
+    public ReturnEntity selectByStateCount() {
+
+        returnEntity = paymentFormService.selectByStateCount();
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "根据用户id获取草稿项目")
+    @PostMapping(value = "/selectByState")
+    public ReturnEntity selectByState(Integer idUser) {
+
+        returnEntity = paymentFormService.selectByState(idUser);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "获取收支流水列表")
     @PostMapping(value = "/queryFlowRecordDetail")
     public ReturnEntity queryFlowRecordDetail(Integer pageNum, Integer pageSize, String startTime, String endTime) {
