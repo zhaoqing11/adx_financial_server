@@ -48,10 +48,15 @@ public class DailyServiceImpl implements DailyService {
         try {
             int countPub = 0;
             int countPri = 0;
+            int approvalTotalPri = 0;
+            int approvalTotalPub = 0;
             switch (idRole) {
                 case 2: // 审批人
                     countPri = privateDailyMapper.selectPrivateDailyByState(0);
                     countPub = publicDailyMapper.selectPublicDailyByState(0);
+
+                    approvalTotalPri = privateDailyMapper.selectPrivateDailyByState(1); // 已审核数量 私账
+                    approvalTotalPub = publicDailyMapper.selectPublicDailyByState(1); // 已审核数量 公账
                     break;
                 case 3: // 汇款人
                     countPri = privateDailyMapper.selectPrivateDailyByState(2);
@@ -61,6 +66,8 @@ public class DailyServiceImpl implements DailyService {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("countPub", countPub);
             map.put("countPri", countPri);
+            map.put("approvalTotalPri", approvalTotalPri);
+            map.put("approvalTotalPub", approvalTotalPub);
 
             returnEntity = ReturnUtil.success(map);
         } catch (Exception e) {

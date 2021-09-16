@@ -17,8 +17,7 @@ logging:
 
 project:
   tokenExpire: 86400
-#  downloadUrl: D:\
-  uploadPath: D:\project\adx-financial\File\images\
+  uploadPath: D:\project\adx_financial\File\images\
   telephone: 13662459025
 
 spring:
