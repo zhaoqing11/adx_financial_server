@@ -36,7 +36,7 @@ public class ApprovalController {
 
     @ApiOperation(value = "审批请款信息")
     @PostMapping(value = "/verify")
-    public ReturnEntity verify(ApprovalProcessNode approvalProcessNode, PaymentApproval paymentApproval) { // ApprovalProcessNode approvalProcessNode
+    public ReturnEntity verify(ApprovalProcessNode approvalProcessNode, PaymentApproval paymentApproval) {
 
         returnEntity = approvalService.verify(approvalProcessNode, paymentApproval);
         return returnEntity;

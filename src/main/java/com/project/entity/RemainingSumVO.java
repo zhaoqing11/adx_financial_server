@@ -40,9 +40,19 @@ public class RemainingSumVO {
 
     private Integer idPaymentRemittance;
 
+    private Integer idPaymentForm;
+
     private Integer idCollectionRecord;
 
     private String remark;
+
+    public Integer getIdPaymentForm() {
+        return idPaymentForm;
+    }
+
+    public void setIdPaymentForm(Integer idPaymentForm) {
+        this.idPaymentForm = idPaymentForm;
+    }
 
     public Integer getId() {
         return id;

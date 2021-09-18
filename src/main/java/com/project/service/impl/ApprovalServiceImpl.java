@@ -128,7 +128,6 @@ public class ApprovalServiceImpl implements ApprovalService {
                     if (Tools.isEmpty(paymentApproval.getAmount()) || paymentApproval.getIdPaymentForm() == null) {
                         throw new ServiceException("获取审批参数错误");
                     }
-
 //                    ApprovalModelNode reApprovalModelNode = approvalModelNodeMapper.selectByNodeIndex(idApprovalModel, 3);
 //                    ApprovalCaseNodeCheckUser reApprovalCaseNodeCheckUser = approvalCaseNodeUserMapper.selectByIdApprovalCase(idApprovalCase,
 //                            reApprovalModelNode.getIdApprovalModelNode());

@@ -72,6 +72,7 @@
          pf.`id_card_type` AS 'idCardType',
          pa.`amount` AS 'approvalAmount',
          pr.`id_payment_remittance` as 'idPaymentRemittance',
+         pr.`id_payment_form` as 'idPaymentForm',
          pr.`amount` AS 'remittanceAmount',
          pr.`service_charge` AS 'serviceCharge',
          pfr.`id_pay_flow_record` as 'idPayFlowRecord',
