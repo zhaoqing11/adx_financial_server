@@ -143,41 +143,53 @@ public class IndexServiceImpl implements IndexService {
                 // 筛选对应部门数据
                 List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
                         item.getIdDepartment() == s.getIdDepartment()).collect(Collectors.toList());
-
-                List<PayFlowRecordVO> recordVOList = new ArrayList<PayFlowRecordVO>();
-                for (int i = 0; i < MONTH_NUM; i++) {
-                    PayFlowRecordVO recordVO = new PayFlowRecordVO();
-                    String month = addZaro(String.valueOf(i + 1));
-                    recordVO.setMonth(i + 1);
-
-                    List<PaymentForm> filterMonth = filterList.stream().filter(s->
-                            formatValue(s.getRemittanceDate()).equals(month)).collect(Collectors.toList());
-
-                    BigDecimal amountTotal = new BigDecimal("0.00"); // 月总支出
-                    BigDecimal serviceCharegeTotal = new BigDecimal("0.00"); // 月总手续费
-
-                    for (PaymentForm paymentForm : filterMonth) {
-                        String amount = paymentForm.getRemittanceAmount();
-                        String serviceCharge = paymentForm.getServiceCharge();
-
-                        amountTotal = amountTotal.add(new BigDecimal(amount));
-                        serviceCharegeTotal = serviceCharegeTotal.add(new BigDecimal(serviceCharge));
-                    }
-                    recordVO.setAmount(String.valueOf(amountTotal));
-                    recordVO.setServiceCharge(String.valueOf(serviceCharegeTotal));
-
-                    recordVOList.add(recordVO);
-                }
-                map.put("data", recordVOList);
-
+                map.put("data", filterMap(filterList));
                 mapList.add(map);
             }
+
+            // 添加其他数据
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("department", "其他");
+
+            List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
+                    null == s.getIdDepartment()).collect(Collectors.toList());
+            map.put("data", filterMap(filterList));
+            mapList.add(map);
+
             returnEntity = ReturnUtil.success(mapList);
         } catch (Exception e) {
             logger.error("（公账）获取指定年份各部门每月支出列表失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return returnEntity;
+    }
+
+    private List<PayFlowRecordVO> filterMap(List<PaymentForm> filterList) {
+        List<PayFlowRecordVO> recordVOList = new ArrayList<PayFlowRecordVO>();
+        for (int i = 0; i < MONTH_NUM; i++) {
+            PayFlowRecordVO recordVO = new PayFlowRecordVO();
+            String month = addZaro(String.valueOf(i + 1));
+            recordVO.setMonth(i + 1);
+
+            List<PaymentForm> filterMonth = filterList.stream().filter(s->
+                    formatValue(s.getRemittanceDate()).equals(month)).collect(Collectors.toList());
+
+            BigDecimal amountTotal = new BigDecimal("0.00"); // 月总支出
+            BigDecimal serviceCharegeTotal = new BigDecimal("0.00"); // 月总手续费
+
+            for (PaymentForm paymentForm : filterMonth) {
+                String amount = paymentForm.getRemittanceAmount();
+                String serviceCharge = paymentForm.getServiceCharge();
+
+                amountTotal = amountTotal.add(new BigDecimal(amount));
+                serviceCharegeTotal = serviceCharegeTotal.add(new BigDecimal(serviceCharge));
+            }
+            recordVO.setAmount(String.valueOf(amountTotal));
+            recordVO.setServiceCharge(String.valueOf(serviceCharegeTotal));
+
+            recordVOList.add(recordVO);
+        }
+        return recordVOList;
     }
 
     private String formatValue(String value) {
@@ -207,34 +219,19 @@ public class IndexServiceImpl implements IndexService {
                 // 筛选对应部门数据
                 List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
                         item.getIdDepartment() == s.getIdDepartment()).collect(Collectors.toList());
-
-                List<PayFlowRecordVO> recordVOList = new ArrayList<PayFlowRecordVO>();
-                for (int i = 0; i < MONTH_NUM; i++) {
-                    PayFlowRecordVO recordVO = new PayFlowRecordVO();
-                    String month = addZaro(String.valueOf(i + 1));
-                    recordVO.setMonth(i + 1);
-
-                    List<PaymentForm> filterMonth = filterList.stream().filter(s->
-                            formatValue(s.getRemittanceDate()).equals(month)).collect(Collectors.toList());
-
-                    BigDecimal amountTotal = new BigDecimal("0.00"); // 月总支出
-                    BigDecimal serviceCharegeTotal = new BigDecimal("0.00"); // 月总手续费
-
-                    for (PaymentForm paymentForm : filterMonth) {
-                        String amount = paymentForm.getRemittanceAmount();
-                        String serviceCharge = paymentForm.getServiceCharge();
-
-                        amountTotal = amountTotal.add(new BigDecimal(amount));
-                        serviceCharegeTotal = serviceCharegeTotal.add(new BigDecimal(serviceCharge));
-                    }
-                    recordVO.setAmount(String.valueOf(amountTotal));
-                    recordVO.setServiceCharge(String.valueOf(serviceCharegeTotal));
-
-                    recordVOList.add(recordVO);
-                }
-                map.put("data", recordVOList);
+                map.put("data", filterMap(filterList));
                 mapList.add(map);
             });
+
+            // 添加其他数据
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("department", "其他");
+
+            List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
+                    null == s.getIdDepartment()).collect(Collectors.toList());
+            map.put("data", filterMap(filterList));
+            mapList.add(map);
+
             returnEntity = ReturnUtil.success(mapList);
         } catch (Exception e) {
             logger.error("（私账）获取指定年份各部门每月支出列表失败，错误消息：--->" + e.getMessage());
