@@ -63,7 +63,7 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
             paymentRemittance.setIdCardType(idCardType);
             boolean flag = addRemittance(paymentRemittance);
             if (flag) {
-                if (idCardType == CardType.PUBLICTYPE) { // 公账
+                if (idCardType == CardType.ACCOUNT_TYPE_1) { // 公账
                     PublicDaily publicDaily = publicDailyMapper.selectByPrimaryKey(idDaily);
 
                     // 获取原本支出数据

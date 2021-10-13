@@ -2,8 +2,10 @@ package com.project.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.project.entity.CardType;
 import com.project.entity.Config;
 import com.project.entity.ConfigVO;
+import com.project.mapper.master.CardTypeMapper;
 import com.project.mapper.master.ConfigMapper;
 import com.project.service.ConfigService;
 import com.project.utils.DecimalFormatUtil;
@@ -30,10 +32,35 @@ public class ConfigServiceImpl implements ConfigService {
     private ConfigMapper configMapper;
 
     @Autowired
+    private CardTypeMapper cardTypeMapper;
+
+    @Autowired
     private ReturnEntity returnEntity;
 
     @Value("${project.telephone}")
     private String telephone;
+
+    @Override
+    public ReturnEntity insertSelective(Config config) {
+        try {
+            ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+            configVO.setTelephone(telephone);
+            config.setConfig(JSON.toJSONString(configVO));
+            int count = configMapper.insertSelective(config);
+            if (count > 0) {
+                CardType cardType = new CardType();
+                cardType.setName(config.getName());
+                cardTypeMapper.insertSelective(cardType);
+                returnEntity = ReturnUtil.success("新增成功");
+            } else {
+                returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "新增失败");
+            }
+        } catch (Exception e) {
+            logger.error("新增账户失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public ReturnEntity selectAll() {

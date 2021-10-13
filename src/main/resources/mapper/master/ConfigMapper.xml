@@ -9,6 +9,32 @@
     <sql id="Base_Column_List">
        id_config, `name`, config
 	</sql>
+    <insert id="insertSelective" parameterType="com.project.entity.Config"
+                           useGeneratedKeys="true" keyProperty="idConfig">
+        insert into `config`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idConfig != null">
+                id_config,
+            </if>
+            <if test="name != null and name != ''">
+                `name`,
+            </if>
+            <if test="config != null and config != ''">
+                `config`
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="idConfig != null">
+                #{idConfig,jdbcType=INTEGER},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="config != null and config != ''">
+                #{config,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
     <select id="selectAll" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from `config`
     </select>

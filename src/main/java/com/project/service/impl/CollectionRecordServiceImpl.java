@@ -47,7 +47,7 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     @Override
     public ReturnEntity updateCollectionRecord(Integer idCardType, Integer idDaily) {
         try {
-            if (idCardType == CardType.PUBLICTYPE) {
+            if (idCardType == CardType.ACCOUNT_TYPE_1) {
                 PublicDaily publicDaily = new PublicDaily();
                 publicDaily.setIdPublicDaily(idDaily);
                 publicDaily.setState(0); // 状态置为“待审核”
@@ -71,7 +71,7 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
             collectionRecord.setIdCardType(idCardType);
             boolean flag = addCollectionRcord(collectionRecord);
             if (flag) {
-                if (idCardType == CardType.PUBLICTYPE) {
+                if (idCardType == CardType.ACCOUNT_TYPE_1) {
                     PublicDaily publicDaily = publicDailyMapper.selectByPrimaryKey(idDaily);
 
                     BigDecimal oldAmount = new BigDecimal(publicDaily.getCollectionAmount());

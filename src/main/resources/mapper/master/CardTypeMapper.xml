@@ -8,6 +8,25 @@
     <sql id="Base_Column_List">
        id_card_type, `name`
 	</sql>
+    <insert id="insertSelective" parameterType="com.project.entity.CardType">
+        insert into card_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idCardType != null">
+                id_card_type,
+            </if>
+            <if test="name != null and name != ''">
+                `name`
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="idCardType != null">
+                #{idCardType,jdbcType=INTEGER},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
     <select id="selectAll" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from `card_type`
     </select>

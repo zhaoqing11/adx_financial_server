@@ -24,6 +24,15 @@ public class ConfigController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "新增账户")
+    @PostMapping(value = "/insertSelective")
+    public ReturnEntity insertSelective(Config config) {
+
+        returnEntity = configService.insertSelective(config);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "获取账户信息")
     @PostMapping(value = "/selectAll")
     public ReturnEntity selectAll() {

@@ -81,7 +81,7 @@ public class DailyServiceImpl implements DailyService {
     public ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType) {
         try {
             int count = 0;
-            if (idCardType == CardType.PUBLICTYPE) {
+            if (idCardType == CardType.ACCOUNT_TYPE_1) {
                 count = publicDailyMapper.selectIsExitUnApprovalDaily();
             } else {
                 count = privateDailyMapper.selectIsExitUnApprovalDaily();
@@ -98,8 +98,8 @@ public class DailyServiceImpl implements DailyService {
     public ReturnEntity queryPrivateDailyByDate(String date) {
         try {
             // 获取私账收支列表
-            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.PRIVATETYPE, date);
-            List<PaymentForm> privateCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.PRIVATETYPE, date);
+            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.ACCOUNT_TYPE_2, date);
+            List<PaymentForm> privateCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.ACCOUNT_TYPE_2, date);
 
             List<RemainingSumVO> remainingSumVOS = formatDaily(privatePayFlowRecord, privateCollectionFlowRecord);
             returnEntity = ReturnUtil.success(remainingSumVOS);
@@ -114,8 +114,8 @@ public class DailyServiceImpl implements DailyService {
     public ReturnEntity queryPublicDailyByDate(String date) {
         try {
             // 获取公账收支列表
-            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.PUBLICTYPE, date);
-            List<PaymentForm> publicCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.PUBLICTYPE, date);
+            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.ACCOUNT_TYPE_1, date);
+            List<PaymentForm> publicCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.ACCOUNT_TYPE_1, date);
 
             List<RemainingSumVO> remainingSumVOS = formatDaily(publicPayFlowRecord, publicCollectionFlowRecord);
             returnEntity = ReturnUtil.success(remainingSumVOS);

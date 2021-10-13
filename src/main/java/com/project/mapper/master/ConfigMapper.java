@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ConfigMapper {
 
+    int insertSelective(Config config);
+
     int updateConfig(Config config);
 
     Config selectConfigInfo(@Param("idConfig") Integer idConfig);

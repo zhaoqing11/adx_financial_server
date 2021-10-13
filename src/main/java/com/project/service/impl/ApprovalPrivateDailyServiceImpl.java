@@ -54,7 +54,7 @@ public class ApprovalPrivateDailyServiceImpl implements ApprovalPrivateDailyServ
                 // 审批通过，发送短信通知
                 if (approvalPrivateDaily.getIdResultType() == 1) {
                     try {
-                        Config config = configMapper.selectConfigInfo(CardType.PRIVATETYPE);
+                        Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_2);
                         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
                         PrivateDaily priDaily = privateDailyMapper.selectByPrimaryKey(approvalPrivateDaily.getIdPrivateDaily());
 

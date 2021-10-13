@@ -98,20 +98,20 @@ public class ReportServiceImpl implements ReportService {
         List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime); // 收入
         List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(startTime); // 余额记录列表
 
-        if (idCardType == CardType.PUBLICTYPE) {
+        if (idCardType == CardType.ACCOUNT_TYPE_1) {
             payFlowList = payFlowList.stream().filter(s ->
-                    s.getIdCardType() == CardType.PUBLICTYPE).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
-                    s.getIdCardType() == CardType.PUBLICTYPE).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
-                    s.getIdCardType() == CardType.PUBLICTYPE).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
         } else {
             payFlowList = payFlowList.stream().filter(s ->
-                    s.getIdCardType() == CardType.PRIVATETYPE).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
-                    s.getIdCardType() == CardType.PRIVATETYPE).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
-                    s.getIdCardType() == CardType.PRIVATETYPE).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
         }
 
         // 循环创建日期

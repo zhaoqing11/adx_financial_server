@@ -176,19 +176,27 @@ public class PaymentFormServiceImpl implements PaymentFormService {
 
             List<RemainingSumVO> publicRemainSumList = new ArrayList<RemainingSumVO>();
             List<RemainingSumVO> privateRemainSumList = new ArrayList<RemainingSumVO>();
+            List<RemainingSumVO> generalAccountOne = new ArrayList<RemainingSumVO>();
+            List<RemainingSumVO> generalAccountTwo = new ArrayList<RemainingSumVO>();
 
             // 过滤公账私账
             for (RemainingSumVO remainingSumVO : remainingSumVOList) {
                 Integer idCardType = remainingSumVO.getIdCardType();
-                if (idCardType == CardType.PUBLICTYPE) {
+                if (idCardType == CardType.ACCOUNT_TYPE_1) {
                     publicRemainSumList.add(remainingSumVO);
-                } else {
+                } else if (idCardType == CardType.ACCOUNT_TYPE_2) {
                     privateRemainSumList.add(remainingSumVO);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_3) {
+                    generalAccountOne.add(remainingSumVO);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_4) {
+                    generalAccountTwo.add(remainingSumVO);
                 }
             }
 
             Collections.sort(publicRemainSumList, Comparator.comparing(RemainingSumVO::getCreateTime).reversed()); //这里使用了JDK8的方法传递特性
             Collections.sort(privateRemainSumList, Comparator.comparing(RemainingSumVO::getCreateTime).reversed());
+            Collections.sort(generalAccountOne, Comparator.comparing(RemainingSumVO::getCreateTime).reversed());
+            Collections.sort(generalAccountTwo, Comparator.comparing(RemainingSumVO::getCreateTime).reversed());
 
             Map<String, Object> publicMp = new HashMap<String, Object>();
             publicMp.put("datas", publicRemainSumList);
@@ -198,9 +206,20 @@ public class PaymentFormServiceImpl implements PaymentFormService {
             privateMp.put("datas", privateRemainSumList);
             privateMp.put("totalPage", privateRemainSumList.size());
 
+            Map<String, Object> generalAccountMpOne = new HashMap<String, Object>();
+            generalAccountMpOne.put("datas", generalAccountOne);
+            generalAccountMpOne.put("totalPage", generalAccountOne.size());
+
+            Map<String, Object> generalAccountMpTwo = new HashMap<String, Object>();
+            generalAccountMpTwo.put("datas", generalAccountTwo);
+            generalAccountMpTwo.put("totalPage", generalAccountTwo.size());
+
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("publicRemainSumList", publicMp);
             map.put("privateRemainSumList", privateMp);
+
+            map.put("generalAccountMpOne", generalAccountMpOne);
+            map.put("generalAccountMpTwo", generalAccountMpTwo);
             returnEntity = ReturnUtil.success(map);
         } catch (Exception e) {
             logger.error("获取收支流水列表失败，错误消息：---:" + e.getMessage());
@@ -214,8 +233,8 @@ public class PaymentFormServiceImpl implements PaymentFormService {
         try {
             int approvalCount = paymentFormMapper.queryApprovalPaymentCount();
             int remittanceCount = paymentFormMapper.queryPaymentRemittanceCount();
-            RemainingSumRecord publicSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(CardType.PUBLICTYPE);
-            RemainingSumRecord privateSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(CardType.PRIVATETYPE);
+            RemainingSumRecord publicSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(CardType.ACCOUNT_TYPE_1);
+            RemainingSumRecord privateSumRecord = remainingSumRecordMapper.queryTodayRemainingSum(CardType.ACCOUNT_TYPE_2);
 
             String publicRemainingSum = publicSumRecord != null ? publicSumRecord.getLastRemainingSum() : null;
             String privateRemainingSum = privateSumRecord != null ? privateSumRecord.getLastRemainingSum() : null;

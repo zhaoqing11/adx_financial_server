@@ -70,7 +70,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity publicFlowRecordByDepartment(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.PUBLICTYPE, year);
+            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.ACCOUNT_TYPE_1, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             departmentList.forEach(item -> {
@@ -103,7 +103,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity privateFlowRecordByDepartment(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.PRIVATETYPE, year);
+            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.ACCOUNT_TYPE_2, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             departmentList.forEach(item -> {
@@ -133,7 +133,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity getPublicFlowRecordDetails(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.PUBLICTYPE, year);
+            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.ACCOUNT_TYPE_1, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             for (Department item : departmentList) {
@@ -209,7 +209,7 @@ public class IndexServiceImpl implements IndexService {
     public ReturnEntity getPrivateFlowRecordDetails(int year) {
         try {
             List<Department> departmentList = departmentMapper.selectAll();
-            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.PRIVATETYPE, year);
+            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.ACCOUNT_TYPE_2, year);
 
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             departmentList.forEach(item -> {
