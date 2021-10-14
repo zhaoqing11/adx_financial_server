@@ -3,6 +3,7 @@ package com.project.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.project.entity.*;
 import com.project.mapper.master.*;
+import com.project.utils.common.base.enums.CardType;
 import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.smartcardio.Card;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +28,12 @@ public class Scheduler {
 
     @Autowired
     private ConfigMapper configMapper;
+
+    @Autowired
+    private SecondGeneralAccountDailyMapper secondGeneralAccountDailyMapper;
+
+    @Autowired
+    private GeneralAccountDailyMapper generalAccountDailyMapper;
 
     @Autowired
     private PrivateDailyMapper privateDailyMapper;
@@ -45,12 +53,8 @@ public class Scheduler {
     @Autowired
     private RemainingSumRecordMapper remainingSumRecordMapper;
 
-    private static final Integer PUBLIC_TYPE = 1; // 公账类型
-
-    private static final Integer PRIVATE_TYPE = 2; // 私账类型
-
     /**
-     * 每天早上八点生成上日收支明细
+     * 每天早上八点生成上一天收支明细
      */
     @Scheduled(cron = "0 0 8 * * ?")
     @Transactional
@@ -59,36 +63,24 @@ public class Scheduler {
             logger.info("日报定时器执行————————————————————————————————————————————");
             String currentDate = getLastDay("yyyy-MM-dd");
             // 获取公账收支列表
-            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(1, currentDate);
-            List<PaymentForm> publicCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(1, currentDate);
+            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_1, currentDate);
+            List<PaymentForm> publicCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_1, currentDate);
             // 获取私账收支明细
-            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(2, currentDate);
-            List<PaymentForm> privateCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(2, currentDate);
+            List<PaymentForm> privatePayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_2, currentDate);
+            List<PaymentForm> privateCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_2, currentDate);
 
-            createDaily(publicPayFlowRecord, publicCollectionRecord, PUBLIC_TYPE);
-            createDaily(privatePayFlowRecord, privateCollectionRecord, PRIVATE_TYPE);
+            // 获取普通账户收支明细
+            List<PaymentForm> generalPayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_3, currentDate);
+            List<PaymentForm> generalCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_3, currentDate);
+            List<PaymentForm> generalPayFlowRecord2 = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_4, currentDate);
+            List<PaymentForm> generalCollectionRecord2 = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_4, currentDate);
 
-            // Todo: 因业务调整，短信通知调整为每日审核通过上一天账单后发送短信
-//            String telephone = priMsg.getTelephone();
-//            MessageVO messageVO = new MessageVO();
-//            messageVO.setCardPub(pubMsg.getCardPub());
-//            messageVO.setCollectionAmountPub(pubMsg.getCollectionAmountPub());
-//            messageVO.setPayAmountPub(pubMsg.getPayAmountPub());
-//            messageVO.setServiceChargePub(pubMsg.getServiceChargePub());
-//            messageVO.setRemainingSumPub(pubMsg.getRemainingSumPub());
-//            messageVO.setCardPri(priMsg.getCardPri());
-//            messageVO.setCollectionAmountPri(priMsg.getCollectionAmountPri());
-//            messageVO.setPayAmountPri(priMsg.getPayAmountPri());
-//            messageVO.setServiceChargePri(priMsg.getServiceChargePri());
-//            messageVO.setRemainingSumPri(priMsg.getRemainingSumPri());
-//            messageVO.setDate(getLastDay("yyyy年MM月dd日"));
+            createDaily(publicPayFlowRecord, publicCollectionRecord, CardType.ACCOUNT_TYPE_1);
+            createDaily(privatePayFlowRecord, privateCollectionRecord, CardType.ACCOUNT_TYPE_2);
 
-//            // 发送短信通知
-//            try {
-//                SmsUtil.sendSms(telephone, messageVO);
-//            } catch (ClientException e) {
-//                e.printStackTrace();
-//            }
+            createDaily(generalPayFlowRecord, generalCollectionRecord, CardType.ACCOUNT_TYPE_3);
+            createDaily(generalPayFlowRecord2, generalCollectionRecord2, CardType.ACCOUNT_TYPE_4);
+
             logger.info("生成日报成功————————————————————————————————————————————");
         } catch (Exception e) {
             logger.error("生成日报失败，错误消息：--->" + e.getMessage());
@@ -126,9 +118,65 @@ public class Scheduler {
 
         if (type == 1) {
             insertPublicDaily(payTotal, serviceChargeTotal, collectionTotal);
-        } else {
+        } else if (type == 2) {
             insertPrivateDaily(payTotal, serviceChargeTotal, collectionTotal);
+        } else if (type == 3) {
+            insertGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
+        } else if (type == 4) {
+            insertSecondGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
         }
+    }
+
+    /**
+     * 创建普通账户2
+     * @param payTotal
+     * @param serviceChargeTotal
+     * @param collectionTotal
+     */
+    private void insertSecondGeneralAccountDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
+        Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_4);
+        ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+
+        SecondGeneralAccountDaily generalAccountDaily = new SecondGeneralAccountDaily();
+        generalAccountDaily.setCollectionAmount(String.valueOf(collectionTotal));
+        generalAccountDaily.setPayAmount(String.valueOf(payTotal));
+        generalAccountDaily.setServiceCharge(String.valueOf(serviceChargeTotal));
+        generalAccountDaily.setRemainingSum(configVO.getRemainingSum());
+        generalAccountDaily.setCreateTime(getLastDay("yyyy-MM-dd"));
+        secondGeneralAccountDailyMapper.insertSelective(generalAccountDaily);
+
+        // 设置上一天余额
+        RemainingSumRecord record = new RemainingSumRecord();
+        record.setIdCardType(CardType.ACCOUNT_TYPE_4);
+        record.setLastRemainingSum(configVO.getRemainingSum());
+        record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        remainingSumRecordMapper.addSelective(record);
+    }
+
+    /**
+     * 创建普通账户1
+     * @param payTotal
+     * @param serviceChargeTotal
+     * @param collectionTotal
+     */
+    private void insertGeneralAccountDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
+        Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_3);
+        ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+
+        GeneralAccountDaily generalAccountDaily = new GeneralAccountDaily();
+        generalAccountDaily.setCollectionAmount(String.valueOf(collectionTotal));
+        generalAccountDaily.setPayAmount(String.valueOf(payTotal));
+        generalAccountDaily.setServiceCharge(String.valueOf(serviceChargeTotal));
+        generalAccountDaily.setRemainingSum(configVO.getRemainingSum());
+        generalAccountDaily.setCreateTime(getLastDay("yyyy-MM-dd"));
+        generalAccountDailyMapper.insertSelective(generalAccountDaily);
+
+        // 设置上一天余额
+        RemainingSumRecord record = new RemainingSumRecord();
+        record.setIdCardType(CardType.ACCOUNT_TYPE_3);
+        record.setLastRemainingSum(configVO.getRemainingSum());
+        record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        remainingSumRecordMapper.addSelective(record);
     }
 
     /**
@@ -138,7 +186,7 @@ public class Scheduler {
      * @param collectionTotal
      */
     private void insertPrivateDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
-        Config config = configMapper.selectConfigInfo(PRIVATE_TYPE);
+        Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_2);
         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
         PrivateDaily privateDaily = new PrivateDaily();
@@ -151,7 +199,7 @@ public class Scheduler {
 
         // 设置上一天余额
         RemainingSumRecord record = new RemainingSumRecord();
-        record.setIdCardType(2);
+        record.setIdCardType(CardType.ACCOUNT_TYPE_2);
         record.setLastRemainingSum(configVO.getRemainingSum());
         record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         remainingSumRecordMapper.addSelective(record);
@@ -165,7 +213,7 @@ public class Scheduler {
      * @param collectionTotal
      */
     private void insertPublicDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
-        Config config = configMapper.selectConfigInfo(PUBLIC_TYPE);
+        Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_1);
         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
         PublicDaily daily = new PublicDaily();
@@ -178,7 +226,7 @@ public class Scheduler {
 
         // 设置上一天余额
         RemainingSumRecord record = new RemainingSumRecord();
-        record.setIdCardType(1);
+        record.setIdCardType(CardType.ACCOUNT_TYPE_1);
         record.setLastRemainingSum(configVO.getRemainingSum());
         record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         remainingSumRecordMapper.addSelective(record);
@@ -213,8 +261,8 @@ public class Scheduler {
             List<PaymentForm> privateIncomeFlowRecordList = incomeFlowRecordList.stream().filter(s->
                     s.getIdCardType() == 2).collect(Collectors.toList());
 
-            createReport(publicPayFlowRecord, publicIncomeFlowRecordList, PUBLIC_TYPE);
-            createReport(privatePayFlowRecord, privateIncomeFlowRecordList, PRIVATE_TYPE);
+            createReport(publicPayFlowRecord, publicIncomeFlowRecordList, CardType.ACCOUNT_TYPE_1);
+            createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_2);
 
             logger.info("生成月报成功————————————————————————————————————————————");
         } catch (Exception e) {
