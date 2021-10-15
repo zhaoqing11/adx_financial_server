@@ -31,6 +31,12 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     private PrivateDailyMapper privateDailyMapper;
 
     @Autowired
+    private GeneralAccountDailyMapper generalAccountDailyMapper;
+
+    @Autowired
+    private SecondGeneralAccountDailyMapper secondGeneralAccountDailyMapper;
+
+    @Autowired
     private PaymentFormMapper paymentFormMapper;
 
     @Autowired
@@ -86,7 +92,7 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
                     publicDaily.setRemainingSum(String.valueOf(remainingTotal));
 
                     publicDailyMapper.updateSelective(publicDaily);
-                } else { // 私账
+                } else if (idCardType == CardType.ACCOUNT_TYPE_2) { // 私账
                     PrivateDaily privateDaily = privateDailyMapper.selectByPrimaryKey(idDaily);
 
                     // 获取原本支出数据
@@ -109,6 +115,52 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
                     privateDaily.setRemainingSum(String.valueOf(remainingTotal));
 
                     privateDailyMapper.updateSelective(privateDaily);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_3) { // 普通账户1
+                    GeneralAccountDaily generalAccountDaily = generalAccountDailyMapper.selectByPrimaryKey(idDaily);
+
+                    // 获取原本支出数据
+                    BigDecimal oldPayAmount = new BigDecimal(generalAccountDaily.getPayAmount());
+                    BigDecimal oldServiceChargeAmount = new BigDecimal(generalAccountDaily.getServiceCharge());
+
+                    // 获取新添加支出数据
+                    BigDecimal ctPayAmount = new BigDecimal(paymentRemittance.getAmount());
+                    BigDecimal ctServiceChargeAmount = new BigDecimal(paymentRemittance.getServiceCharge());
+
+                    // 计算总支出
+                    BigDecimal newPayAmount = oldPayAmount.add(ctPayAmount);
+                    BigDecimal newServiceChargeAmount = oldServiceChargeAmount.add(ctServiceChargeAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(generalAccountDaily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.subtract(ctPayAmount).subtract(ctServiceChargeAmount);
+
+                    generalAccountDaily.setPayAmount(String.valueOf(newPayAmount));
+                    generalAccountDaily.setServiceCharge(String.valueOf(newServiceChargeAmount));
+                    generalAccountDaily.setRemainingSum(String.valueOf(remainingTotal));
+
+                    generalAccountDailyMapper.updateSelective(generalAccountDaily);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_4) { // 普通账户2
+                    SecondGeneralAccountDaily generalAccountDaily = secondGeneralAccountDailyMapper.selectByPrimaryKey(idDaily);
+
+                    // 获取原本支出数据
+                    BigDecimal oldPayAmount = new BigDecimal(generalAccountDaily.getPayAmount());
+                    BigDecimal oldServiceChargeAmount = new BigDecimal(generalAccountDaily.getServiceCharge());
+
+                    // 获取新添加支出数据
+                    BigDecimal ctPayAmount = new BigDecimal(paymentRemittance.getAmount());
+                    BigDecimal ctServiceChargeAmount = new BigDecimal(paymentRemittance.getServiceCharge());
+
+                    // 计算总支出
+                    BigDecimal newPayAmount = oldPayAmount.add(ctPayAmount);
+                    BigDecimal newServiceChargeAmount = oldServiceChargeAmount.add(ctServiceChargeAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(generalAccountDaily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.subtract(ctPayAmount).subtract(ctServiceChargeAmount);
+
+                    generalAccountDaily.setPayAmount(String.valueOf(newPayAmount));
+                    generalAccountDaily.setServiceCharge(String.valueOf(newServiceChargeAmount));
+                    generalAccountDaily.setRemainingSum(String.valueOf(remainingTotal));
+
+                    secondGeneralAccountDailyMapper.updateSelective(generalAccountDaily);
                 }
                 returnEntity = ReturnUtil.success("汇款成功");
             } else {

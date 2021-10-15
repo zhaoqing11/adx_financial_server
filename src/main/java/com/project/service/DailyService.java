@@ -6,6 +6,10 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface DailyService {
 
+    ReturnEntity querySecondGeneralDailyByDate(String date);
+
+    ReturnEntity queryGeneralDailyByDate(String date);
+
     ReturnEntity selectDailyByState(Integer idRole);
 
     ReturnEntity selectIsExitUnApprovalDaily(Integer idCardType);

@@ -33,6 +33,12 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     private PrivateDailyMapper privateDailyMapper;
 
     @Autowired
+    private GeneralAccountDailyMapper generalAccountDailyMapper;
+
+    @Autowired
+    private SecondGeneralAccountDailyMapper secondGeneralAccountDailyMapper;
+
+    @Autowired
     private ConfigMapper configMapper;
 
     @Autowired
@@ -52,12 +58,23 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
                 publicDaily.setIdPublicDaily(idDaily);
                 publicDaily.setState(0); // 状态置为“待审核”
                 publicDailyMapper.updateSelective(publicDaily);
-            } else {
+            } else if (idCardType == CardType.ACCOUNT_TYPE_2) {
                 PrivateDaily privateDaily = new PrivateDaily();
                 privateDaily.setIdPrivateDaily(idDaily);
                 privateDaily.setState(0); // 状态置为“待审核”
                 privateDailyMapper.updateSelective(privateDaily);
+            } else if (idCardType == CardType.ACCOUNT_TYPE_3) {
+                GeneralAccountDaily generalAccountDaily = new GeneralAccountDaily();
+                generalAccountDaily.setIdGeneralAccountDaily(idDaily);
+                generalAccountDaily.setState(0); // 状态置为“待审核”
+                generalAccountDailyMapper.updateSelective(generalAccountDaily);
+            } else if (idCardType == CardType.ACCOUNT_TYPE_4) {
+                SecondGeneralAccountDaily generalAccountDaily = new SecondGeneralAccountDaily();
+                generalAccountDaily.setIdSecondGeneralAccountDaily(idDaily);
+                generalAccountDaily.setState(0); // 状态置为“待审核”
+                secondGeneralAccountDailyMapper.updateSelective(generalAccountDaily);
             }
+            returnEntity = ReturnUtil.success("编辑成功");
         } catch (Exception e) {
             logger.error("修改审核状态失败，错误消息：--->" + e.getMessage());
             throw new ServiceException(e.getMessage());
@@ -85,7 +102,7 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
                     publicDaily.setRemainingSum(String.valueOf(remainingTotal));
 
                     publicDailyMapper.updateSelective(publicDaily);
-                } else {
+                } else if (idCardType == CardType.ACCOUNT_TYPE_2) {
                     PrivateDaily privateDaily = privateDailyMapper.selectByPrimaryKey(idDaily);
 
                     BigDecimal oldAmount = new BigDecimal(privateDaily.getCollectionAmount());
@@ -99,6 +116,34 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
                     privateDaily.setRemainingSum(String.valueOf(remainingTotal));
 
                     privateDailyMapper.updateSelective(privateDaily);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_3) {
+                    GeneralAccountDaily generalAccountDaily = generalAccountDailyMapper.selectByPrimaryKey(idDaily);
+
+                    BigDecimal oldAmount = new BigDecimal(generalAccountDaily.getCollectionAmount());
+                    BigDecimal newAmount = new BigDecimal(collectionRecord.getAmount());
+                    BigDecimal amountTotal = oldAmount.add(newAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(generalAccountDaily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.add(newAmount);
+
+                    generalAccountDaily.setCollectionAmount(String.valueOf(amountTotal));
+                    generalAccountDaily.setRemainingSum(String.valueOf(remainingTotal));
+
+                    generalAccountDailyMapper.updateSelective(generalAccountDaily);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_4) {
+                    SecondGeneralAccountDaily secondGeneralAccountDaily = secondGeneralAccountDailyMapper.selectByPrimaryKey(idDaily);
+
+                    BigDecimal oldAmount = new BigDecimal(secondGeneralAccountDaily.getCollectionAmount());
+                    BigDecimal newAmount = new BigDecimal(collectionRecord.getAmount());
+                    BigDecimal amountTotal = oldAmount.add(newAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(secondGeneralAccountDaily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.add(newAmount);
+
+                    secondGeneralAccountDaily.setCollectionAmount(String.valueOf(amountTotal));
+                    secondGeneralAccountDaily.setRemainingSum(String.valueOf(remainingTotal));
+
+                    secondGeneralAccountDailyMapper.updateSelective(secondGeneralAccountDaily);
                 }
                 returnEntity = ReturnUtil.success("编辑成功");
             } else {

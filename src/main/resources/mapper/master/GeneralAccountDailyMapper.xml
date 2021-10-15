@@ -7,7 +7,7 @@
       <result column="pay_amount" property="payAmount" jdbcType="DECIMAL"/>
       <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
       <result column="remaining_sum" property="remainingSum" jdbcType="DECIMAL"/>
-      <result column="state" property="state" jdbcType="BOOLEAN"/>
+      <result column="state" property="state" jdbcType="INTEGER"/>
       <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -63,6 +63,35 @@
             </if>
         </trim>
     </insert>
+    <update id="updateSelective" parameterType="com.project.entity.GeneralAccountDaily">
+        update general_account_daily
+        <set>
+            <if test="collectionAmount != null and collectionAmount != ''">
+                collection_amount = #{collectionAmount},
+            </if>
+            <if test="payAmount != null and payAmount != ''">
+                pay_amount = #{payAmount},
+            </if>
+            <if test="serviceCharge != null and serviceCharge != ''">
+                service_charge = #{serviceCharge},
+            </if>
+            <if test="remainingSum != null and remainingSum != ''">
+                remaining_sum = #{remainingSum},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime}
+            </if>
+        </set>
+        where id_general_account_daily = #{idGeneralAccountDaily,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from general_account_daily
+        where id_general_account_daily = #{idGeneralAccountDaily,jdbcType=INTEGER}
+    </select>
     <select id="selectByPageTotal" resultType="java.lang.Integer">
         select count(1)
         from `general_account_daily`

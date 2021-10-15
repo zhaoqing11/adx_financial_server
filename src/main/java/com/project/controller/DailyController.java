@@ -36,6 +36,24 @@ public class DailyController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "根据指定日期获取收支明细")
+    @PostMapping(value = "/selectGeneralDailyByDate")
+    public ReturnEntity queryGeneralDailyByDate(String date) {
+
+        returnEntity = dailyService.queryGeneralDailyByDate(date);
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "根据指定日期获取收支明细")
+    @PostMapping(value = "/selectSecondGeneralDailyByDate")
+    public ReturnEntity querySecondGeneralDailyByDate(String date) {
+
+        returnEntity = dailyService.querySecondGeneralDailyByDate(date);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "获取每日账单列表（普通账户2）")
     @PostMapping(value = "/selectSecondGeneralAccountDailyByPage")
     public ReturnEntity selectSecondGeneralAccountDailyByPage(Integer pageNum, Integer pageSize, SecondGeneralAccountDaily daily){

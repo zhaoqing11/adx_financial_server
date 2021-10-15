@@ -44,6 +44,38 @@ public class DailyServiceImpl implements DailyService {
     private ReturnEntity returnEntity;
 
     @Override
+    public ReturnEntity querySecondGeneralDailyByDate(String date) {
+        try {
+            // 获取普通账户收支列表
+            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.ACCOUNT_TYPE_4, date);
+            List<PaymentForm> publicCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.ACCOUNT_TYPE_4, date);
+
+            List<RemainingSumVO> remainingSumVOS = formatDaily(publicPayFlowRecord, publicCollectionFlowRecord);
+            returnEntity = ReturnUtil.success(remainingSumVOS);
+        } catch (Exception e) {
+            logger.error("根据指定日期获取账单明细列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity queryGeneralDailyByDate(String date) {
+        try {
+            // 获取普通账户收支列表
+            List<PaymentForm> publicPayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.ACCOUNT_TYPE_3, date);
+            List<PaymentForm> publicCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.ACCOUNT_TYPE_3, date);
+
+            List<RemainingSumVO> remainingSumVOS = formatDaily(publicPayFlowRecord, publicCollectionFlowRecord);
+            returnEntity = ReturnUtil.success(remainingSumVOS);
+        } catch (Exception e) {
+            logger.error("根据指定日期获取账单明细列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity selectDailyByState(Integer idRole) {
         try {
             int countPub = 0;

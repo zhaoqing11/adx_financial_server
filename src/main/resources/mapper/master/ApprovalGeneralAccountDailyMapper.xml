@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.project.mapper.master.ApprovalPrivateDailyMapper">
-    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalPrivateDaily">
-        <id column="id_approval_private_daily" property="idApprovalPrivateDaily" jdbcType="INTEGER"/>
-        <result column="id_private_daily" property="idPrivateDaily" jdbcType="INTEGER"/>
+<mapper namespace="com.project.mapper.master.ApprovalGeneralAccountDailyMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.ApprovalGeneralAccountDaily">
+        <id column="id_approval_general_account_daily" property="idApprovalGeneralAccountDaily" jdbcType="INTEGER"/>
+        <result column="id_general_account_daily" property="idGeneralAccountDaily" jdbcType="INTEGER"/>
         <result column="id_result_type" property="idResultType" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_approval_private_daily, id_private_daily, id_result_type, `remark`, id_user, create_time
+       id_approval_general_account_daily, id_general_account_daily, id_result_type, `remark`, id_user, create_time
 	</sql>
-    <insert id="insertSelective" parameterType="com.project.entity.ApprovalPrivateDaily"
-                      useGeneratedKeys="true" keyProperty="idApprovalPrivateDaily">
-       insert into approval_private_daily
+    <insert id="insertSelective" parameterType="com.project.entity.ApprovalGeneralAccountDaily"
+                      useGeneratedKeys="true" keyProperty="idApprovalGeneralAccountDaily">
+       insert into approval_general_account_daily
        <trim prefix="(" suffix=")" suffixOverrides=",">
-           <if test="idApprovalPrivateDaily">
-               id_approval_private_daily,
+           <if test="idApprovalGeneralAccountDaily">
+               id_approval_general_account_daily,
            </if>
-           <if test="idPrivateDaily != null">
-               id_private_daily,
+           <if test="idGeneralAccountDaily != null">
+               id_general_account_daily,
            </if>
            <if test="idResultType != null">
                id_result_type,
@@ -36,11 +36,11 @@
            </if>
        </trim>
        <trim prefix="values(" suffix=")" suffixOverrides=",">
-           <if test="idApprovalPrivateDaily">
-               #{idApprovalPrivateDaily,jdbcType=INTEGER},
+           <if test="idApprovalGeneralAccountDaily">
+               #{idApprovalGeneralAccountDaily,jdbcType=INTEGER},
            </if>
-           <if test="idPrivateDaily != null">
-               #{idPrivateDaily,jdbcType=INTEGER},
+           <if test="idGeneralAccountDaily != null">
+               #{idGeneralAccountDaily,jdbcType=INTEGER},
            </if>
            <if test="idResultType != null">
                #{idResultType,jdbcType=INTEGER},

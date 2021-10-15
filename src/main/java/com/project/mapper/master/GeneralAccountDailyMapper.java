@@ -9,6 +9,10 @@ public interface GeneralAccountDailyMapper {
 
     int insertSelective(GeneralAccountDaily daily);
 
+    int updateSelective(GeneralAccountDaily daily);
+
+    GeneralAccountDaily selectByPrimaryKey(@Param("idGeneralAccountDaily") Integer idGeneralAccountDaily);
+
     int selectByPageTotal(@Param("daily") GeneralAccountDaily daily);
 
     List<GeneralAccountDaily> selectByPage(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize,

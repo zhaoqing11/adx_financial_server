@@ -15,7 +15,7 @@ public class SecondGeneralAccountDaily {
 
     private String remainingSum;
 
-    private boolean state;
+    private Integer state;
 
     private String createTime;
 }
