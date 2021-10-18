@@ -6,6 +6,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface ReportService {
 
+    ReturnEntity selectSecondGeneralReportByPage(Integer startIndex, Integer pageSize,
+                                           Integer currentDate);
+
+    ReturnEntity selectGeneralReportByPage(Integer startIndex, Integer pageSize,
+                                          Integer currentDate);
+
     void exportToExcel(HttpServletResponse response, int year, int month, Integer idCardType);
 
     ReturnEntity selectReportDetailByMonth(int year, int month, Integer idCardType);

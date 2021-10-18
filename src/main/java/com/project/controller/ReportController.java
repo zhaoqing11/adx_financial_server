@@ -72,4 +72,24 @@ public class ReportController {
 
     }
 
+    @ApiOperation(value = "分页（条件）查询普通账户2月报")
+    @PostMapping(value = "/selectSecondGeneralReportByPage")
+    ReturnEntity selectSecondGeneralReportByPage(Integer pageNum, Integer pageSize,
+                                                 Integer currentDate) {
+
+        returnEntity = reportService.selectSecondGeneralReportByPage(pageNum, pageSize, currentDate);
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "分页（条件）查询普通账户1月报")
+    @PostMapping(value = "/selectGeneralReportByPage")
+    ReturnEntity selectGeneralReportByPage(Integer pageNum, Integer pageSize,
+                                           Integer currentDate) {
+
+        returnEntity = reportService.selectGeneralReportByPage(pageNum, pageSize, currentDate);
+        return returnEntity;
+
+    }
+
 }

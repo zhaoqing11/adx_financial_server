@@ -4,6 +4,14 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface IndexService {
 
+    ReturnEntity getSecondGeneralFlowRecordDetails(int year);
+
+    ReturnEntity getGeneralRecordDetails(int year);
+
+    ReturnEntity getSecondGeneralRecordByDepartment(int year);
+
+    ReturnEntity getGeneralRecordByDepartment(int year);
+
     ReturnEntity getDataInfo(Integer idCardType, int year);
 
     ReturnEntity publicFlowRecordByDepartment(int year);

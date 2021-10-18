@@ -23,6 +23,50 @@ public class IndexController {
     @Autowired
     IndexService indexService;
 
+
+
+    @ApiOperation(value = "获取（普通账户2）部门支出明细")
+    @PostMapping(value = "/getSecondGeneralFlowRecordDetails")
+    ReturnEntity getSecondGeneralFlowRecordDetails(int year) {
+
+        returnEntity = indexService.getSecondGeneralFlowRecordDetails(year);
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "获取（普通账户1）部门支出明细")
+    @PostMapping(value = "/getGeneralRecordDetails")
+    ReturnEntity getGeneralRecordDetails(int year) {
+
+        returnEntity = indexService.getGeneralRecordDetails(year);
+        return returnEntity;
+
+    }
+
+
+    @ApiOperation(value = "获取（普通账户2）部门支出流水")
+    @PostMapping(value = "/getSecondGeneralRecordByDepartment")
+    ReturnEntity getSecondGeneralRecordByDepartment(int year){
+
+        returnEntity = indexService.getSecondGeneralRecordByDepartment(year);
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "获取（普通账户1）部门支出流水")
+    @PostMapping(value = "/getGeneralRecordByDepartment")
+    ReturnEntity getGeneralRecordByDepartment(int year) {
+
+        returnEntity = indexService.getGeneralRecordByDepartment(year);
+        return returnEntity;
+
+    }
+
+
+
+
+
+
     @ApiOperation(value = "获取年收入支出总数")
     @PostMapping(value = "/getDataInfo")
     ReturnEntity getDataInfo(Integer idCardType, int year) {
@@ -76,4 +120,5 @@ public class IndexController {
         return returnEntity;
 
     }
+
 }

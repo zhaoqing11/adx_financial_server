@@ -1,13 +1,7 @@
 package com.project.service.impl;
 
-import com.project.entity.PaymentForm;
-import com.project.entity.PrivateReport;
-import com.project.entity.PublicReport;
-import com.project.entity.RemainingSumRecord;
-import com.project.mapper.master.PaymentFormMapper;
-import com.project.mapper.master.PrivateReportMapper;
-import com.project.mapper.master.RemainingSumRecordMapper;
-import com.project.mapper.master.PublicReportMapper;
+import com.project.entity.*;
+import com.project.mapper.master.*;
 import com.project.service.ReportService;
 import com.project.utils.DateUtil;
 import com.project.utils.DecimalFormatUtil;
@@ -46,10 +40,84 @@ public class ReportServiceImpl implements ReportService {
     private PrivateReportMapper privateReportMapper;
 
     @Autowired
+    private GeneralAccountReportMapper generalAccountReportMapper;
+
+    @Autowired
+    private SecondGeneralAccountReportMapper secondGeneralAccountReportMapper;
+
+    @Autowired
     private PaymentFormMapper paymentFormMapper;
 
     @Autowired
     private RemainingSumRecordMapper remainingSumRecordMapper;
+
+    @Override
+    public ReturnEntity selectSecondGeneralReportByPage(Integer startIndex, Integer pageSize, Integer currentDate) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = secondGeneralAccountReportMapper.selectByPageTotal(currentDate);
+            PageBean<PublicReport> pageBean = new PageBean<PublicReport>(startIndex, pageSize, total);
+            List<SecondGeneralAccountReport> reportList = secondGeneralAccountReportMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
+                    currentDate);
+
+            for (SecondGeneralAccountReport report : reportList) {
+                String collectionAmount = report.getCollectionAmount();
+                String payAmount = report.getPayAmount();
+                String serviceCharge = report.getServiceCharge();
+
+                collectionAmount = collectionAmount.matches("^0.*$") ? collectionAmount : DecimalFormatUtil.formatString(new BigDecimal(collectionAmount), null);
+                payAmount = payAmount.matches("^0.*$") ? payAmount : DecimalFormatUtil.formatString(new BigDecimal(payAmount), null);
+                serviceCharge = serviceCharge.matches("^0.*$") ? serviceCharge : DecimalFormatUtil.formatString(new BigDecimal(serviceCharge), null);
+
+                report.setCollectionAmount(collectionAmount);
+                report.setPayAmount(payAmount);
+                report.setServiceCharge(serviceCharge);
+            }
+
+            pageBean.setList(reportList);
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("根据指定日期获取（普通账户2）流水列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity selectGeneralReportByPage(Integer startIndex, Integer pageSize, Integer currentDate) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = generalAccountReportMapper.selectByPageTotal(currentDate);
+            PageBean<PublicReport> pageBean = new PageBean<PublicReport>(startIndex, pageSize, total);
+            List<GeneralAccountReport> reportList = generalAccountReportMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
+                    currentDate);
+
+            for (GeneralAccountReport report : reportList) {
+                String collectionAmount = report.getCollectionAmount();
+                String payAmount = report.getPayAmount();
+                String serviceCharge = report.getServiceCharge();
+
+                collectionAmount = collectionAmount.matches("^0.*$") ? collectionAmount : DecimalFormatUtil.formatString(new BigDecimal(collectionAmount), null);
+                payAmount = payAmount.matches("^0.*$") ? payAmount : DecimalFormatUtil.formatString(new BigDecimal(payAmount), null);
+                serviceCharge = serviceCharge.matches("^0.*$") ? serviceCharge : DecimalFormatUtil.formatString(new BigDecimal(serviceCharge), null);
+
+                report.setCollectionAmount(collectionAmount);
+                report.setPayAmount(payAmount);
+                report.setServiceCharge(serviceCharge);
+            }
+
+            pageBean.setList(reportList);
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("根据指定日期获取（普通账户1）流水列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public void exportToExcel(HttpServletResponse response, int year, int month, Integer idCardType) {

@@ -44,6 +44,142 @@ public class IndexServiceImpl implements IndexService {
     private static final Integer MONTH_NUM = 12;
 
     @Override
+    public ReturnEntity getSecondGeneralFlowRecordDetails(int year) {
+        try {
+            List<Department> departmentList = departmentMapper.selectAll();
+            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.ACCOUNT_TYPE_4, year);
+
+            List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+            for (Department item : departmentList) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("department", item.getDepartmentName());
+
+                // 筛选对应部门数据
+                List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
+                        item.getIdDepartment() == s.getIdDepartment()).collect(Collectors.toList());
+                map.put("data", filterMap(filterList));
+                mapList.add(map);
+            }
+
+            // 添加其他数据
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("department", "其他");
+
+            List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
+                    null == s.getIdDepartment()).collect(Collectors.toList());
+            map.put("data", filterMap(filterList));
+            mapList.add(map);
+
+            returnEntity = ReturnUtil.success(mapList);
+        } catch (Exception e) {
+            logger.error("（普通账户2）获取指定年份各部门每月支出列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity getGeneralRecordDetails(int year) {
+        try {
+            List<Department> departmentList = departmentMapper.selectAll();
+            List<PaymentForm> paymentFormList = paymentFormMapper.selectPayFlowRecordDetails(CardType.ACCOUNT_TYPE_3, year);
+
+            List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+            for (Department item : departmentList) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("department", item.getDepartmentName());
+
+                // 筛选对应部门数据
+                List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
+                        item.getIdDepartment() == s.getIdDepartment()).collect(Collectors.toList());
+                map.put("data", filterMap(filterList));
+                mapList.add(map);
+            }
+
+            // 添加其他数据
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("department", "其他");
+
+            List<PaymentForm> filterList = paymentFormList.stream().filter(s ->
+                    null == s.getIdDepartment()).collect(Collectors.toList());
+            map.put("data", filterMap(filterList));
+            mapList.add(map);
+
+            returnEntity = ReturnUtil.success(mapList);
+        } catch (Exception e) {
+            logger.error("（普通账户1）获取指定年份各部门每月支出列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity getSecondGeneralRecordByDepartment(int year) {
+        try {
+            List<Department> departmentList = departmentMapper.selectAll();
+            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.ACCOUNT_TYPE_4, year);
+
+            List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+            departmentList.forEach(item -> {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("department", item.getDepartmentName());
+
+                List<PaymentRemittance> filterRemittance = paymentRemittanceList.stream().filter(s ->
+                        item.getIdDepartment() == s.getIdDepartment()).collect(Collectors.toList());
+                String amount = filterRemittance.size() > 0 ? filterRemittance.get(0).getAmount() : "";
+                String serviceCharge = filterRemittance.size() > 0 ? filterRemittance.get(0).getServiceCharge() : "";
+
+                BigDecimal ctAmount = Tools.isEmpty(amount) ? new BigDecimal("0.00") : new BigDecimal(amount);
+                BigDecimal ctServiceCharge = Tools.isEmpty(serviceCharge) ? new BigDecimal("0.00") : new BigDecimal(serviceCharge);
+
+                BigDecimal total = ctAmount.add(ctServiceCharge);
+                map.put("num", total);
+
+                mapList.add(map);
+            });
+
+            returnEntity = ReturnUtil.success(mapList);
+        } catch (Exception e) {
+            logger.error("（普通账户2）按年份获取各部门支出数据失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity getGeneralRecordByDepartment(int year) {
+        try {
+            List<Department> departmentList = departmentMapper.selectAll();
+            List<PaymentRemittance> paymentRemittanceList = paymentRemittanceMapper.selectPaymentRemittanceByDepartment(CardType.ACCOUNT_TYPE_3, year);
+
+            List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+            departmentList.forEach(item -> {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("department", item.getDepartmentName());
+
+                List<PaymentRemittance> filterRemittance = paymentRemittanceList.stream().filter(s ->
+                        item.getIdDepartment() == s.getIdDepartment()).collect(Collectors.toList());
+                String amount = filterRemittance.size() > 0 ? filterRemittance.get(0).getAmount() : "";
+                String serviceCharge = filterRemittance.size() > 0 ? filterRemittance.get(0).getServiceCharge() : "";
+
+                BigDecimal ctAmount = Tools.isEmpty(amount) ? new BigDecimal("0.00") : new BigDecimal(amount);
+                BigDecimal ctServiceCharge = Tools.isEmpty(serviceCharge) ? new BigDecimal("0.00") : new BigDecimal(serviceCharge);
+
+                BigDecimal total = ctAmount.add(ctServiceCharge);
+                map.put("num", total);
+
+                mapList.add(map);
+            });
+
+            returnEntity = ReturnUtil.success(mapList);
+        } catch (Exception e) {
+            logger.error("（普通账户1）按年份获取各部门支出数据失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity getDataInfo(Integer idCardType, int year) {
         try {
             PaymentRemittance paymentRemittance = paymentRemittanceMapper.selectRemittanceTotalByYear(idCardType, year);
