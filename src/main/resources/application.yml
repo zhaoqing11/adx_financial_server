@@ -19,6 +19,7 @@ project:
   tokenExpire: 86400
   uploadPath: D:\project\adx_financial\File\images\
   telephone: 13662459025
+  secondTelephone: 13662459025
 
 spring:
   servlet:

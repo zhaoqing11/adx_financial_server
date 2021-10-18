@@ -20,6 +20,7 @@ project:
   downloadUrl: /tmpFile
   uploadPath: /adxFinancialServer/File/images/
   telephone: 18602076288
+  secondTelephone: 18666153711
 
 spring:
   servlet:

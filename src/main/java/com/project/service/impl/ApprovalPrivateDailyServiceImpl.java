@@ -18,6 +18,7 @@ import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -39,6 +40,12 @@ public class ApprovalPrivateDailyServiceImpl implements ApprovalPrivateDailyServ
 
     @Autowired
     private ReturnEntity returnEntity;
+
+    @Value("${project.telephone}")
+    private String telephone;
+
+    @Value("${project.secondTelephone}")
+    private String secondTelephone;
 
     @Override
     public ReturnEntity insertSelective(ApprovalPrivateDaily approvalPrivateDaily, Integer idPrivateDaily) {
@@ -71,6 +78,7 @@ public class ApprovalPrivateDailyServiceImpl implements ApprovalPrivateDailyServ
                         messageVO.setDate(DateUtil.getLastDay("yyyy年MM月dd日"));
 
                         SmsUtil.sendSms(telephone, messageVO);
+                        SmsUtil.sendSms(secondTelephone, messageVO);
                     } catch (ClientException e) {
                         e.printStackTrace();
                     }
