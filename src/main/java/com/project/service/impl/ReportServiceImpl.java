@@ -98,20 +98,34 @@ public class ReportServiceImpl implements ReportService {
         List<PaymentForm> incomeFlowList = paymentFormMapper.queryIncomeFlowRecordDetail(0, 0, startTime, endTime); // 收入
         List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(startTime); // 余额记录列表
 
-        if (idCardType == CardType.ACCOUNT_TYPE_1) {
+        if (idCardType == CardType.ACCOUNT_TYPE_1) { // 公账
             payFlowList = payFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
-        } else {
+        } else if (idCardType == CardType.ACCOUNT_TYPE_2) { // 私账
             payFlowList = payFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
+        } else if (idCardType == CardType.ACCOUNT_TYPE_3) { // 普通账户1
+            payFlowList = payFlowList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
+            incomeFlowList = incomeFlowList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
+            remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
+        } else if (idCardType == CardType.ACCOUNT_TYPE_4) { // 普通账户2
+            payFlowList = payFlowList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
+            incomeFlowList = incomeFlowList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
+            remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
         }
 
         // 循环创建日期

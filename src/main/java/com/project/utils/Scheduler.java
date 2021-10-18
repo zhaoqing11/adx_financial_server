@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.smartcardio.Card;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +45,12 @@ public class Scheduler {
 
     @Autowired
     private PrivateReportMapper privateReportMapper;
+
+    @Autowired
+    private GeneralAccountReportMapper generalAccountReportMapper;
+
+    @Autowired
+    private SecondGeneralAccountReportMapper secondGeneralAccountReportMapper;
 
     @Autowired
     private PaymentFormMapper paymentFormMapper;
@@ -251,18 +256,32 @@ public class Scheduler {
 
             // 获取公账列表
             List<PaymentForm> publicPayFlowRecord = payFlowRecordList.stream().filter(s->
-                    s.getIdCardType() == 1).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
             List<PaymentForm> publicIncomeFlowRecordList = incomeFlowRecordList.stream().filter(s->
-                    s.getIdCardType() == 1).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
 
             // 获取私账列表
             List<PaymentForm> privatePayFlowRecord = payFlowRecordList.stream().filter(s->
-                    s.getIdCardType() == 2).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
             List<PaymentForm> privateIncomeFlowRecordList = incomeFlowRecordList.stream().filter(s->
-                    s.getIdCardType() == 2).collect(Collectors.toList());
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
+
+            // 获取普通账户1
+            List<PaymentForm> firstGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
+            List<PaymentForm> firstGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
+
+            // 获取普通账户2
+            List<PaymentForm> secondGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
+            List<PaymentForm> secondGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
 
             createReport(publicPayFlowRecord, publicIncomeFlowRecordList, CardType.ACCOUNT_TYPE_1);
             createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_2);
+            createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_3);
+            createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_4);
 
             logger.info("生成月报成功————————————————————————————————————————————");
         } catch (Exception e) {
@@ -299,11 +318,51 @@ public class Scheduler {
             collectionTotal = collectionTotal.add(amount);
         }
 
-        if (type == 1) {
+        if (type == CardType.ACCOUNT_TYPE_1) {
             insertPublicReport(collectionTotal, payTotal, serviceChargeTotal);
-        } else {
+        } else if (type == CardType.ACCOUNT_TYPE_2) {
             insertPrivateReport(collectionTotal, payTotal, serviceChargeTotal);
+        } else if (type == CardType.ACCOUNT_TYPE_3) {
+            insertGeneralAccountReport(collectionTotal, payTotal, serviceChargeTotal);
+        } else if (type == CardType.ACCOUNT_TYPE_4) {
+            insertSecondGeneralAccountReport(collectionTotal, payTotal, serviceChargeTotal);
         }
+    }
+
+    /**
+     * 创建月报（普通账户2）
+     * @param collectionTotal
+     * @param payTotal
+     * @param serviceChargeTotal
+     */
+    private void insertSecondGeneralAccountReport(BigDecimal collectionTotal, BigDecimal payTotal, BigDecimal serviceChargeTotal) {
+        Date date = getCurrentDate();
+        SecondGeneralAccountReport report = new SecondGeneralAccountReport();
+        report.setYear(Integer.parseInt(Tools.date2Str(date, "yyyy")));
+        report.setMonth(date.getMonth() + 1);
+        report.setCollectionAmount(String.valueOf(collectionTotal));
+        report.setPayAmount(String.valueOf(payTotal));
+        report.setServiceCharge(String.valueOf(serviceChargeTotal));
+        report.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        secondGeneralAccountReportMapper.addSelective(report);
+    }
+
+    /**
+     * 创建月报（普通账户1）
+     * @param collectionTotal
+     * @param payTotal
+     * @param serviceChargeTotal
+     */
+    private void insertGeneralAccountReport(BigDecimal collectionTotal, BigDecimal payTotal, BigDecimal serviceChargeTotal) {
+        Date date = getCurrentDate();
+        GeneralAccountReport report = new GeneralAccountReport();
+        report.setYear(Integer.parseInt(Tools.date2Str(date, "yyyy")));
+        report.setMonth(date.getMonth() + 1);
+        report.setCollectionAmount(String.valueOf(collectionTotal));
+        report.setPayAmount(String.valueOf(payTotal));
+        report.setServiceCharge(String.valueOf(serviceChargeTotal));
+        report.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        generalAccountReportMapper.addSelective(report);
     }
 
     /**
