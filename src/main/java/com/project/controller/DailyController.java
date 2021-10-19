@@ -1,9 +1,6 @@
 package com.project.controller;
 
-import com.project.entity.GeneralAccountDaily;
-import com.project.entity.PrivateDaily;
-import com.project.entity.PublicDaily;
-import com.project.entity.SecondGeneralAccountDaily;
+import com.project.entity.*;
 import com.project.service.DailyService;
 import com.project.service.GeneralAccountDailyService;
 import com.project.service.SecondGeneralAccountDailyService;
@@ -35,6 +32,24 @@ public class DailyController {
 
     @Autowired
     ReturnEntity returnEntity;
+
+    @ApiOperation(value = "根据指定日期获取（公账-账户3）收支明细")
+    @PostMapping(value = "/selectPubGeneralDailyByDate")
+    public ReturnEntity queryPubGeneralDailyByDate(String date) {
+
+        returnEntity = dailyService.queryPubGeneralDailyByDate(date);
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "获取每日账单列表（公账-账户4）")
+    @PostMapping(value = "/selectPubGeneralDailyByPage")
+    public ReturnEntity selectPubGeneralDailyByPage(Integer pageNum, Integer pageSize, PubGeneralDaily daily) {
+
+        returnEntity = dailyService.selectPubGeneralDailyByPage(pageNum, pageSize, daily);
+        return returnEntity;
+
+    }
 
     @ApiOperation(value = "根据指定日期获取收支明细")
     @PostMapping(value = "/selectGeneralDailyByDate")

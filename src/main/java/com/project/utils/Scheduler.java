@@ -29,6 +29,9 @@ public class Scheduler {
     private ConfigMapper configMapper;
 
     @Autowired
+    private PubGeneralDailyMapper pubGeneralDailyMapper;
+
+    @Autowired
     private SecondGeneralAccountDailyMapper secondGeneralAccountDailyMapper;
 
     @Autowired
@@ -79,12 +82,14 @@ public class Scheduler {
             List<PaymentForm> generalCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_3, currentDate);
             List<PaymentForm> generalPayFlowRecord2 = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_4, currentDate);
             List<PaymentForm> generalCollectionRecord2 = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_4, currentDate);
+            List<PaymentForm> generalPayFlowRecord3 = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_5, currentDate);
+            List<PaymentForm> generalCollectionRecord3 = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_5, currentDate);
 
             createDaily(publicPayFlowRecord, publicCollectionRecord, CardType.ACCOUNT_TYPE_1);
             createDaily(privatePayFlowRecord, privateCollectionRecord, CardType.ACCOUNT_TYPE_2);
-
             createDaily(generalPayFlowRecord, generalCollectionRecord, CardType.ACCOUNT_TYPE_3);
             createDaily(generalPayFlowRecord2, generalCollectionRecord2, CardType.ACCOUNT_TYPE_4);
+            createDaily(generalPayFlowRecord3, generalCollectionRecord3, CardType.ACCOUNT_TYPE_5);
 
             logger.info("生成日报成功————————————————————————————————————————————");
         } catch (Exception e) {
@@ -129,7 +134,35 @@ public class Scheduler {
             insertGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
         } else if (type == 4) {
             insertSecondGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
+        } else if (type == 5) {
+            insertPubGeneralDaily(payTotal, serviceChargeTotal, collectionTotal);
         }
+    }
+
+    /**
+     * 创建（公账）账户3
+     * @param payTotal
+     * @param serviceChargeTotal
+     * @param collectionTotal
+     */
+    private void insertPubGeneralDaily(BigDecimal payTotal, BigDecimal serviceChargeTotal, BigDecimal collectionTotal) {
+        Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_5);
+        ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+
+        PubGeneralDaily daily = new PubGeneralDaily();
+        daily.setCollectionAmount(String.valueOf(collectionTotal));
+        daily.setPayAmount(String.valueOf(payTotal));
+        daily.setServiceCharge(String.valueOf(serviceChargeTotal));
+        daily.setRemainingSum(configVO.getRemainingSum());
+        daily.setCreateTime(getLastDay("yyyy-MM-dd"));
+        pubGeneralDailyMapper.insertSelective(daily);
+
+        // 设置上一天余额
+        RemainingSumRecord record = new RemainingSumRecord();
+        record.setIdCardType(CardType.ACCOUNT_TYPE_4);
+        record.setLastRemainingSum(configVO.getRemainingSum());
+        record.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        remainingSumRecordMapper.addSelective(record);
     }
 
     /**

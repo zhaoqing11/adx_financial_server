@@ -39,6 +39,9 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
     private SecondGeneralAccountDailyMapper secondGeneralAccountDailyMapper;
 
     @Autowired
+    private PubGeneralDailyMapper pubGeneralDailyMapper;
+
+    @Autowired
     private ConfigMapper configMapper;
 
     @Autowired
@@ -73,6 +76,11 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
                 generalAccountDaily.setIdSecondGeneralAccountDaily(idDaily);
                 generalAccountDaily.setState(0); // 状态置为“待审核”
                 secondGeneralAccountDailyMapper.updateSelective(generalAccountDaily);
+            } else if (idCardType == CardType.ACCOUNT_TYPE_5) {
+                PubGeneralDaily daily = new PubGeneralDaily();
+                daily.setIdPubGeneralDaily(idDaily);
+                daily.setState(0); // 状态置为“待审核”
+                pubGeneralDailyMapper.updateSelective(daily);
             }
             returnEntity = ReturnUtil.success("编辑成功");
         } catch (Exception e) {
@@ -144,6 +152,20 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
                     secondGeneralAccountDaily.setRemainingSum(String.valueOf(remainingTotal));
 
                     secondGeneralAccountDailyMapper.updateSelective(secondGeneralAccountDaily);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_5) {
+                    PubGeneralDaily daily = pubGeneralDailyMapper.selectByPrimaryKey(idDaily);
+
+                    BigDecimal oldAmount = new BigDecimal(daily.getCollectionAmount());
+                    BigDecimal newAmount = new BigDecimal(collectionRecord.getAmount());
+                    BigDecimal amountTotal = oldAmount.add(newAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(daily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.add(newAmount);
+
+                    daily.setCollectionAmount(String.valueOf(amountTotal));
+                    daily.setRemainingSum(String.valueOf(remainingTotal));
+
+                    pubGeneralDailyMapper.updateSelective(daily);
                 }
                 returnEntity = ReturnUtil.success("编辑成功");
             } else {

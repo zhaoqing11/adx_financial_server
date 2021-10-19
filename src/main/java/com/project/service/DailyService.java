@@ -1,10 +1,15 @@
 package com.project.service;
 
 import com.project.entity.PrivateDaily;
+import com.project.entity.PubGeneralDaily;
 import com.project.entity.PublicDaily;
 import com.project.utils.common.base.ReturnEntity;
 
 public interface DailyService {
+
+    ReturnEntity queryPubGeneralDailyByDate(String date);
+
+    ReturnEntity selectPubGeneralDailyByPage(Integer startIndex, Integer pageSize, PubGeneralDaily daily);
 
     ReturnEntity querySecondGeneralDailyByDate(String date);
 

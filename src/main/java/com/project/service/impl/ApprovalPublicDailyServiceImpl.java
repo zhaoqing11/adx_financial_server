@@ -3,9 +3,7 @@ package com.project.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
 import com.project.entity.*;
-import com.project.mapper.master.ApprovalPublicDailyMapper;
-import com.project.mapper.master.ConfigMapper;
-import com.project.mapper.master.PublicDailyMapper;
+import com.project.mapper.master.*;
 import com.project.service.ApprovalPublicDailyService;
 import com.project.utils.DateUtil;
 import com.project.utils.ReturnUtil;
@@ -36,7 +34,13 @@ public class ApprovalPublicDailyServiceImpl implements ApprovalPublicDailyServic
     private ApprovalPublicDailyMapper approvalPublicDailyMapper;
 
     @Autowired
+    private ApprovalPubGeneralDailyMapper approvalPubGeneralDailyMapper;
+
+    @Autowired
     private PublicDailyMapper publicDailyMapper;
+
+    @Autowired
+    private PubGeneralDailyMapper pubGeneralDailyMapper;
 
     @Autowired
     private ReturnEntity returnEntity;
@@ -46,6 +50,53 @@ public class ApprovalPublicDailyServiceImpl implements ApprovalPublicDailyServic
 
     @Value("${project.secondTelephone}")
     private String secondTelephone;
+
+    @Override
+    public ReturnEntity approvalPubGeneral(ApprovalPubGeneralDaily approvalPublicDaily, Integer idPubGeneralDaily) {
+        try {
+            approvalPublicDaily.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd"));
+            int count = approvalPubGeneralDailyMapper.insertSelective(approvalPublicDaily);
+            if (count > 0) {
+                PubGeneralDaily daily = new PubGeneralDaily();
+                daily.setState(approvalPublicDaily.getIdResultType());
+                daily.setIdPubGeneralDaily(idPubGeneralDaily);
+                pubGeneralDailyMapper.updateSelective(daily);
+
+                // 审批通过，发送短信通知
+                if (approvalPublicDaily.getIdResultType() == 1) {
+                    try {
+                        Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_5);
+                        ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+                        PubGeneralDaily pubDaily = pubGeneralDailyMapper.selectByPrimaryKey(approvalPublicDaily.getIdPubGeneralDaily());
+
+                        String telephone = configVO.getTelephone();
+
+                        MessageVO messageVO = new MessageVO();
+                        int len = configVO.getCardNum().length();
+                        String card = configVO.getCardNum().substring(len - 4, len);
+                        messageVO.setCard(card);
+                        messageVO.setCollectionAmount(pubDaily.getCollectionAmount());
+                        messageVO.setPayAmount(pubDaily.getPayAmount());
+                        messageVO.setServiceCharge(pubDaily.getServiceCharge());
+                        messageVO.setRemainingSum(pubDaily.getRemainingSum());
+                        messageVO.setDate(DateUtil.getLastDay("yyyy年MM月dd日"));
+
+                        SmsUtil.sendSms(telephone, messageVO);
+                        SmsUtil.sendSms(secondTelephone, messageVO);
+                    } catch (ClientException e) {
+                        e.printStackTrace();
+                    }
+                }
+                returnEntity = ReturnUtil.success("审批成功");
+            } else {
+                returnEntity = ReturnUtil.validError(HttpCode.CODE_500, "审批失败");
+            }
+        } catch (Exception e) {
+            logger.error("新增（公账-账户3）日报审批记录失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public ReturnEntity insertSelective(ApprovalPublicDaily approvalPublicDaily, Integer idPublicDaily) {

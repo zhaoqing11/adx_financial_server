@@ -1,11 +1,9 @@
 package com.project.service.impl;
 
-import com.project.entity.PaymentForm;
-import com.project.entity.PrivateDaily;
-import com.project.entity.PublicDaily;
-import com.project.entity.RemainingSumVO;
+import com.project.entity.*;
 import com.project.mapper.master.PaymentFormMapper;
 import com.project.mapper.master.PrivateDailyMapper;
+import com.project.mapper.master.PubGeneralDailyMapper;
 import com.project.mapper.master.PublicDailyMapper;
 import com.project.service.DailyService;
 import com.project.utils.ReturnUtil;
@@ -41,7 +39,45 @@ public class DailyServiceImpl implements DailyService {
     private PublicDailyMapper publicDailyMapper;
 
     @Autowired
+    private PubGeneralDailyMapper pubGeneralDailyMapper;
+
+    @Autowired
     private ReturnEntity returnEntity;
+
+    @Override
+    public ReturnEntity queryPubGeneralDailyByDate(String date) {
+        try {
+            // 获取普通账户收支列表
+            List<PaymentForm> pubPayFlowRecord = paymentFormMapper.selectPaymentByIdCardType(CardType.ACCOUNT_TYPE_5, date);
+            List<PaymentForm> pubCollectionFlowRecord = paymentFormMapper.selectCollectionByIdCardType(CardType.ACCOUNT_TYPE_5, date);
+
+            List<RemainingSumVO> remainingSumVOS = formatDaily(pubPayFlowRecord, pubCollectionFlowRecord);
+            returnEntity = ReturnUtil.success(remainingSumVOS);
+        } catch (Exception e) {
+            logger.error("根据指定日期获取账单明细列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
+    public ReturnEntity selectPubGeneralDailyByPage(Integer startIndex, Integer pageSize, PubGeneralDaily daily) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = pubGeneralDailyMapper.selectByPageTotal(daily);
+            PageBean<PubGeneralDaily> pageBean = new PageBean<PubGeneralDaily>(startIndex, pageSize, total);
+            List<PubGeneralDaily> dailyList = pubGeneralDailyMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(), daily);
+            pageBean.setList(dailyList);
+
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public ReturnEntity querySecondGeneralDailyByDate(String date) {

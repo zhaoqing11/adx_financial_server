@@ -23,6 +23,15 @@ public class RoleController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "获取角色权限列表")
+    @PostMapping(value = "/getAuthByRole")
+    public ReturnEntity getAuthByRole(Integer idRole) {
+
+        returnEntity = roleService.getAuthByRole(idRole);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "查询角色列表")
     @PostMapping(value = "/selectAll")
     public ReturnEntity selectAll() {

@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import com.project.entity.ApprovalPubGeneralDaily;
 import com.project.entity.ApprovalPublicDaily;
 import com.project.service.ApprovalPublicDailyService;
 import com.project.utils.common.base.ReturnEntity;
@@ -23,6 +24,15 @@ public class ApprovalPublicDailyController {
 
     @Autowired
     ReturnEntity returnEntity;
+
+    @ApiOperation(value = "审批（公账-账户3）日报审批记录")
+    @PostMapping(value = "/approvalPubGeneral")
+    public ReturnEntity approvalPubGeneral(ApprovalPubGeneralDaily approvalPublicDaily, Integer idPubGeneralDaily) {
+
+        returnEntity = approvalPublicDailyService.approvalPubGeneral(approvalPublicDaily, idPubGeneralDaily);
+        return returnEntity;
+
+    }
 
     @ApiOperation(value = "新增（公账）日报审批记录")
     @PostMapping(value = "/insertSelective")

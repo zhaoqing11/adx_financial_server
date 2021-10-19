@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.mapper.master.PubGeneralDailyMapper">
+    <resultMap id="BaseResultMap" type="com.project.entity.PubGeneralDaily">
+      <id column="id_pub_general_daily" property="idPubGeneralDaily" jdbcType="INTEGER"/>
+      <result column="collection_amount" property="collectionAmount" jdbcType="DECIMAL"/>
+      <result column="pay_amount" property="payAmount" jdbcType="DECIMAL"/>
+      <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
+      <result column="remaining_sum" property="remainingSum" jdbcType="DECIMAL"/>
+      <result column="state" property="state" jdbcType="INTEGER"/>
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+       id_pub_general_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time
+	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from pub_general_daily where id_pub_general_daily = #{idDaily,jdbcType=INTEGER}
+    </select>
+    <update id="updateSelective" parameterType="com.project.entity.PubGeneralDaily">
+        update `pub_general_daily`
+        <set>
+            <if test="collectionAmount != null and collectionAmount != ''">
+                `collection_amount` = #{collectionAmount},
+            </if>
+            <if test="payAmount != null and payAmount != ''">
+                `pay_amount` = #{payAmount},
+            </if>
+            <if test="serviceCharge != null and serviceCharge != ''">
+                `service_charge` = #{serviceCharge},
+            </if>
+            <if test="remainingSum != null and remainingSum != ''">
+                `remaining_sum` = #{remainingSum},
+            </if>
+            <if test="state != null">
+                `state` = #{state}
+            </if>
+        </set>
+        where id_pub_general_daily = #{idPubGeneralDaily,jdbcType=INTEGER}
+    </update>
+    <insert id="insertSelective" parameterType="com.project.entity.PubGeneralDaily" useGeneratedKeys="true" keyColumn="idPubGeneralDaily">
+        insert into `pub_general_daily`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idPubGeneralDaily != null">
+                id_pub_general_daily,
+            </if>
+            <if test="collectionAmount != null and collectionAmount != ''">
+                collection_amount,
+            </if>
+            <if test="payAmount != null and payAmount != ''">
+                pay_amount,
+            </if>
+            <if test="serviceCharge != null and serviceCharge != ''">
+                service_charge,
+            </if>
+            <if test="remainingSum != null and remainingSum != ''">
+                `remaining_sum`,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="idPubGeneralDaily != null">
+                #{idPubGeneralDaily,jdbcType=INTEGER},
+            </if>
+            <if test="collectionAmount != null and collectionAmount != ''">
+                #{collectionAmount},
+            </if>
+            <if test="payAmount != null and payAmount != ''">
+                #{payAmount},
+            </if>
+            <if test="serviceCharge != null and serviceCharge != ''">
+                #{serviceCharge},
+            </if>
+            <if test="remainingSum != null and remainingSum != ''">
+                #{remainingSum},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime}
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByPageTotal" resultType="java.lang.Integer">
+        select count(1)
+        from `pub_general_daily`
+        where 1=1
+        <if test="daily != null">
+            <if test="daily.state != null">
+                and state = #{state,jdbcType=INTEGER}
+            </if>
+            <if test="daily.createTime != null and daily.createTime != ''">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') = #{daily.createTime}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPage" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from `pub_general_daily`
+        where 1=1
+        <if test="daily != null">
+            <if test="daily.state != null">
+               and state = #{state,jdbcType=INTEGER}
+            </if>
+            <if test="daily.createTime != null and daily.createTime != ''">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') = #{daily.createTime}
+            </if>
+        </if>
+        ORDER BY create_time DESC
+        <if test="pageSize > 0">
+            limit #{startIndex},#{pageSize}
+        </if>
+    </select>
+</mapper>

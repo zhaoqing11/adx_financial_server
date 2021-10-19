@@ -37,6 +37,9 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     private SecondGeneralAccountDailyMapper secondGeneralAccountDailyMapper;
 
     @Autowired
+    private PubGeneralDailyMapper pubGeneralDailyMapper;
+
+    @Autowired
     private PaymentFormMapper paymentFormMapper;
 
     @Autowired
@@ -161,6 +164,29 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
                     generalAccountDaily.setRemainingSum(String.valueOf(remainingTotal));
 
                     secondGeneralAccountDailyMapper.updateSelective(generalAccountDaily);
+                } else if (idCardType == CardType.ACCOUNT_TYPE_5) { // 普通账户3
+                    PubGeneralDaily daily = pubGeneralDailyMapper.selectByPrimaryKey(idDaily);
+
+                    // 获取原本支出数据
+                    BigDecimal oldPayAmount = new BigDecimal(daily.getPayAmount());
+                    BigDecimal oldServiceChargeAmount = new BigDecimal(daily.getServiceCharge());
+
+                    // 获取新添加支出数据
+                    BigDecimal ctPayAmount = new BigDecimal(paymentRemittance.getAmount());
+                    BigDecimal ctServiceChargeAmount = new BigDecimal(paymentRemittance.getServiceCharge());
+
+                    // 计算总支出
+                    BigDecimal newPayAmount = oldPayAmount.add(ctPayAmount);
+                    BigDecimal newServiceChargeAmount = oldServiceChargeAmount.add(ctServiceChargeAmount);
+
+                    BigDecimal oldRemaingSum = new BigDecimal(daily.getRemainingSum());
+                    BigDecimal remainingTotal = oldRemaingSum.subtract(ctPayAmount).subtract(ctServiceChargeAmount);
+
+                    daily.setPayAmount(String.valueOf(newPayAmount));
+                    daily.setServiceCharge(String.valueOf(newServiceChargeAmount));
+                    daily.setRemainingSum(String.valueOf(remainingTotal));
+
+                    pubGeneralDailyMapper.updateSelective(daily);
                 }
                 returnEntity = ReturnUtil.success("汇款成功");
             } else {
