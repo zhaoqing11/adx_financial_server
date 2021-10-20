@@ -42,7 +42,7 @@
         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
         LEFT JOIN `user` u ON u.`id_user` = pf.`id_user`
         LEFT JOIN department d ON d.`id_department` = u.`id_department`
-        WHERE pr.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        WHERE pr.id_config = #{idCardType,jdbcType=INTEGER}
         <if test="year != null">
             AND YEAR(pr.`remittance_date`) = #{year}
         </if>

@@ -17,7 +17,7 @@
     <select id="selectPageDetailByYear" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM `collection_record`
-        WHERE id_card_type = #{idCardType,jdbcType=INTEGER}
+        WHERE id_config = #{idCardType,jdbcType=INTEGER}
         <if test="year != null">
             AND YEAR(collection_date) = #{year}
         </if>
@@ -25,7 +25,7 @@
     <select id="selectCollectionTotalByYear" resultType="java.lang.String">
         SELECT SUM(amount)
         FROM `collection_record`
-        WHERE id_card_type = #{idCardType,jdbcType=INTEGER}
+        WHERE id_config = #{idCardType,jdbcType=INTEGER}
         <if test="year != null">
             AND YEAR(collection_date) = #{year}
         </if>
