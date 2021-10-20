@@ -1,10 +1,7 @@
 package com.project.service.impl;
 
 import com.project.entity.*;
-import com.project.mapper.master.PaymentFormMapper;
-import com.project.mapper.master.PrivateDailyMapper;
-import com.project.mapper.master.PubGeneralDailyMapper;
-import com.project.mapper.master.PublicDailyMapper;
+import com.project.mapper.master.*;
 import com.project.service.DailyService;
 import com.project.utils.ReturnUtil;
 import com.project.utils.common.PageBean;
@@ -37,6 +34,12 @@ public class DailyServiceImpl implements DailyService {
 
     @Autowired
     private PublicDailyMapper publicDailyMapper;
+
+    @Autowired
+    private GeneralAccountDailyMapper generalAccountDailyMapper;
+
+    @Autowired
+    private SecondGeneralAccountDailyMapper secondGeneralAccountDailyMapper;
 
     @Autowired
     private PubGeneralDailyMapper pubGeneralDailyMapper;
@@ -151,8 +154,14 @@ public class DailyServiceImpl implements DailyService {
             int count = 0;
             if (idCardType == CardType.ACCOUNT_TYPE_1) {
                 count = publicDailyMapper.selectIsExitUnApprovalDaily();
-            } else {
+            } else if (idCardType == CardType.ACCOUNT_TYPE_2) {
                 count = privateDailyMapper.selectIsExitUnApprovalDaily();
+            } else if (idCardType == CardType.ACCOUNT_TYPE_3) {
+                count = generalAccountDailyMapper.selectIsExitUnApprovalDaily();
+            } else if (idCardType == CardType.ACCOUNT_TYPE_4) {
+                count = secondGeneralAccountDailyMapper.selectIsExitUnApprovalDaily();
+            } else if (idCardType == CardType.ACCOUNT_TYPE_5) {
+                count = pubGeneralDailyMapper.selectIsExitUnApprovalDaily();
             }
             returnEntity = ReturnUtil.success(count);
         } catch (Exception e) {

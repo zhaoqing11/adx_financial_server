@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.project.entity.CollectionRecord">
         <id column="id_collection_record" property="idCollectionRecord" jdbcType="INTEGER"/>
         <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
+        <result column="id_config" property="idConfig" jdbcType="INTEGER"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="collection_date" property="collectionDate" jdbcType="TIMESTAMP"/>
         <result column="id_user" property="idUser" jdbcType="INTEGER"/>
@@ -11,7 +12,7 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_collection_record, id_card_type, amount, collection_date, id_user, remark, create_time
+       id_collection_record, id_card_type, id_config, amount, collection_date, id_user, remark, create_time
 	</sql>
     <select id="selectPageDetailByYear" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
@@ -39,6 +40,9 @@
             <if test="idCardType != null">
                 id_card_type,
             </if>
+            <if test="idConfig != null">
+                id_config,
+            </if>
             <if test="amount != null">
                 amount,
             </if>
@@ -62,6 +66,9 @@
             <if test="idCardType != null">
                 #{idCardType,jdbcType=INTEGER},
             </if>
+            <if test="idConfig != null">
+                #{idConfig,jdbcType=INTEGER},
+            </if>
             <if test="amount != null">
                 #{amount,jdbcType=DECIMAL},
             </if>
@@ -83,7 +90,10 @@
         update collection_record
         <set>
             <if test="idCardType != null">
-                #{idCardType,jdbcType=INTEGER},
+                id_card_type = #{idCardType,jdbcType=INTEGER},
+            </if>
+            <if test="idConfig != null">
+                id_config = #{idConfig,jdbcType=INTEGER},
             </if>
             <if test="amount != null">
                 amount = #{amount,jdbcType=DECIMAL},
@@ -120,6 +130,7 @@
         cr.`remark`,
         cr.`create_time` AS 'createTime',
         cr.id_card_type as 'idCardType',
+        cr.id_config as 'idConfig',
 
         cr.`id_user` AS 'idUser',
         u.`real_name` AS 'userName'

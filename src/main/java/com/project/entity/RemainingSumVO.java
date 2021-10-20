@@ -38,6 +38,8 @@ public class RemainingSumVO {
 
     private Integer idCardType;
 
+    private Integer idConfig;
+
     private Integer idPaymentRemittance;
 
     private Integer idPaymentForm;
@@ -45,6 +47,14 @@ public class RemainingSumVO {
     private Integer idCollectionRecord;
 
     private String remark;
+
+    public Integer getIdConfig() {
+        return idConfig;
+    }
+
+    public void setIdConfig(Integer idConfig) {
+        this.idConfig = idConfig;
+    }
 
     public Integer getIdPaymentForm() {
         return idPaymentForm;

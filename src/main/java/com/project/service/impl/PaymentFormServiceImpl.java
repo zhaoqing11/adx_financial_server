@@ -155,6 +155,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 remainingSumVO.setIdFlowType(item.getIdFlowType());
                 remainingSumVO.setIdPayFlowRecord(item.getIdPayFlowRecord());
                 remainingSumVO.setIdCardType(item.getIdCardType());
+                remainingSumVO.setIdConfig(item.getIdConfig());
                 remainingSumVO.setRemark(item.getRemark());
                 remainingSumVO.setCreateTime(item.getCreateTime());
                 remainingSumVOList.add(remainingSumVO);
@@ -169,6 +170,7 @@ public class PaymentFormServiceImpl implements PaymentFormService {
                 remainingSumVO.setIdFlowType(item.getIdFlowType());
                 remainingSumVO.setIdIncomeFlowRecord(item.getIdIncomeFlowRecord());
                 remainingSumVO.setIdCardType(item.getIdCardType());
+                remainingSumVO.setIdConfig(item.getIdConfig());
                 remainingSumVO.setRemark(item.getRemark());
                 remainingSumVO.setCreateTime(item.getCreateTime());
                 remainingSumVOList.add(remainingSumVO);
@@ -182,16 +184,16 @@ public class PaymentFormServiceImpl implements PaymentFormService {
 
             // 过滤公账私账
             for (RemainingSumVO remainingSumVO : remainingSumVOList) {
-                Integer idCardType = remainingSumVO.getIdCardType();
-                if (idCardType == CardType.ACCOUNT_TYPE_1) {
+                Integer idConfig = remainingSumVO.getIdConfig();
+                if (idConfig == CardType.ACCOUNT_TYPE_1) {
                     publicRemainSumList.add(remainingSumVO);
-                } else if (idCardType == CardType.ACCOUNT_TYPE_2) {
+                } else if (idConfig == CardType.ACCOUNT_TYPE_2) {
                     privateRemainSumList.add(remainingSumVO);
-                } else if (idCardType == CardType.ACCOUNT_TYPE_3) {
+                } else if (idConfig == CardType.ACCOUNT_TYPE_3) {
                     firstGeneralAccount.add(remainingSumVO);
-                } else if (idCardType == CardType.ACCOUNT_TYPE_4) {
+                } else if (idConfig == CardType.ACCOUNT_TYPE_4) {
                     secondGeneralAccount.add(remainingSumVO);
-                } else if (idCardType == CardType.ACCOUNT_TYPE_5) {
+                } else if (idConfig == CardType.ACCOUNT_TYPE_5) {
                     thirdGeneralAccount.add(remainingSumVO);
                 }
             }

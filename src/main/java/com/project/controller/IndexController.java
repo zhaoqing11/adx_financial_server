@@ -23,6 +23,24 @@ public class IndexController {
     @Autowired
     IndexService indexService;
 
+    @ApiOperation(value = "获取（公账账户3）部门支出明细")
+    @PostMapping(value = "/getPubGeneralRecordDetails")
+    ReturnEntity getPubGeneralRecordDetails(int year) {
+
+        returnEntity = indexService.getPubGeneralRecordDetails(year);
+        return returnEntity;
+
+    }
+
+    @ApiOperation(value = "获取（公账账户3）部门支出流水")
+    @PostMapping(value = "/getPubGeneralRecordByDepartment")
+    public ReturnEntity getPubGeneralRecordByDepartment(int year){
+
+        returnEntity = indexService.getPubGeneralRecordByDepartment(year);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "获取（普通账户2）部门支出明细")
     @PostMapping(value = "/getSecondGeneralFlowRecordDetails")
     ReturnEntity getSecondGeneralFlowRecordDetails(int year) {

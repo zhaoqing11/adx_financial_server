@@ -11,6 +11,8 @@ public class PaymentRemittance {
 
     private Integer idCardType;
 
+    private Integer idConfig;
+
     private String amount;
 
     private String serviceCharge;

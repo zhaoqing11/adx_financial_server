@@ -14,7 +14,7 @@
        id_private_report, `year`, `month`, collection_amount, pay_amount, service_charge, create_time
 	</sql>
     <delete id="deleteSelective" parameterType="java.lang.Integer">
-        delete from private_report where id_private_report = #{idPrivateReport,jdbcType=INTEGER}
+        delete from private_report where id_private_report = #{idReport,jdbcType=INTEGER}
     </delete>
     <insert id="addSelective" parameterType="com.project.entity.PublicReport"
             useGeneratedKeys="true" keyProperty="idPrivateReport">

@@ -204,6 +204,7 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
         try {
             PaymentForm paymentForm = paymentFormMapper.selectByPrimaryKey(paymentRemittance.getIdPaymentForm());
             paymentRemittance.setIdCardType(paymentForm.getIdCardType());
+            paymentRemittance.setIdConfig(paymentForm.getIdConfig());
             boolean flag = addRemittance(paymentRemittance);
             if (flag) {
                 returnEntity = ReturnUtil.success("汇款成功");

@@ -13,6 +13,8 @@ public class PaymentForm {
 
     private Integer idCardType;
 
+    private Integer idConfig;
+
     private String reasonApplication;
 
     private String amount;

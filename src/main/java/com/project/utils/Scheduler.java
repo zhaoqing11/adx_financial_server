@@ -56,6 +56,9 @@ public class Scheduler {
     private SecondGeneralAccountReportMapper secondGeneralAccountReportMapper;
 
     @Autowired
+    private PubGeneralReportMapper pubGeneralReportMapper;
+
+    @Autowired
     private PaymentFormMapper paymentFormMapper;
 
     @Autowired
@@ -299,22 +302,29 @@ public class Scheduler {
             List<PaymentForm> privateIncomeFlowRecordList = incomeFlowRecordList.stream().filter(s->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
 
-            // 获取普通账户1
+            // 获取公账账户1
             List<PaymentForm> firstGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
             List<PaymentForm> firstGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
 
-            // 获取普通账户2
+            // 获取公账账户2
             List<PaymentForm> secondGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
             List<PaymentForm> secondGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
 
+            // 获取公账账户3
+            List<PaymentForm> pubGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_5).collect(Collectors.toList());
+            List<PaymentForm> pubGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_5).collect(Collectors.toList());
+
             createReport(publicPayFlowRecord, publicIncomeFlowRecordList, CardType.ACCOUNT_TYPE_1);
             createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_2);
-            createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_3);
-            createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_4);
+            createReport(firstGeneralAccountPayRecord, firstGeneralAccountIncomeRecord, CardType.ACCOUNT_TYPE_3);
+            createReport(secondGeneralAccountPayRecord, secondGeneralAccountIncomeRecord, CardType.ACCOUNT_TYPE_4);
+            createReport(pubGeneralAccountPayRecord, pubGeneralAccountIncomeRecord, CardType.ACCOUNT_TYPE_5);
 
             logger.info("生成月报成功————————————————————————————————————————————");
         } catch (Exception e) {
@@ -359,11 +369,31 @@ public class Scheduler {
             insertGeneralAccountReport(collectionTotal, payTotal, serviceChargeTotal);
         } else if (type == CardType.ACCOUNT_TYPE_4) {
             insertSecondGeneralAccountReport(collectionTotal, payTotal, serviceChargeTotal);
+        } else if (type == CardType.ACCOUNT_TYPE_5) {
+            insertPubGeneralAccountReport(collectionTotal, payTotal, serviceChargeTotal);
         }
     }
 
     /**
-     * 创建月报（普通账户2）
+     * 创建月报（公账账户3）
+     * @param collectionTotal
+     * @param payTotal
+     * @param serviceChargeTotal
+     */
+    private void insertPubGeneralAccountReport(BigDecimal collectionTotal, BigDecimal payTotal, BigDecimal serviceChargeTotal) {
+        Date date = getCurrentDate();
+        PubGeneralReport report = new PubGeneralReport();
+        report.setYear(Integer.parseInt(Tools.date2Str(date, "yyyy")));
+        report.setMonth(date.getMonth() + 1);
+        report.setCollectionAmount(String.valueOf(collectionTotal));
+        report.setPayAmount(String.valueOf(payTotal));
+        report.setServiceCharge(String.valueOf(serviceChargeTotal));
+        report.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        pubGeneralReportMapper.addSelective(report);
+    }
+
+    /**
+     * 创建月报（公账账户2）
      * @param collectionTotal
      * @param payTotal
      * @param serviceChargeTotal
@@ -381,7 +411,7 @@ public class Scheduler {
     }
 
     /**
-     * 创建月报（普通账户1）
+     * 创建月报（公账账户1）
      * @param collectionTotal
      * @param payTotal
      * @param serviceChargeTotal

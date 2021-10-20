@@ -6,6 +6,7 @@
         <result column="id_approval" property="idApproval" jdbcType="INTEGER"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
+        <result column="id_config" property="idConfig" jdbcType="INTEGER"/>
         <result column="reason_application" property="reasonApplication" jdbcType="VARCHAR"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="payment_name" property="paymentName" jdbcType="VARCHAR"/>
@@ -17,7 +18,7 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_form, id_approval, `code`, id_card_type, reason_application, amount, payment_name, payment_account, id_user,
+       id_payment_form, id_approval, `code`, id_card_type, id_config, reason_application, amount, payment_name, payment_account, id_user,
        id_payment_form_state, state, files, create_time
 	</sql>
     <select id="selectByStateCount" resultType="java.lang.Integer">
@@ -130,6 +131,7 @@
         SELECT
          cr.`amount` as 'collectionAmount',
          cr.`id_card_type` as 'idCardType',
+         cr.`id_config` as 'idConfig',
          ifr.`remaining_sum` AS 'remainingSum',
          ifr.`id_flow_type` AS 'idFlowType',
          ifr.`id_income_flow_record` AS 'idIncomeFlowRecord',
@@ -174,6 +176,7 @@
          pfr.`id_pay_flow_record` AS 'idPayFlowRecord',
          pr.`remark` AS 'remark',
          pr.`remittance_date` as 'remittanceDate',
+         pr.`id_config` as 'idConfig',
          pr.`create_time` AS 'createTime'
          FROM pay_flow_record pfr
         LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance`
@@ -216,8 +219,8 @@
     <select id="queryAllPaymentForm" resultType="com.project.entity.PaymentForm">
          SELECT
          pf.`id_payment_form` AS 'idPaymentForm',
-        pf.`id_approval` as 'idApproval',
-        pf.`code`,
+         pf.`id_approval` as 'idApproval',
+         pf.`code`,
          pf.`reason_application` AS 'reasonApplication',
          pf.`amount`,
          pf.`payment_name` AS 'paymentName',
@@ -226,6 +229,7 @@
          pf.`create_time` AS 'createTime',
          pf.`id_user` AS 'idUser',
          pf.`id_card_type` as 'idCardType',
+         pf.`id_config` as 'idConfig',
          pf.`state`,
          pf.`files`,
          pa.`amount` AS 'approvalAmount',
@@ -319,6 +323,9 @@
           <if test="idCardType != null">
               id_card_type,
           </if>
+          <if test="idConfig != null">
+              id_config,
+          </if>
           <if test="reasonApplication != null and reasonApplication != ''">
               reason_application,
           </if>
@@ -357,6 +364,9 @@
             <if test="idCardType != null">
                 #{idCardType,jdbcType=INTEGER},
             </if>
+            <if test="idConfig != null">
+                #{idConfig,jdbcType=INTEGER},
+            </if>
             <if test="reasonApplication != null and reasonApplication != ''">
                 #{reasonApplication,jdbcType=VARCHAR},
             </if>
@@ -388,6 +398,9 @@
         <set>
             <if test="idCardType != null">
                 id_card_type = #{idCardType,jdbcType=INTEGER},
+            </if>
+            <if test="idConfig != null">
+                id_config = #{idConfig,jdbcType=INTEGER},
             </if>
             <if test="reasonApplication != null and reasonApplication != ''">
                 `reason_application` = #{reasonApplication,jdbcType=VARCHAR},

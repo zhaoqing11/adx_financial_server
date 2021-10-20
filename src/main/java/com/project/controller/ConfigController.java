@@ -24,6 +24,15 @@ public class ConfigController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "根据id获取账户列表")
+    @PostMapping(value = "/selectByIdCardType")
+    public ReturnEntity selectByIdCardType(Integer idCardType) {
+
+        returnEntity = configService.selectByIdCardType(idCardType);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "新增账户")
     @PostMapping(value = "/insertSelective")
     public ReturnEntity insertSelective(Config config) {

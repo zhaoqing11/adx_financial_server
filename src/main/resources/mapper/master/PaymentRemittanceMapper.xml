@@ -5,6 +5,7 @@
         <id column="id_payment_remittance" property="idPaymentRemittance" jdbcType="INTEGER"/>
         <result column="id_payment_form" property="idPaymentForm" jdbcType="INTEGER"/>
         <result column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
+        <result column="id_config" property="idConfig" jdbcType="INTEGER"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL"/>
         <result column="remittance_date" property="remittanceDate" jdbcType="TIMESTAMP"/>
@@ -13,7 +14,7 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_payment_remittance, id_payment_form, id_card_type, amount, service_charge, remittance_date, remark, id_user, create_time
+       id_payment_remittance, id_payment_form, id_card_type, id_config, amount, service_charge, remittance_date, remark, id_user, create_time
 	</sql>
     <select id="selectRemittanceByIdPamentForm" resultType="java.lang.Integer">
         SELECT count(1) FROM `payment_remittance` WHERE id_payment_form = #{idPaymentForm,jdbcType=INTEGER}
@@ -56,6 +57,9 @@
             <if test="idCardType != null">
                 id_card_type = #{idCardType},
             </if>
+            <if test="idConfig != null">
+                id_config = #{idConfig},
+            </if>
             <if test="amount != null">
                 amount = #{amount},
             </if>
@@ -80,6 +84,9 @@
             </if>
             <if test="idCardType != null">
                 id_card_type,
+            </if>
+            <if test="idConfig != null">
+                id_config,
             </if>
             <if test="amount != null">
                 amount,
@@ -109,6 +116,9 @@
             </if>
             <if test="idCardType != null">
                 #{idCardType,jdbcType=INTEGER},
+            </if>
+            <if test="idConfig != null">
+                #{idConfig,jdbcType=INTEGER},
             </if>
             <if test="amount != null">
                 #{amount,jdbcType=DECIMAL},

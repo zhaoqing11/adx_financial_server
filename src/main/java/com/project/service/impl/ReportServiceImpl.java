@@ -43,6 +43,9 @@ public class ReportServiceImpl implements ReportService {
     private GeneralAccountReportMapper generalAccountReportMapper;
 
     @Autowired
+    private PubGeneralReportMapper pubGeneralReportMapper;
+
+    @Autowired
     private SecondGeneralAccountReportMapper secondGeneralAccountReportMapper;
 
     @Autowired
@@ -50,6 +53,40 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private RemainingSumRecordMapper remainingSumRecordMapper;
+
+    @Override
+    public ReturnEntity selectPubGeneralReportByPage(Integer startIndex, Integer pageSize, Integer currentDate) {
+        try {
+            startIndex = startIndex == null ? 0 : startIndex;
+            pageSize = pageSize == null ? 0 : pageSize;
+
+            int total = pubGeneralReportMapper.selectByPageTotal(currentDate);
+            PageBean<PublicReport> pageBean = new PageBean<PublicReport>(startIndex, pageSize, total);
+            List<PubGeneralReport> reportList = pubGeneralReportMapper.selectByPage(pageBean.getStartIndex(), pageBean.getPageSize(),
+                    currentDate);
+
+            for (PubGeneralReport report : reportList) {
+                String collectionAmount = report.getCollectionAmount();
+                String payAmount = report.getPayAmount();
+                String serviceCharge = report.getServiceCharge();
+
+                collectionAmount = collectionAmount.matches("^0.*$") ? collectionAmount : DecimalFormatUtil.formatString(new BigDecimal(collectionAmount), null);
+                payAmount = payAmount.matches("^0.*$") ? payAmount : DecimalFormatUtil.formatString(new BigDecimal(payAmount), null);
+                serviceCharge = serviceCharge.matches("^0.*$") ? serviceCharge : DecimalFormatUtil.formatString(new BigDecimal(serviceCharge), null);
+
+                report.setCollectionAmount(collectionAmount);
+                report.setPayAmount(payAmount);
+                report.setServiceCharge(serviceCharge);
+            }
+
+            pageBean.setList(reportList);
+            returnEntity = ReturnUtil.success(pageBean);
+        } catch (Exception e) {
+            logger.error("根据指定日期获取（普通账户3）流水列表失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
 
     @Override
     public ReturnEntity selectSecondGeneralReportByPage(Integer startIndex, Integer pageSize, Integer currentDate) {
@@ -167,33 +204,50 @@ public class ReportServiceImpl implements ReportService {
         List<RemainingSumRecord> remainingSumRecordList = remainingSumRecordMapper.queryRemainingSumByMonth(startTime); // 余额记录列表
 
         if (idCardType == CardType.ACCOUNT_TYPE_1) { // 公账
+
             payFlowList = payFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_1).collect(Collectors.toList());
+
         } else if (idCardType == CardType.ACCOUNT_TYPE_2) { // 私账
+
             payFlowList = payFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_2).collect(Collectors.toList());
+
         } else if (idCardType == CardType.ACCOUNT_TYPE_3) { // 普通账户1
+
             payFlowList = payFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
+
         } else if (idCardType == CardType.ACCOUNT_TYPE_4) { // 普通账户2
+
             payFlowList = payFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
             incomeFlowList = incomeFlowList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
             remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
+
+        } else if (idCardType == CardType.ACCOUNT_TYPE_5) { // 普通账户3
+
+            payFlowList = payFlowList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_5).collect(Collectors.toList());
+            incomeFlowList = incomeFlowList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_5).collect(Collectors.toList());
+            remainingSumRecordList = remainingSumRecordList.stream().filter(s ->
+                    s.getIdCardType() == CardType.ACCOUNT_TYPE_5).collect(Collectors.toList());
+
         }
 
         // 循环创建日期
@@ -302,9 +356,26 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReturnEntity deleteSelective(Integer idReport) {
+    public ReturnEntity deleteSelective(Integer idReport, Integer idCardType) {
         try {
-            int count = reportMapper.deleteSelective(idReport);
+            int count = 0;
+            switch (idCardType) {
+                case 1:
+                    count = reportMapper.deleteSelective(idReport);
+                    break;
+                case 2:
+                    count = privateReportMapper.deleteSelective(idReport);
+                    break;
+                case 3:
+                    count = generalAccountReportMapper.deleteSelective(idReport);
+                    break;
+                case 4:
+                    count = secondGeneralAccountReportMapper.deleteSelective(idReport);
+                    break;
+                case 5:
+                    count = pubGeneralReportMapper.deleteSelective(idReport);
+                    break;
+            }
             if (count > 0) {
                 returnEntity = ReturnUtil.success("删除成功");
             } else {

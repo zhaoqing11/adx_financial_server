@@ -3,18 +3,27 @@
 <mapper namespace="com.project.mapper.master.ConfigMapper">
     <resultMap id="BaseResultMap" type="com.project.entity.Config">
         <id column="id_config" property="idConfig" jdbcType="INTEGER"/>
+        <id column="id_card_type" property="idCardType" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="config" property="config" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-       id_config, `name`, config
+       id_config, id_card_type, `name`, config
 	</sql>
+    <select id="selectByIdCardType" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM config
+        WHERE id_card_type = #{idCardType,jdbcType=INTEGER}
+    </select>
     <insert id="insertSelective" parameterType="com.project.entity.Config"
                            useGeneratedKeys="true" keyProperty="idConfig">
         insert into `config`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="idConfig != null">
                 id_config,
+            </if>
+            <if test="idCardType != null">
+                id_card_type,
             </if>
             <if test="name != null and name != ''">
                 `name`,
@@ -26,6 +35,9 @@
         <trim prefix="values(" suffix=")" suffixOverrides=",">
             <if test="idConfig != null">
                 #{idConfig,jdbcType=INTEGER},
+            </if>
+            <if test="idCardType != null">
+                #{idCardType,jdbcType=INTEGER},
             </if>
             <if test="name != null and name != ''">
                 #{name,jdbcType=VARCHAR},

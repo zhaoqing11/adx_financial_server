@@ -26,6 +26,15 @@ public class ReportController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "分页（条件）查询公账账户3月报")
+    @PostMapping(value = "/selectPubGeneralReportByPage")
+    public ReturnEntity selectPubGeneralReportByPage(Integer pageNum, Integer pageSize, Integer currentDate) {
+
+        returnEntity = reportService.selectPubGeneralReportByPage(pageNum, pageSize, currentDate);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "导出收支明细")
     @GetMapping(value = "/exportToExcel")
     public void exportToExcel(HttpServletResponse response, int year, int month, Integer idCardType) {
@@ -45,9 +54,9 @@ public class ReportController {
 
     @ApiOperation(value = "删除月报")
     @PostMapping(value = "/deleteSelective")
-    public ReturnEntity deleteSelective(Integer idReport) {
+    public ReturnEntity deleteSelective(Integer idReport, Integer idCardType) {
 
-        returnEntity = reportService.deleteSelective(idReport);
+        returnEntity = reportService.deleteSelective(idReport, idCardType);
         return returnEntity;
 
     }

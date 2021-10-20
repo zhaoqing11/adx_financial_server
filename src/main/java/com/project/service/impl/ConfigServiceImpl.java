@@ -41,6 +41,18 @@ public class ConfigServiceImpl implements ConfigService {
     private String telephone;
 
     @Override
+    public ReturnEntity selectByIdCardType(Integer idCardType) {
+        try {
+            List<Config> configList = configMapper.selectByIdCardType(idCardType);
+            returnEntity = ReturnUtil.success(configList);
+        } catch (Exception e) {
+            logger.error("根据idCardType获取账户信息失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity insertSelective(Config config) {
         try {
             ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);

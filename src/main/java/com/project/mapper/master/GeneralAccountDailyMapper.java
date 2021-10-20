@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface GeneralAccountDailyMapper {
 
+    int selectIsExitUnApprovalDaily();
+
     int insertSelective(GeneralAccountDaily daily);
 
     int updateSelective(GeneralAccountDaily daily);

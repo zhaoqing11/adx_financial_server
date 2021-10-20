@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface ReportService {
 
+    ReturnEntity selectPubGeneralReportByPage(Integer startIndex, Integer pageSize,
+                                           Integer currentDate);
+
     ReturnEntity selectSecondGeneralReportByPage(Integer startIndex, Integer pageSize,
                                            Integer currentDate);
 
@@ -16,7 +19,7 @@ public interface ReportService {
 
     ReturnEntity selectReportDetailByMonth(int year, int month, Integer idCardType);
 
-    ReturnEntity deleteSelective(Integer idReport);
+    ReturnEntity deleteSelective(Integer idReport, Integer idCardType);
 
     ReturnEntity selectPublicReportByPage(Integer startIndex, Integer pageSize,
                               Integer currentDate);

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ConfigMapper {
 
+    List<Config> selectByIdCardType(@Param("idCardType") Integer idCardType);
+
     int insertSelective(Config config);
 
     int updateConfig(Config config);

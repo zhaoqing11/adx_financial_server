@@ -13,6 +13,9 @@
     <sql id="Base_Column_List">
        id_second_general_account_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time
 	</sql>
+    <select id="selectIsExitUnApprovalDaily" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM `second_general_account_daily` WHERE DATEDIFF(NOW(), create_time) = 1 AND `state` &lt;&gt; 1
+    </select>
     <insert id="insertSelective" parameterType="com.project.entity.SecondGeneralAccountDaily"
             useGeneratedKeys="true" keyColumn="idSecondGeneralAccountDaily">
         insert into `second_general_account_daily`
