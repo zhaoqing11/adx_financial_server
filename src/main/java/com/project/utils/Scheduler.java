@@ -83,15 +83,17 @@ public class Scheduler {
             // 获取普通账户收支明细
             List<PaymentForm> generalPayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_3, currentDate);
             List<PaymentForm> generalCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_3, currentDate);
-            List<PaymentForm> generalPayFlowRecord2 = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_4, currentDate);
-            List<PaymentForm> generalCollectionRecord2 = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_4, currentDate);
             List<PaymentForm> generalPayFlowRecord3 = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_5, currentDate);
             List<PaymentForm> generalCollectionRecord3 = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_5, currentDate);
+
+              // Todo: 因业务需求变更，暂时停止浦发账户1151
+//            List<PaymentForm> generalPayFlowRecord2 = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_4, currentDate);
+//            List<PaymentForm> generalCollectionRecord2 = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_4, currentDate);
+//            createDaily(generalPayFlowRecord2, generalCollectionRecord2, CardType.ACCOUNT_TYPE_4);
 
             createDaily(publicPayFlowRecord, publicCollectionRecord, CardType.ACCOUNT_TYPE_1);
             createDaily(privatePayFlowRecord, privateCollectionRecord, CardType.ACCOUNT_TYPE_2);
             createDaily(generalPayFlowRecord, generalCollectionRecord, CardType.ACCOUNT_TYPE_3);
-            createDaily(generalPayFlowRecord2, generalCollectionRecord2, CardType.ACCOUNT_TYPE_4);
             createDaily(generalPayFlowRecord3, generalCollectionRecord3, CardType.ACCOUNT_TYPE_5);
 
             logger.info("生成日报成功————————————————————————————————————————————");
@@ -308,11 +310,11 @@ public class Scheduler {
             List<PaymentForm> firstGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
                     s.getIdCardType() == CardType.ACCOUNT_TYPE_3).collect(Collectors.toList());
 
-            // 获取公账账户2
-            List<PaymentForm> secondGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
-                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
-            List<PaymentForm> secondGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
-                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
+            // 获取公账账户2 Todo: 因业务需求变更，暂时停止浦发账户1151
+//            List<PaymentForm> secondGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
+//                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
+//            List<PaymentForm> secondGeneralAccountIncomeRecord = incomeFlowRecordList.stream().filter(s ->
+//                    s.getIdCardType() == CardType.ACCOUNT_TYPE_4).collect(Collectors.toList());
 
             // 获取公账账户3
             List<PaymentForm> pubGeneralAccountPayRecord =payFlowRecordList.stream().filter(s ->
@@ -323,7 +325,7 @@ public class Scheduler {
             createReport(publicPayFlowRecord, publicIncomeFlowRecordList, CardType.ACCOUNT_TYPE_1);
             createReport(privatePayFlowRecord, privateIncomeFlowRecordList, CardType.ACCOUNT_TYPE_2);
             createReport(firstGeneralAccountPayRecord, firstGeneralAccountIncomeRecord, CardType.ACCOUNT_TYPE_3);
-            createReport(secondGeneralAccountPayRecord, secondGeneralAccountIncomeRecord, CardType.ACCOUNT_TYPE_4);
+//            createReport(secondGeneralAccountPayRecord, secondGeneralAccountIncomeRecord, CardType.ACCOUNT_TYPE_4);
             createReport(pubGeneralAccountPayRecord, pubGeneralAccountIncomeRecord, CardType.ACCOUNT_TYPE_5);
 
             logger.info("生成月报成功————————————————————————————————————————————");

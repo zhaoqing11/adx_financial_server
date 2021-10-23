@@ -59,7 +59,7 @@
          cr.`collection_date` AS 'createTime'
          FROM income_flow_record ifr
         LEFT JOIN collection_record cr ON cr.`id_collection_record` = ifr.`id_collection_record`
-        WHERE cr.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        WHERE cr.`id_config` = #{idCardType,jdbcType=INTEGER}
         AND DATE_FORMAT(cr.`collection_date`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
         order by cr.create_time desc
     </select>
@@ -86,7 +86,7 @@
         LEFT JOIN payment_remittance pr ON pr.`id_payment_remittance` = pfr.`id_payment_remittance`
         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pr.`id_payment_form`
         LEFT JOIN payment_form pf ON pf.`id_payment_form` = pa.`id_payment_form`
-        WHERE pr.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        WHERE pr.`id_config` = #{idCardType,jdbcType=INTEGER}
         AND DATE_FORMAT(pr.`remittance_date`, '%Y-%m-%d') = #{date,jdbcType=VARCHAR}
         order by pr.create_time desc
     </select>

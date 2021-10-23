@@ -64,7 +64,7 @@ public class ApprovalPublicDailyServiceImpl implements ApprovalPublicDailyServic
 
                 // 审批通过，发送短信通知
                 if (approvalPublicDaily.getIdResultType() == 1) {
-                    try {
+//                    try {
                         Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_5);
                         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
                         PubGeneralDaily pubDaily = pubGeneralDailyMapper.selectByPrimaryKey(approvalPublicDaily.getIdPubGeneralDaily());
@@ -81,11 +81,11 @@ public class ApprovalPublicDailyServiceImpl implements ApprovalPublicDailyServic
                         messageVO.setRemainingSum(pubDaily.getRemainingSum());
                         messageVO.setDate(DateUtil.getLastDay("yyyy年MM月dd日"));
 
-                        SmsUtil.sendSms(telephone, messageVO);
-                        SmsUtil.sendSms(secondTelephone, messageVO);
-                    } catch (ClientException e) {
-                        e.printStackTrace();
-                    }
+//                        SmsUtil.sendSms(telephone, messageVO);
+//                        SmsUtil.sendSms(secondTelephone, messageVO);
+//                    } catch (ClientException e) {
+//                        e.printStackTrace();
+//                    }
                 }
                 returnEntity = ReturnUtil.success("审批成功");
             } else {
@@ -111,7 +111,7 @@ public class ApprovalPublicDailyServiceImpl implements ApprovalPublicDailyServic
 
                 // 审批通过，发送短信通知
                 if (approvalPublicDaily.getIdResultType() == 1) {
-                    try {
+//                    try {
                         Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_1);
                         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
                         PublicDaily pubDaily = publicDailyMapper.selectByPrimaryKey(approvalPublicDaily.getIdPublicDaily());
@@ -128,11 +128,11 @@ public class ApprovalPublicDailyServiceImpl implements ApprovalPublicDailyServic
                         messageVO.setRemainingSum(pubDaily.getRemainingSum());
                         messageVO.setDate(DateUtil.getLastDay("yyyy年MM月dd日"));
 
-                        SmsUtil.sendSms(telephone, messageVO);
-                        SmsUtil.sendSms(secondTelephone, messageVO);
-                    } catch (ClientException e) {
-                        e.printStackTrace();
-                    }
+//                        SmsUtil.sendSms(telephone, messageVO);
+//                        SmsUtil.sendSms(secondTelephone, messageVO);
+//                    } catch (ClientException e) {
+//                        e.printStackTrace();
+//                    }
                 }
                 returnEntity = ReturnUtil.success("审批成功");
             } else {

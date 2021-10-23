@@ -33,6 +33,15 @@ public class DailyController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "查询待办任务")
+    @PostMapping(value = "/getDataInfo")
+    public ReturnEntity getDataInfo(int idRole) {
+
+        returnEntity = dailyService.getDataInfo(idRole);
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "根据指定日期获取（公账-账户3）收支明细")
     @PostMapping(value = "/selectPubGeneralDailyByDate")
     public ReturnEntity queryPubGeneralDailyByDate(String date) {

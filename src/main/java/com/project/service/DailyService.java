@@ -7,6 +7,8 @@ import com.project.utils.common.base.ReturnEntity;
 
 public interface DailyService {
 
+    ReturnEntity getDataInfo(int idRole);
+
     ReturnEntity queryPubGeneralDailyByDate(String date);
 
     ReturnEntity selectPubGeneralDailyByPage(Integer startIndex, Integer pageSize, PubGeneralDaily daily);

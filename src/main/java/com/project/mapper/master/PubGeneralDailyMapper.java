@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface PubGeneralDailyMapper {
 
+    int selectPubGeneralDailyUnApproval(@Param("state") Integer state);
+
     int selectIsExitUnApprovalDaily();
 
     PubGeneralDaily selectByPrimaryKey(@Param("idDaily") Integer idDaily);

@@ -48,6 +48,43 @@ public class DailyServiceImpl implements DailyService {
     private ReturnEntity returnEntity;
 
     @Override
+    public ReturnEntity getDataInfo(int idRole) {
+        try {
+            int state = 0; // 查询状态不等于1的待审核数量
+            switch (idRole) {
+                case 2:
+                    state = 0;
+                    break;
+                case 3:
+                    state = 2;
+                    break;
+            }
+            int pubNum = publicDailyMapper.selectPublicDailyByState(state);
+            int priNum = privateDailyMapper.selectPrivateDailyByState(state);
+            int generalNum = generalAccountDailyMapper.selectGeneralDailyUnApproval(state);
+            int pubGeneralNum = pubGeneralDailyMapper.selectPubGeneralDailyUnApproval(state);
+
+            int approvalCount = paymentFormMapper.queryApprovalPaymentCount();
+            int remittanceCount = paymentFormMapper.queryPaymentRemittanceCount();
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("pubNum", pubNum);
+            map.put("priNum", priNum);
+            map.put("generalNum", generalNum);
+            map.put("pubGeneralNum", pubGeneralNum);
+
+            map.put("approvalCount", approvalCount);
+            map.put("remittanceCount", remittanceCount);
+
+            returnEntity = ReturnUtil.success(map);
+        } catch (Exception e) {
+            logger.error("查询待办任务失败，错误消息：--->" + e.getMessage());
+            throw new ServiceException(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    @Override
     public ReturnEntity queryPubGeneralDailyByDate(String date) {
         try {
             // 获取普通账户收支列表

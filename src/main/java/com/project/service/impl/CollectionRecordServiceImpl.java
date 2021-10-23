@@ -196,11 +196,33 @@ public class CollectionRecordServiceImpl implements CollectionRecordService {
 
     private boolean addCollectionRcord(CollectionRecord collectionRecord) {
         collectionRecord.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        switch (collectionRecord.getIdCardType()) {
+            case 1:
+                collectionRecord.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                collectionRecord.setIdConfig(CardType.ACCOUNT_TYPE_1);
+                break;
+            case 2:
+                collectionRecord.setIdCardType(CardType.ACCOUNT_TYPE_2);
+                collectionRecord.setIdConfig(CardType.ACCOUNT_TYPE_2);
+                break;
+            case 3:
+                collectionRecord.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                collectionRecord.setIdConfig(CardType.ACCOUNT_TYPE_3);
+                break;
+            case 4:
+                collectionRecord.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                collectionRecord.setIdConfig(CardType.ACCOUNT_TYPE_4);
+                break;
+            case 5:
+                collectionRecord.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                collectionRecord.setIdConfig(CardType.ACCOUNT_TYPE_5);
+                break;
+        }
         int count = collectionRecordMapper.addSelective(collectionRecord);
         if (count > 0) {
             // 创建支出流水记录
             Integer idCollectionRecord = collectionRecord.getIdCollectionRecord();
-            Config config = configMapper.selectConfigInfo(collectionRecord.getIdCardType());
+            Config config = configMapper.selectConfigInfo(collectionRecord.getIdConfig());
             ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
 
             BigDecimal remainingSum = new BigDecimal(configVO.getRemainingSum()); // 余额

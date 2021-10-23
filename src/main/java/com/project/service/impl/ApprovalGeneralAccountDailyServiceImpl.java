@@ -64,7 +64,7 @@ public class ApprovalGeneralAccountDailyServiceImpl implements ApprovalGeneralAc
 
                 // 审批通过，发送短信通知
                 if (accountDaily.getIdResultType() == 1) {
-                    try {
+//                    try {
                         Config config = configMapper.selectConfigInfo(CardType.ACCOUNT_TYPE_3);
                         ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
                         GeneralAccountDaily generalAccountDaily = generalAccountDailyMapper.selectByPrimaryKey(accountDaily.getIdGeneralAccountDaily());
@@ -81,11 +81,11 @@ public class ApprovalGeneralAccountDailyServiceImpl implements ApprovalGeneralAc
                         messageVO.setRemainingSum(generalAccountDaily.getRemainingSum());
                         messageVO.setDate(DateUtil.getLastDay("yyyy年MM月dd日"));
 
-                        SmsUtil.sendSms(telephone, messageVO);
-                        SmsUtil.sendSms(secondTelephone, messageVO);
-                    } catch (ClientException e) {
-                        e.printStackTrace();
-                    }
+//                        SmsUtil.sendSms(telephone, messageVO);
+//                        SmsUtil.sendSms(secondTelephone, messageVO);
+//                    } catch (ClientException e) {
+//                        e.printStackTrace();
+//                    }
                 }
                 returnEntity = ReturnUtil.success("审批成功");
             } else {
