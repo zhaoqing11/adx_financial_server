@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface PublicDailyMapper {
 
+    PublicDaily selectDailyByDate();
+
     int selectPublicDailyByState(@Param("state") Integer state);
 
     PublicDaily selectByPrimaryKey(@Param("idDaily") Integer idDaily);

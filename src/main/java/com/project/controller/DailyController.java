@@ -33,6 +33,15 @@ public class DailyController {
     @Autowired
     ReturnEntity returnEntity;
 
+    @ApiOperation(value = "发送短信")
+    @PostMapping(value = "/sendMessage")
+    public ReturnEntity sendMessage() {
+
+        returnEntity = dailyService.sendMessage();
+        return returnEntity;
+
+    }
+
     @ApiOperation(value = "查询待办任务")
     @PostMapping(value = "/getDataInfo")
     public ReturnEntity getDataInfo(int idRole) {

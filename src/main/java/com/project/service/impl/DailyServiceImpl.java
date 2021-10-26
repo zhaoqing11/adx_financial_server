@@ -1,9 +1,13 @@
 package com.project.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.project.entity.*;
 import com.project.mapper.master.*;
 import com.project.service.DailyService;
+import com.project.utils.DateUtil;
 import com.project.utils.ReturnUtil;
+import com.project.utils.SmsUtil;
+import com.project.utils.Tools;
 import com.project.utils.common.PageBean;
 import com.project.utils.common.base.HttpCode;
 import com.project.utils.common.base.ReturnEntity;
@@ -12,12 +16,10 @@ import com.project.utils.common.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -45,7 +47,100 @@ public class DailyServiceImpl implements DailyService {
     private PubGeneralDailyMapper pubGeneralDailyMapper;
 
     @Autowired
+    private ConfigMapper configMapper;
+
+    @Autowired
     private ReturnEntity returnEntity;
+
+    @Value("${project.telephone}")
+    private String telephone;
+
+    @Value("${project.secondTelephone}")
+    private String secondTelephone;
+
+    @Override
+    public ReturnEntity sendMessage() {
+        try {
+            if (publicDailyMapper.selectIsExitUnApprovalDaily() > 0) {
+                return ReturnUtil.validError(HttpCode.CODE_500, "数据尚未审核通过，请审核后操作");
+            }
+            if (privateDailyMapper.selectIsExitUnApprovalDaily() > 0) {
+                return ReturnUtil.validError(HttpCode.CODE_500, "数据尚未审核通过，请审核后操作");
+            }
+            if (generalAccountDailyMapper.selectIsExitUnApprovalDaily() > 0) {
+                return ReturnUtil.validError(HttpCode.CODE_500, "数据尚未审核通过，请审核后操作");
+            }
+            if (pubGeneralDailyMapper.selectIsExitUnApprovalDaily() > 0) {
+                return ReturnUtil.validError(HttpCode.CODE_500, "数据尚未审核通过，请审核后操作");
+            }
+
+            MessageVO pubMsg = selectByAccountType(CardType.ACCOUNT_TYPE_1);
+            MessageVO priMsg = selectByAccountType(CardType.ACCOUNT_TYPE_2);
+            MessageVO generalMsg = selectByAccountType(CardType.ACCOUNT_TYPE_3);
+            MessageVO pubGeneralMsg = selectByAccountType(CardType.ACCOUNT_TYPE_5);
+
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("pubMsg", pubMsg);
+            map.put("priMsg", priMsg);
+            map.put("generalMsg", generalMsg);
+            map.put("pubGeneralMsg", pubGeneralMsg);
+
+            SmsUtil.sendSms(telephone, map);
+            SmsUtil.sendSms(secondTelephone, map);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return returnEntity;
+    }
+
+    private MessageVO selectByAccountType(Integer type) {
+        String date = Tools.date2Str(new Date(), "yyyy-MM-dd");
+        Config config = configMapper.selectConfigInfo(type);
+        ConfigVO configVO = JSONObject.parseObject(config.getConfig(), ConfigVO.class);
+
+        MessageVO messageVO = new MessageVO();
+        int len = configVO.getCardNum().length();
+        String card = configVO.getCardNum().substring(len - 4, len);
+        messageVO.setCard(card);
+        messageVO.setDate(DateUtil.getLastDay("yyyy年MM月dd日"));
+
+        switch (type) {
+            case 1:
+                PublicDaily pubDaily = publicDailyMapper.selectDailyByDate();
+
+                messageVO.setCollectionAmount(pubDaily.getCollectionAmount());
+                messageVO.setPayAmount(pubDaily.getPayAmount());
+                messageVO.setServiceCharge(pubDaily.getServiceCharge());
+                messageVO.setRemainingSum(pubDaily.getRemainingSum());
+                break;
+            case 2:
+                PrivateDaily priDaily = privateDailyMapper.selectDailyByDate();
+
+                messageVO.setCollectionAmount(priDaily.getCollectionAmount());
+                messageVO.setPayAmount(priDaily.getPayAmount());
+                messageVO.setServiceCharge(priDaily.getServiceCharge());
+                messageVO.setRemainingSum(priDaily.getRemainingSum());
+                break;
+            case 3:
+                GeneralAccountDaily generalDaily = generalAccountDailyMapper.selectDailyDate();
+
+                messageVO.setCollectionAmount(generalDaily.getCollectionAmount());
+                messageVO.setPayAmount(generalDaily.getPayAmount());
+                messageVO.setServiceCharge(generalDaily.getServiceCharge());
+                messageVO.setRemainingSum(generalDaily.getRemainingSum());
+                break;
+            case 5:
+                PubGeneralDaily pubGeneralDaily = pubGeneralDailyMapper.selectDailyDate();
+
+                messageVO.setCollectionAmount(pubGeneralDaily.getCollectionAmount());
+                messageVO.setPayAmount(pubGeneralDaily.getPayAmount());
+                messageVO.setServiceCharge(pubGeneralDaily.getServiceCharge());
+                messageVO.setRemainingSum(pubGeneralDaily.getRemainingSum());
+                break;
+        }
+        return messageVO;
+    }
 
     @Override
     public ReturnEntity getDataInfo(int idRole) {

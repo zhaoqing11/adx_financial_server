@@ -13,6 +13,9 @@
     <sql id="Base_Column_List">
        id_private_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time
 	</sql>
+    <select id="selectDailyByDate" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM `private_daily` WHERE DATEDIFF(NOW(), create_time) = 0
+    </select>
     <select id="selectPrivateDailyByState" resultType="java.lang.Integer">
         select count(1) from private_daily WHERE state = #{state,jdbcType=INTEGER}
     </select>

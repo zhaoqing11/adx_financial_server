@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface GeneralAccountDailyMapper {
 
+    GeneralAccountDaily selectDailyDate();
+
     int selectGeneralDailyUnApproval(@Param("state") Integer state);
 
     int selectIsExitUnApprovalDaily();
