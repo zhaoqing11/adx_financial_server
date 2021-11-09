@@ -14,7 +14,7 @@
        id_pub_general_daily, collection_amount, pay_amount, service_charge, remaining_sum, state, create_time
 	</sql>
     <select id="selectDailyDate" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM `pub_general_daily` WHERE DATEDIFF(NOW(), create_time) = 0
+        SELECT <include refid="Base_Column_List"/> FROM `pub_general_daily` WHERE DATEDIFF(NOW(), create_time) = 1
     </select>
     <select id="selectPubGeneralDailyUnApproval" resultType="java.lang.Integer">
         select count(1) from pub_general_daily WHERE state = #{state,jdbcType=INTEGER}

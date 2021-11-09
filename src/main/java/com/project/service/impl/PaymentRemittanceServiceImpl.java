@@ -70,7 +70,7 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     public ReturnEntity addApprovalPaymentRemittance(PaymentRemittance paymentRemittance, Integer idDaily, Integer idCardType) {
         try {
             paymentRemittance.setIdCardType(idCardType);
-            boolean flag = addRemittance(paymentRemittance);
+            boolean flag = addRemittance(paymentRemittance, "pay_2");
             if (flag) {
                 if (idCardType == CardType.ACCOUNT_TYPE_1) { // 公账
                     PublicDaily publicDaily = publicDailyMapper.selectByPrimaryKey(idDaily);
@@ -205,7 +205,7 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
             PaymentForm paymentForm = paymentFormMapper.selectByPrimaryKey(paymentRemittance.getIdPaymentForm());
             paymentRemittance.setIdCardType(paymentForm.getIdCardType());
             paymentRemittance.setIdConfig(paymentForm.getIdConfig());
-            boolean flag = addRemittance(paymentRemittance);
+            boolean flag = addRemittance(paymentRemittance, "pay_1");
             if (flag) {
                 returnEntity = ReturnUtil.success("汇款成功");
             } else {
@@ -219,29 +219,31 @@ public class PaymentRemittanceServiceImpl implements PaymentRemittanceService {
     }
 
 
-    private boolean addRemittance(PaymentRemittance paymentRemittance) {
-//        switch (paymentRemittance.getIdCardType()) {
-//            case 1:
-//                paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
-//                paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_1);
-//                break;
-//            case 2:
-//                paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_2);
-//                paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_2);
-//                break;
-//            case 3:
-//                paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
-//                paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_3);
-//                break;
-//            case 4:
-//                paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
-//                paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_4);
-//                break;
-//            case 5:
-//                paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
-//                paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_5);
-//                break;
-//        }
+    private boolean addRemittance(PaymentRemittance paymentRemittance, String type) {
+        if (type.equals("pay_2")) {
+            switch (paymentRemittance.getIdCardType()) {
+                case 1:
+                    paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                    paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_1);
+                    break;
+                case 2:
+                    paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_2);
+                    paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_2);
+                    break;
+                case 3:
+                    paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                    paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_3);
+                    break;
+                case 4:
+                    paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                    paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_4);
+                    break;
+                case 5:
+                    paymentRemittance.setIdCardType(CardType.ACCOUNT_TYPE_1);
+                    paymentRemittance.setIdConfig(CardType.ACCOUNT_TYPE_5);
+                    break;
+            }
+        }
         paymentRemittance.setCreateTime(Tools.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         int count = paymentRemittanceMapper.addSelective(paymentRemittance);
         if (count > 0) {
