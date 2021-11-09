@@ -58,6 +58,7 @@ public class SmsUtil {
                 "\"serviceCharge_pub2\":\""+ generalMsg.getServiceCharge() +"\",\"card_pub3\":\""+ pubGeneralMsg.getCard() +"\",\"remainingSum_pub3\":\""+ pubGeneralMsg.getRemainingSum() +"\"," +
                 "\"collectionAmount_pub3\":\""+ pubGeneralMsg.getCollectionAmount() +"\",\"payAmount_pub3\":\""+ pubGeneralMsg.getPayAmount() +"\",\"serviceCharge_pub3\":\""+ pubGeneralMsg.getServiceCharge() +"\"}";
 
+        log.debug("json ===> " + jsonText);
         request.setTemplateParam(jsonText);
 
         // 可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
