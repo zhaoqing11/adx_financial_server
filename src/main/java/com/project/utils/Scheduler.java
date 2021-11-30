@@ -83,6 +83,7 @@ public class Scheduler {
             // 获取普通账户收支明细
             List<PaymentForm> generalPayFlowRecord = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_3, currentDate);
             List<PaymentForm> generalCollectionRecord = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_3, currentDate);
+
             List<PaymentForm> generalPayFlowRecord3 = paymentFormMapper.queryLastDayFlowRecord(CardType.ACCOUNT_TYPE_5, currentDate);
             List<PaymentForm> generalCollectionRecord3 = paymentFormMapper.queryLastDayCollectionRecord(CardType.ACCOUNT_TYPE_5, currentDate);
 
@@ -131,16 +132,22 @@ public class Scheduler {
             collectionTotal = collectionTotal.add(convertCollectionAmount);
         }
 
-        if (type == 1) {
-            insertPublicDaily(payTotal, serviceChargeTotal, collectionTotal);
-        } else if (type == 2) {
-            insertPrivateDaily(payTotal, serviceChargeTotal, collectionTotal);
-        } else if (type == 3) {
-            insertGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
-        } else if (type == 4) {
-            insertSecondGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
-        } else if (type == 5) {
-            insertPubGeneralDaily(payTotal, serviceChargeTotal, collectionTotal);
+        switch (type) {
+            case 1:
+                insertPublicDaily(payTotal, serviceChargeTotal, collectionTotal);
+                break;
+            case 2:
+                insertPrivateDaily(payTotal, serviceChargeTotal, collectionTotal);
+                break;
+            case 3:
+                insertGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
+                break;
+            case 4:
+                insertSecondGeneralAccountDaily(payTotal, serviceChargeTotal, collectionTotal);
+                break;
+            case 5:
+                insertPubGeneralDaily(payTotal, serviceChargeTotal, collectionTotal);
+                break;
         }
     }
 

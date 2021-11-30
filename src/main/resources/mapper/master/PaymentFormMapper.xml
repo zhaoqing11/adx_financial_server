@@ -95,7 +95,7 @@
          amount as 'collectionAmount',
          collection_date as 'collectionDate'
          FROM `collection_record`
-         WHERE id_card_type = #{idCardType,jdbcType=INTEGER}
+         WHERE id_config = #{idConfig,jdbcType=INTEGER}
          AND  DATE_FORMAT(collection_date, '%Y-%m-%d') = #{currentDate}
     </select>
     <select id="queryLastDayFlowRecord" resultType="com.project.entity.PaymentForm">
@@ -115,7 +115,7 @@
          FROM payment_form pf
         LEFT JOIN payment_approval pa ON pa.`id_payment_form` = pf.`id_payment_form`
         LEFT JOIN payment_remittance pr ON pr.`id_payment_form` = pf.`id_payment_form`
-        WHERE pf.`id_card_type` = #{idCardType,jdbcType=INTEGER}
+        WHERE pr.`id_config` = #{idConfig,jdbcType=INTEGER}
         AND DATE_FORMAT(pr.`remittance_date`, '%Y-%m-%d') = #{currentDate}
     </select>
     <select id="queryIncomeFlowRecordDetailTotal" resultType="java.lang.Integer">

@@ -18,9 +18,9 @@ public interface PaymentFormMapper {
 
     List<PaymentForm> selectPaymentByIdCardType(@Param("idCardType") Integer idCardType, @Param("date") String date);
 
-    List<PaymentForm> queryLastDayCollectionRecord(@Param("idCardType") Integer idCardType, @Param("currentDate") String currentDate);
+    List<PaymentForm> queryLastDayCollectionRecord(@Param("idConfig") Integer idConfig, @Param("currentDate") String currentDate);
 
-    List<PaymentForm> queryLastDayFlowRecord(@Param("idCardType") Integer idCardType, @Param("currentDate") String currentDate);
+    List<PaymentForm> queryLastDayFlowRecord(@Param("idConfig") Integer idConfig, @Param("currentDate") String currentDate);
 
     int queryIncomeFlowRecordDetailTotal(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
